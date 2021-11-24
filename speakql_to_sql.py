@@ -42,6 +42,12 @@ antlr_words = [
     "decimalLiteral",
     "joinPart",
     "dottedId",
+    "selectModifierExpression",
+    "groupByClause",
+    "groupBy",
+    "aggregateWindowedFunction",
+    "functionCall",
+    "stringLiteral"
 ]
 
 def reorder(speakql_tree):
@@ -49,7 +55,7 @@ def reorder(speakql_tree):
     select_expression = get_expression("selectExpression", speakql_tree)
     select_modifier_expression = get_expression("selectModifierExpression", speakql_tree)
     
-    return select_expression + select_modifier_expression + table_expression 
+    return select_expression + table_expression + select_modifier_expression 
 
 def get_expression(expression_token, speakql_tree):
     expression = "(" + expression_token
