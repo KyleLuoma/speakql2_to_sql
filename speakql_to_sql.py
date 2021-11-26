@@ -109,18 +109,16 @@ paren_tags = {"L_PAREN" : "(", "R_PAREN" : ")"}
 
 def tag_function_arg_parens(speakql_tree, paren_tags):
     while "functionArg" in speakql_tree:
-        l_paren_location = find_inner_open_paren(speakql_tree.find("functionArg"), speakql_tree)
-        r_paren_location = find_next_closed_paren(l_paren_location, speakql_tree)
-        speakql_tree = speakql_tree[0 : l_paren_location].replace("functionArg", "") + speakql_tree[l_paren_location : len(speakql_tree)]
-        l_paren_location = l_paren_location - (len("functionArg") - 1)
-        r_paren_location = r_paren_location - len("functionArg")
-        speakql_tree = speakql_tree[0 : l_paren_location] + " L_PAREN " + speakql_tree[l_paren_location : r_paren_location] + " R_PAREN " + speakql_tree[r_paren_location : len(speakql_tree)]
+        expression = get_expression("functionArg", speakql_tree)
+        speakql_tree = speakql_tree.replace(expression, " L_PAREN " + expression.replace("functionArg", "") + " R_PAREN ")
     return speakql_tree
 
 def replace_paren_tags(speakql_tree, paren_tags):
     speakql_tree = speakql_tree.replace("L_PAREN", paren_tags["L_PAREN"])
     speakql_tree = speakql_tree.replace("R_PAREN", paren_tags["R_PAREN"])
     return speakql_tree
+
+print(get_expression("functionArg", "(test(functionArg (fullColumnName (uid (simpleId LINE_ITEM)) (dottedId .PRICE))))").replace("functionArg", " L_PAREN "))
 
 #print(tag_function_arg_parens("test functionArg (((A)))", paren_tags))
 
