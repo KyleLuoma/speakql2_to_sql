@@ -84,6 +84,16 @@ def find_next_closed_paren(start_at, text):
             start_at = start_at + 1
     return 0
 
+def find_inner_open_paren(start_at, text):
+    last_seen_open_paren = 0
+    i = start_at
+    while i < len(text) and text[i] != ")":
+        #print("looking for open paren at", str(i), text[i])
+        if text[i] == "(":
+            last_seen_open_paren = i
+        i = i + 1
+    return last_seen_open_paren
+
 def replace_keyword(old_keyword, new_keyword, text):
     beginning = text.find("(" + old_keyword)
     ending = find_next_closed_paren(beginning, text)
@@ -94,6 +104,25 @@ def replace_synonyms(speakql_tree, SQL_KEYWORDS):
         while key in speakql_tree:
             speakql_tree = replace_keyword(key, SQL_KEYWORDS[key], speakql_tree)
     return speakql_tree
+
+paren_tags = {"L_PAREN" : "(", "R_PAREN" : ")"}
+
+def tag_function_arg_parens(speakql_tree, paren_tags):
+    while "functionArg" in speakql_tree:
+        l_paren_location = find_inner_open_paren(speakql_tree.find("functionArg"), speakql_tree)
+        r_paren_location = find_next_closed_paren(l_paren_location, speakql_tree)
+        speakql_tree = speakql_tree[0 : l_paren_location].replace("functionArg", "") + speakql_tree[l_paren_location : len(speakql_tree)]
+        l_paren_location = l_paren_location - (len("functionArg") - 1)
+        r_paren_location = r_paren_location - len("functionArg")
+        speakql_tree = speakql_tree[0 : l_paren_location] + " L_PAREN " + speakql_tree[l_paren_location : r_paren_location] + " R_PAREN " + speakql_tree[r_paren_location : len(speakql_tree)]
+    return speakql_tree
+
+def replace_paren_tags(speakql_tree, paren_tags):
+    speakql_tree = speakql_tree.replace("L_PAREN", paren_tags["L_PAREN"])
+    speakql_tree = speakql_tree.replace("R_PAREN", paren_tags["R_PAREN"])
+    return speakql_tree
+
+#print(tag_function_arg_parens("test functionArg (((A)))", paren_tags))
 
 def remove_antlr_words(speakql_tree, antlr_words):
     for word in antlr_words:
