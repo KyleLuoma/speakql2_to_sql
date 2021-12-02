@@ -126,3 +126,26 @@ def remove_antlr_parens(speakql_tree):
     for paren in ["(", ")"]:
         speakql_tree = speakql_tree.replace(paren, "")
     return ' '.join(speakql_tree.split())
+
+def translate_speakql_to_sql(speakql_tree, verbose = False):
+    reordered_tree = reorder((speakql_tree))
+    replaced_synonym_tree = replace_synonyms(reordered_tree, SQL_KEYWORDS)
+    removed_antlr_words = remove_antlr_words(replaced_synonym_tree, antlr_words)
+    no_antlr_parens = remove_antlr_parens(removed_antlr_words)
+    final_tree = replace_paren_tags(no_antlr_parens, paren_tags)
+
+    if(verbose):
+        print("---- Starting with SpeakQl tree ----")
+        print(speakql_tree)
+        print("---- Setting back to SQL Select - From - Where ----")
+        print(reordered_tree)
+        print ("---- Replacing SpeakQL Synonyms with SQL Keywords ----")
+        print(replaced_synonym_tree)
+        print ("---- Removing ANTLR-specific keywords ----")
+        print(removed_antlr_words)
+        print ("---- Removing ANTLR parens and extra white space ----")
+        print(no_antlr_parens)
+        print("---- Replacing PAREN tags with ( and ) ----")
+        print(final_tree)
+
+    return final_tree
