@@ -47,7 +47,8 @@ antlr_words = [
     "groupBy",
     "aggregateWindowedFunction",
     "functionCall",
-    "stringLiteral"
+    "stringLiteral",
+    "functionArg"
 ]
 
 def reorder(speakql_tree):
@@ -105,20 +106,14 @@ def replace_synonyms(speakql_tree, SQL_KEYWORDS):
             speakql_tree = replace_keyword(key, SQL_KEYWORDS[key], speakql_tree)
     return speakql_tree
 
-paren_tags = {"L_PAREN" : "(", "R_PAREN" : ")"}
-
-def tag_function_arg_parens(speakql_tree, paren_tags):
-    while "functionArg" in speakql_tree:
-        expression = get_expression("functionArg", speakql_tree)
-        speakql_tree = speakql_tree.replace(expression, " L_PAREN " + expression.replace("functionArg", "") + " R_PAREN ")
-    return speakql_tree
+paren_tags = {"leftParen" : "(", "rightParen" : ")"}
 
 def replace_paren_tags(speakql_tree, paren_tags):
-    speakql_tree = speakql_tree.replace("L_PAREN", paren_tags["L_PAREN"])
-    speakql_tree = speakql_tree.replace("R_PAREN", paren_tags["R_PAREN"])
+    speakql_tree = speakql_tree.replace("leftParen", paren_tags["leftParen"])
+    speakql_tree = speakql_tree.replace("rightParen", paren_tags["rightParen"])
     return speakql_tree
 
-print(get_expression("functionArg", "(test(functionArg (fullColumnName (uid (simpleId LINE_ITEM)) (dottedId .PRICE))))").replace("functionArg", " L_PAREN "))
+#print(get_expression("functionArg", "(test(functionArg (fullColumnName (uid (simpleId LINE_ITEM)) (dottedId .PRICE))))").replace("functionArg", " L_PAREN "))
 
 #print(tag_function_arg_parens("test functionArg (((A)))", paren_tags))
 
