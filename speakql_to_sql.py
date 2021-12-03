@@ -48,7 +48,11 @@ antlr_words = [
     "aggregateWindowedFunction",
     "functionCall",
     "stringLiteral",
-    "functionArg"
+    "functionArg",
+    "selectStatement",
+    "queryExpression",
+    "querySpecification",
+    "keywordsCanBeId"
 ]
 
 def reorder(speakql_tree):
