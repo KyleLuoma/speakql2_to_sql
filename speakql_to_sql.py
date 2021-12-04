@@ -55,23 +55,28 @@ antlr_words = [
     "keywordsCanBeId"
 ]
 
+#Function complexity: 3 * 2n = 6n
 def reorder(speakql_tree):
+    #get_expression call complexity: 2n * 3
     table_expression = get_expression("tableExpression", speakql_tree)
     select_expression = get_expression("selectExpression", speakql_tree)
     select_modifier_expression = get_expression("selectModifierExpression", speakql_tree)
     
     return select_expression + table_expression + select_modifier_expression 
 
+#Function complexity: 2n
 def get_expression(expression_token, speakql_tree):
     expression = "(" + expression_token
-    expression_start = speakql_tree.find(expression)
+    #Find complexity: n
+    expression_start = speakql_tree.find(expression)               
     paren_count = 1
     i = expression_start + 1
     
     if "(" not in speakql_tree[expression_start:]:
         return ""
     
-    while paren_count > 0:
+    #While loop complexity: n
+    while paren_count > 0:                                        
         if i < len(speakql_tree) and speakql_tree[i] == "(":
             paren_count = paren_count + 1
         elif i < len(speakql_tree) and speakql_tree[i] == ")":
@@ -104,14 +109,18 @@ def replace_keyword(old_keyword, new_keyword, text):
     ending = find_next_closed_paren(beginning, text)
     return text.replace(text[beginning:ending+1], new_keyword)
 
-def replace_synonyms(speakql_tree, SQL_KEYWORDS):    
+#function complexity ~ 40n
+def replace_synonyms(speakql_tree, SQL_KEYWORDS): 
+    #for loop complexity: number of keywords with synonyms in speakQL grammar (currently 4) * n   
     for key in SQL_KEYWORDS.keys():
+        #while loop complexity: n * number of times a keyword is in the tree (min of 2, likely max of 10) so 10n
         while key in speakql_tree:
             speakql_tree = replace_keyword(key, SQL_KEYWORDS[key], speakql_tree)
     return speakql_tree
 
 paren_tags = {"leftParen" : "(", "rightParen" : ")"}
 
+#function complexity: 2n
 def replace_paren_tags(speakql_tree, paren_tags):
     speakql_tree = speakql_tree.replace("leftParen", paren_tags["leftParen"])
     speakql_tree = speakql_tree.replace("rightParen", paren_tags["rightParen"])
@@ -121,21 +130,29 @@ def replace_paren_tags(speakql_tree, paren_tags):
 
 #print(tag_function_arg_parens("test functionArg (((A)))", paren_tags))
 
+#Function complexity: num antlr_words * n so ~40n
 def remove_antlr_words(speakql_tree, antlr_words):
     for word in antlr_words:
         speakql_tree = speakql_tree.replace(word, "")
     return speakql_tree
 
+#function complexity: 2n
 def remove_antlr_parens(speakql_tree):
     for paren in ["(", ")"]:
         speakql_tree = speakql_tree.replace(paren, "")
     return ' '.join(speakql_tree.split())
 
+#Function complexity: O(90n)
 def translate_speakql_to_sql(speakql_tree, verbose = False):
+    #reorder function call complexity: 6n
     reordered_tree = reorder((speakql_tree))
+    #replace synonym call complexity: ~40n
     replaced_synonym_tree = replace_synonyms(reordered_tree, SQL_KEYWORDS)
+    #remove antlr words call complexity: ~40n
     removed_antlr_words = remove_antlr_words(replaced_synonym_tree, antlr_words)
+    #remove antlr parens call complexity: 2n
     no_antlr_parens = remove_antlr_parens(removed_antlr_words)
+    #replace paren tag call complexity: 2n
     final_tree = replace_paren_tags(no_antlr_parens, paren_tags)
 
     if(verbose):
