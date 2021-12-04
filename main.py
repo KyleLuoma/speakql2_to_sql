@@ -3,7 +3,7 @@ from speakql_to_sql import *
 
 verbose = True
 
-parse_engine = spc.JavaSpeakQlParseEngine("gen_parens")
+parse_engine = spc.JavaSpeakQlParseEngine("gen_spoken_dot")
 parse_caller = spc.SpeakQlParseCaller(parse_engine)
 
 py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
@@ -17,5 +17,5 @@ while user_input.upper() != "QUIT":
         break
 
     tree = parse_caller.run_select_statement(user_input)
-    print("Java parser:", translate_speakql_to_sql(tree))
+    print("Java parser:", translate_speakql_to_sql(tree, verbose = True))
     

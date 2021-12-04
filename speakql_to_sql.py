@@ -14,6 +14,7 @@ SQL_KEYWORDS = {
     "selectKeyword" : "SELECT", 
     "fromKeyword" : "FROM",
     "selectElementDelimiter" : ",",
+    "selectElementDot" : ".",
     "joinKeyword" : "JOIN"
     }
 
@@ -145,9 +146,10 @@ def remove_antlr_parens(speakql_tree):
 
 #function complexity: 2n
 def remove_unwanted_white_space(speakql_tree):
-    while(" ." in speakql_tree or ". " in speakql_tree):
+    while(" ." in speakql_tree or ". " in speakql_tree or " ," in speakql_tree):
         speakql_tree = speakql_tree.replace(" .", ".")
         speakql_tree = speakql_tree.replace(". ", ".")
+        speakql_tree = speakql_tree.replace(" ,", ",")
     return speakql_tree
 
 #Function complexity: O(92n)
