@@ -52,7 +52,8 @@ antlr_words = [
     "selectStatement",
     "queryExpression",
     "querySpecification",
-    "keywordsCanBeId"
+    "keywordsCanBeId",
+    "mathOperator"
 ]
 
 #Function complexity: 3 * 2n = 6n
@@ -122,8 +123,8 @@ paren_tags = {"leftParen" : "(", "rightParen" : ")"}
 
 #function complexity: 2n
 def replace_paren_tags(speakql_tree, paren_tags):
-    speakql_tree = speakql_tree.replace("leftParen", paren_tags["leftParen"])
-    speakql_tree = speakql_tree.replace("rightParen", paren_tags["rightParen"])
+    speakql_tree = speakql_tree.replace(" leftParen ", paren_tags["leftParen"])
+    speakql_tree = speakql_tree.replace(" rightParen", paren_tags["rightParen"])
     return speakql_tree
 
 #print(get_expression("functionArg", "(test(functionArg (fullColumnName (uid (simpleId LINE_ITEM)) (dottedId .PRICE))))").replace("functionArg", " L_PAREN "))
@@ -142,7 +143,14 @@ def remove_antlr_parens(speakql_tree):
         speakql_tree = speakql_tree.replace(paren, "")
     return ' '.join(speakql_tree.split())
 
-#Function complexity: O(90n)
+#function complexity: 2n
+def remove_unwanted_white_space(speakql_tree):
+    while(" ." in speakql_tree or ". " in speakql_tree):
+        speakql_tree = speakql_tree.replace(" .", ".")
+        speakql_tree = speakql_tree.replace(". ", ".")
+    return speakql_tree
+
+#Function complexity: O(92n)
 def translate_speakql_to_sql(speakql_tree, verbose = False):
     #reorder function call complexity: 6n
     reordered_tree = reorder((speakql_tree))
@@ -153,7 +161,9 @@ def translate_speakql_to_sql(speakql_tree, verbose = False):
     #remove antlr parens call complexity: 2n
     no_antlr_parens = remove_antlr_parens(removed_antlr_words)
     #replace paren tag call complexity: 2n
-    final_tree = replace_paren_tags(no_antlr_parens, paren_tags)
+    sql_parens = replace_paren_tags(no_antlr_parens, paren_tags)
+    #remove unwanted white space call complexity: 2n
+    final_tree = remove_unwanted_white_space(sql_parens)
 
     if(verbose):
         print("---- Starting with SpeakQl tree ----")
@@ -167,6 +177,8 @@ def translate_speakql_to_sql(speakql_tree, verbose = False):
         print ("---- Removing ANTLR parens and extra white space ----")
         print(no_antlr_parens)
         print("---- Replacing PAREN tags with ( and ) ----")
+        print(sql_parens)
+        print("---- Removing unwanted white space ----")
         print(final_tree)
 
     return final_tree
