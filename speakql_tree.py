@@ -1,5 +1,5 @@
 lisp_tree = "(selectStatement (querySpecification (selectExpression (selectClause (selectKeyword SELECT)) (selectElements (selectElement (fullColumnName (uid (simpleId A)))))) (tableExpression (fromClause (fromKeyword FROM) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId B))))))) WHERE (expression (predicate (predicate (expressionAtom (fullColumnName (uid (simpleId A))))) (comparisonOperator =) (predicate (expressionAtom (fullColumnName (uid (simpleId B))))))))) selectModifierExpression))"
-level = 1
+level = 0
 class SpeakQlTree:
 
     tree_nodes = ()
@@ -31,11 +31,11 @@ class SpeakQlTree:
                 
 
     def add_node(self, rule_name, is_root, is_leaf, depth):
+        if self.next_id == 1 and self.tree_nodes[0].depth == depth - 1:
+            self.tree_nodes[0].add_child(1)
         for i in range(len(self.tree_nodes) - 1, 0, -1):
             if self.tree_nodes[i].depth == depth - 1:
-                #print(str(self.tree_nodes[i].depth), str(depth - 1))
                 self.tree_nodes[i].add_child(self.next_id)
-                print(str(self.tree_nodes[i].children))
                 break
         self.tree_nodes[self.next_id] = SpeakQlNode(
             self.next_id,
