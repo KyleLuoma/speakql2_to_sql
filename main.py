@@ -3,7 +3,7 @@ from speakql_to_sql import *
 
 verbose = True
 
-parse_engine = spc.JavaSpeakQlParseEngine("gen_get_keyword")
+parse_engine = spc.JavaSpeakQlParseEngine("gen_disaggregate")
 parse_caller = spc.SpeakQlParseCaller(parse_engine)
 
 py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
