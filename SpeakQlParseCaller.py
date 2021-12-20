@@ -37,7 +37,7 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
             cwd="c:/research_projects/speakql2_to_sql/antlr_builds/" + self.build_name
             )
         tree = str(tree)
-        tree_start = tree.find("stdout=b'") + len("stdout=b'")
+        tree_start = tree.find("stdout=b") + len("stdout=b*")
         tree_end = tree.find("\\r\\n")
         tree = tree[tree_start:tree_end]
 

@@ -1,5 +1,6 @@
 #lisp_tree = "(selectStatement (querySpecification (tableThenSelectExpression (tableExpression (fromClause (fromKeyword FROM TABLE) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId A))))))) (whereKeyword WHERE) (expression (predicate (predicate (expressionAtom (fullColumnName (uid (simpleId A))))) (comparisonOperator =) (predicate (expressionAtom (fullColumnName (uid (simpleId B))))))))) (selectExpression (selectClause (selectKeyword DISPLAY)) (selectElements (selectElement (fullColumnName (uid (simpleId B))))))) selectModifierExpression))"
-lisp_tree = "(selectStatement (querySpecification (tableThenSelectExpression (tableExpression (fromClause (fromKeyword FROM TABLE) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId A))))))) (whereKeyword WHERE) (expression (predicate (predicate (expressionAtom (fullColumnName (uid (simpleId A))))) (comparisonOperator =) (predicate (expressionAtom (constant (decimalLiteral 1)))))))) (selectExpression (selectClause (selectKeyword DISPLAY)) (selectElements (selectElement (fullColumnName (uid (simpleId A)))) (selectElementDelimiter ,) (selectElement (fullColumnName (uid (simpleId B)))) (selectElementDelimiter AND) (selectElement (fullColumnName (uid (simpleId C))))))) (expressionDelimiter THEN) (selectThenTableExpression (selectExpression (selectClause (selectKeyword SELECT)) (selectElements (selectElement (fullColumnName (uid (simpleId D)))) (selectElementDelimiter ,) (selectElement (fullColumnName (uid (simpleId E)))) (selectElementDelimiter AND) (selectElement (fullColumnName (uid (simpleId F)))))) (tableExpression (fromClause (fromKeyword FROM TABLE) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId G))))) (joinPart (joinKeyword JOINED WITH) (tableSourceItem (tableName (fullId (uid (simpleId A))))) (onKeyword ON) (expression (predicate (predicate (expressionAtom (fullColumnName (uid (simpleId A)) (dottedId .A)))) (comparisonOperator =) (predicate (expressionAtom (fullColumnName (uid (simpleId G)) (dottedId .F)))))))))))) selectModifierExpression))"
+lisp_tree = "(selectStatement (querySpecification (selectThenTableExpression (selectExpression (selectClause (selectKeyword SELECT)) (selectElements (selectElement (fullColumnName (uid (simpleId A)))) (selectElementDelimiter AND) (selectElement (functionCall (aggregateWindowedFunction SUM (leftParen () (functionArg (fullColumnName (uid (simpleId B)))) (rightParen ))))))) (tableExpression (fromClause (fromKeyword FROM TABLE) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId (keywordsCanBeId ONE))))))))))) selectModifierExpression))"
+
 level = 0
 class SpeakQlTree:
 
@@ -77,20 +78,22 @@ class SpeakQlTree:
             rule_string = rule_string + rule + " "
         return rule_string
 
-    def preorder_serialize_leafs(self, node_id, input = ""):
+    def preorder_serialize_tokens(self, node_id, input = ""):
         output = input
         node = self.get_node(node_id)
         if node.get_is_leaf():
             return self.get_token_string_from_rule(node)
+        if len(node.get_rule_name().split()) > 1:
+            output = output + self.get_token_string_from_rule(node)
         for child in node.get_children():
-            output = output + self.preorder_serialize_leafs(child)
+            output = output + self.preorder_serialize_tokens(child)
         return output
 
     def get_all_select_elements(self, node_id = 0):
         elements = []
         node = self.get_node(node_id)
         if "selectElements" in node.get_rule_name():
-            new_elements = self.preorder_serialize_leafs(node_id).split(',')
+            new_elements = self.preorder_serialize_tokens(node_id).split(',')
             for element in new_elements:
                 elements.append(element.strip())
             return elements
@@ -103,7 +106,7 @@ class SpeakQlTree:
         table_names = []
         node = self.get_node(node_id)
         if "tableName" in node.get_rule_name():
-            table_names.append(self.preorder_serialize_leafs(node_id))
+            table_names.append(self.preorder_serialize_tokens(node_id))
             return table_names
         else:
             for child in node.get_children():
@@ -216,17 +219,19 @@ class JoinExpression:
         self.to_on_attr = to_on_attr
         self.pred = pred
 
-tree = SpeakQlTree()
-tree.build_tree(lisp_tree)
-print(tree.scan_serialize_leafs())
-tree.replace_keywords_for_rule_name("selectKeyword", "SELECT")
-tree.replace_keywords_for_rule_name("fromKeyword", "FROM")
-tree.replace_keywords_for_rule_name("joinKeyword", "JOIN")
-tree.replace_keywords_for_rule_name("selectElementDelimiter", ",")
-#tree.print_tree_to_console()
-print(tree.scan_serialize_leafs())
-print(tree.preorder_serialize_leafs(0))
-tree.reorder_select_and_table_expressions(0)
-print(tree.preorder_serialize_leafs(0))
-print(tree.get_all_select_elements(0))
-print(tree.get_select_elements_by_table(0))
+# tree = SpeakQlTree()
+# tree.build_tree(lisp_tree)
+# print(tree.scan_serialize_leafs())
+# tree.replace_keywords_for_rule_name("selectKeyword", "SELECT")
+# tree.replace_keywords_for_rule_name("fromKeyword", "FROM")
+# tree.replace_keywords_for_rule_name("joinKeyword", "JOIN")
+# tree.replace_keywords_for_rule_name("selectElementDelimiter", ",")
+# tree.replace_keywords_for_rule_name("leftParen", "(")
+# tree.replace_keywords_for_rule_name("rightParen", ")")
+# tree.print_tree_to_console()
+# print(tree.scan_serialize_leafs())
+# print(tree.preorder_serialize_tokens(0))
+# tree.reorder_select_and_table_expressions(0)
+# print(tree.preorder_serialize_tokens(0))
+# print(tree.get_all_select_elements(0))
+# print(tree.get_select_elements_by_table(0))

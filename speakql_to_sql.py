@@ -6,6 +6,8 @@ Created on Tue Nov 23 17:00:11 2021
 @author: KYLEL
 """
 
+import SpeakQlTree as st
+
 open_paren = 0
 close_paren = 0
 sql_out = ""
@@ -17,6 +19,10 @@ SQL_KEYWORDS = {
     "selectElementDot" : ".",
     "joinKeyword" : "JOIN"
     }
+
+SQL_KEYWORDS_FOR_ST = SQL_KEYWORDS.copy()
+SQL_KEYWORDS_FOR_ST["leftParen"] = "("
+SQL_KEYWORDS_FOR_ST["rightParen"] = ")"
 
 antlr_words = [
     "selectExpression",
@@ -146,11 +152,26 @@ def remove_antlr_parens(speakql_tree):
 
 #function complexity: 2n
 def remove_unwanted_white_space(speakql_tree):
-    while(" ." in speakql_tree or ". " in speakql_tree or " ," in speakql_tree):
+    while(" ." in speakql_tree 
+          or ". " in speakql_tree 
+          or " ," in speakql_tree
+          or " ( " in speakql_tree
+          or " )" in speakql_tree
+          ):
         speakql_tree = speakql_tree.replace(" .", ".")
         speakql_tree = speakql_tree.replace(". ", ".")
         speakql_tree = speakql_tree.replace(" ,", ",")
+        speakql_tree = speakql_tree.replace(" ( ", "(")
+        speakql_tree = speakql_tree.replace(" )", ")")
     return speakql_tree
+
+def translate_speakql_to_sql_with_st(lisp_tree):
+    speakql_tree = st.SpeakQlTree()
+    speakql_tree.build_tree(lisp_tree)
+    for key in SQL_KEYWORDS_FOR_ST:
+        speakql_tree.replace_keywords_for_rule_name(key, SQL_KEYWORDS_FOR_ST[key])
+    speakql_tree.reorder_select_and_table_expressions(0)
+    return remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
 
 #Function complexity: O(92n)
 def translate_speakql_to_sql(speakql_tree, verbose = False):
