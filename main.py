@@ -19,5 +19,5 @@ while user_input.upper() != "QUIT":
 
     tree = parse_caller.run_select_statement(user_input)
     print("Serial translator:", translate_speakql_to_sql(tree, verbose = False))
-    print("Tree translator:", translate_speakql_to_sql_with_st(tree))
+    print("Tree translator:", translate_speakql_to_sql_with_st(tree, verbose = True))
     
