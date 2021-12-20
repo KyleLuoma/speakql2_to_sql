@@ -25,6 +25,8 @@ SQL_KEYWORDS_FOR_ST["leftParen"] = "("
 SQL_KEYWORDS_FOR_ST["rightParen"] = ")"
 
 antlr_words = [
+    "distinctAggregatorKeyword",
+    "selectElementAs",
     "selectExpression",
     "selectClause",
     "selectElements",
@@ -55,6 +57,7 @@ antlr_words = [
     "aggregateWindowedFunction",
     "functionCall",
     "stringLiteral",
+    "functionArgs",
     "functionArg",
     "selectStatement",
     "queryExpression",
