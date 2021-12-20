@@ -6,6 +6,10 @@ class SpeakQlTree:
     def __init__(self):
         self.next_id = 0
         self.tree_nodes = {}
+        self.table_select_agg_rules = [
+            "selectThenTableExpression",
+            "tableThenSelectExpression"
+        ]
 
     def build_tree(self, lisp_tree):
         is_root = True
@@ -70,7 +74,7 @@ class SpeakQlTree:
         rule_split = node.get_rule_name().split()
         rule_string = ""
         for rule in rule_split[1:]:
-            rule_string = rule_string + " " + rule
+            rule_string = rule_string + rule + " "
         return rule_string
 
     def preorder_serialize_leafs(self, node_id, input = ""):
@@ -81,6 +85,43 @@ class SpeakQlTree:
         for child in node.get_children():
             output = output + self.preorder_serialize_leafs(child)
         return output
+
+    def get_all_select_elements(self, node_id = 0):
+        elements = []
+        node = self.get_node(node_id)
+        if "selectElements" in node.get_rule_name():
+            new_elements = self.preorder_serialize_leafs(node_id).split(',')
+            for element in new_elements:
+                elements.append(element.strip())
+            return elements
+        else:
+            for child in node.get_children():
+                elements = elements + self.get_all_select_elements(child)
+            return elements
+
+    def get_all_table_names(self, node_id = 0):
+        table_names = []
+        node = self.get_node(node_id)
+        if "tableName" in node.get_rule_name():
+            table_names.append(self.preorder_serialize_leafs(node_id))
+            return table_names
+        else:
+            for child in node.get_children():
+                table_names = table_names + self.get_all_table_names(child)
+            return table_names
+
+    def get_select_elements_by_table(self, node_id = 0):
+        table_elements = { }
+        node = self.get_node(node_id)
+        for rule in self.table_select_agg_rules:
+            if rule in node.get_rule_name():
+                select_elements = self.get_all_select_elements(node_id)
+                table_name = self.get_all_table_names(node_id)[0].strip()
+                table_elements[table_name] = select_elements
+                return table_elements
+        for child in node.get_children():
+            table_elements.update(self.get_select_elements_by_table(child))
+        return table_elements
 
     def reorder_select_and_table_expressions(self, node_id):
         node = self.get_node(node_id)
@@ -171,8 +212,13 @@ tree = SpeakQlTree()
 tree.build_tree(lisp_tree)
 print(tree.scan_serialize_leafs())
 tree.replace_keywords_for_rule_name("selectKeyword", "SELECT")
+tree.replace_keywords_for_rule_name("fromKeyword", "FROM")
+tree.replace_keywords_for_rule_name("joinKeyword", "JOIN")
+tree.replace_keywords_for_rule_name("selectElementDelimiter", ",")
 #tree.print_tree_to_console()
 print(tree.scan_serialize_leafs())
 print(tree.preorder_serialize_leafs(0))
 tree.reorder_select_and_table_expressions(0)
 print(tree.preorder_serialize_leafs(0))
+print(tree.get_all_select_elements(0))
+print(tree.get_select_elements_by_table(0))
