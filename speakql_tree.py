@@ -207,6 +207,14 @@ class SpeakQlNode:
     def get_is_leaf(self):
         return self.is_leaf
 
+class JoinExpression:
+
+    def __init__(self, from_table, to_table, from_on_attr, to_on_attr, pred):
+        self.from_table = from_table
+        self.to_table = to_table
+        self.from_on_attr = from_on_attr
+        self.to_on_attr = to_on_attr
+        self.pred = pred
 
 tree = SpeakQlTree()
 tree.build_tree(lisp_tree)
