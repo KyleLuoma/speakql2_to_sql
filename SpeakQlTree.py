@@ -14,6 +14,8 @@ class SpeakQlTree:
         self.build_tree(lisp_tree)
 
     def build_tree(self, lisp_tree):
+        lisp_tree = lisp_tree.replace("leftParen (", "leftParen")
+        lisp_tree = lisp_tree.replace("rightParen )", "rightParen")
         is_root = True
         depth = 0
         for i in range (0, len(lisp_tree)):
@@ -23,20 +25,25 @@ class SpeakQlTree:
                 for j in range (i + 1, len(lisp_tree)):
                     if lisp_tree[j] == "(" or lisp_tree[j] == ")":
                         rule_name = lisp_tree[i + 1 : j]
-                        is_leaf =  lisp_tree[j] == ")"
-                        depth = depth + 1
+                        is_leaf = lisp_tree[j] == ")"
                         self.add_node(
                             rule_name, is_root, is_leaf, depth
                         )
+                        depth = depth + 1
                         is_root = False
                         i = j + 1
                         break
             elif lisp_tree[i] == ")":
                 depth = depth - 1
-
+            
+            
     def print_tree_to_console(self):
         for i in range(0, len(self.tree_nodes)):
             print(self.tree_nodes[i].to_tree_string())
+
+    def print_nodes_to_console(self):
+        for i in range(0, len(self.tree_nodes)):
+            print(self.tree_nodes[i].to_string())
                 
     def add_node(self, rule_name, is_root, is_leaf, depth):
         parent = -1

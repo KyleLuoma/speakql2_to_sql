@@ -31,6 +31,8 @@ while user_input.upper() != "QUIT":
         verbose = False
     elif(user_input.upper() == "PRINT SPEAKQL TREE"):
         speakql_tree.print_tree_to_console()
+    elif(user_input.upper() == "PRINT ALL NODES"):
+        speakql_tree.print_nodes_to_console()
     else:
         tree = parse_caller.run_select_statement(user_input)
         speakql_tree = st.SpeakQlTree(tree)
