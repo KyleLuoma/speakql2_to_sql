@@ -4,13 +4,14 @@ lisp_tree = "(selectStatement (querySpecification (selectThenTableExpression (se
 level = 0
 class SpeakQlTree:
 
-    def __init__(self):
+    def __init__(self, lisp_tree):
         self.next_id = 0
         self.tree_nodes = {}
         self.table_select_agg_rules = [
             "selectThenTableExpression",
             "tableThenSelectExpression"
         ]
+        self.build_tree(lisp_tree)
 
     def build_tree(self, lisp_tree):
         is_root = True
@@ -35,7 +36,7 @@ class SpeakQlTree:
 
     def print_tree_to_console(self):
         for i in range(0, len(self.tree_nodes)):
-            print(self.tree_nodes[i].to_string())
+            print(self.tree_nodes[i].to_tree_string())
                 
     def add_node(self, rule_name, is_root, is_leaf, depth):
         parent = -1
@@ -226,6 +227,13 @@ class SpeakQlNode:
             " Leaf: " + str(self.is_leaf)
         )
 
+    def to_tree_string(self):
+        pad = ""
+        pad_char = "-"
+        for i in range(0, self.depth):
+            pad = pad + pad_char
+        return pad + self.rule_name
+
     def add_child(self, child_id):
         self.children.append(child_id)
 
@@ -258,12 +266,12 @@ class SpeakQlNode:
 
 class JoinExpression:
 
-    def __init__(self, from_table, to_table, from_on_attr, to_on_attr, pred):
-        self.from_table = from_table
-        self.to_table = to_table
-        self.from_on_attr = from_on_attr
-        self.to_on_attr = to_on_attr
-        self.pred = pred
+    def __init__(self, join_tree):
+        self.from_table = ""
+        self.to_table = ""
+        self.from_on_attr = ""
+        self.to_on_attr = ""
+        self.pred = ""
 
 # tree = SpeakQlTree()
 # tree.build_tree(lisp_tree)

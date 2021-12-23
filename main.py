@@ -10,14 +10,32 @@ parse_caller = spc.SpeakQlParseCaller(parse_engine)
 py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
 py_parse_caller = spc.SpeakQlParseCaller(py_parse_engine)
 
+tree = ""
 user_input = ""
+verbose = False
+
+speakql_tree = st.SpeakQlTree(tree)
+
 while user_input.upper() != "QUIT":
     print("SpeakQl2>", end = ' ')
     user_input = input()
     if(user_input.upper() == "QUIT"):
         break
+    elif(user_input.upper() == "PRINT PARSE TREE"):
+        print(tree)
+    elif(user_input.upper() == "VERBOSE ON"):
+        print("Verbose mode is on. Type verbose off to turn it off again")
+        verbose = True
+    elif(user_input.upper() == "VERBOSE OFF"):
+        print("Verbose mode is off. Type verbose on to turn it back on.")
+        verbose = False
+    elif(user_input.upper() == "PRINT SPEAKQL TREE"):
+        speakql_tree.print_tree_to_console()
+    else:
+        tree = parse_caller.run_select_statement(user_input)
+        speakql_tree = st.SpeakQlTree(tree)
+        print("Serial translator:", translate_speakql_to_sql(tree, verbose = verbose))
+        print("Tree translator:", translate_speakql_to_sql_with_st(speakql_tree, verbose = verbose))
 
-    tree = parse_caller.run_select_statement(user_input)
-    print("Serial translator:", translate_speakql_to_sql(tree, verbose = False))
-    print("Tree translator:", translate_speakql_to_sql_with_st(tree, verbose = True))
+    
     

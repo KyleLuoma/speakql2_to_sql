@@ -168,9 +168,7 @@ def remove_unwanted_white_space(speakql_tree):
         speakql_tree = speakql_tree.replace(" )", ")")
     return speakql_tree
 
-def translate_speakql_to_sql_with_st(lisp_tree, verbose = False):
-    speakql_tree = st.SpeakQlTree()
-    speakql_tree.build_tree(lisp_tree)
+def translate_speakql_to_sql_with_st(speakql_tree, verbose = False):
     for key in SQL_KEYWORDS_FOR_ST:
         speakql_tree.replace_keywords_for_rule_name(key, SQL_KEYWORDS_FOR_ST[key])
     speakql_tree.reorder_select_and_table_expressions(0)
