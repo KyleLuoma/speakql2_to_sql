@@ -4,7 +4,7 @@ from speakql_to_sql import *
 
 verbose = True
 
-parse_engine = spc.JavaSpeakQlParseEngine("gen_count_agg_kw")
+parse_engine = spc.JavaSpeakQlParseEngine("gen_subquery_table")
 parse_caller = spc.SpeakQlParseCaller(parse_engine)
 
 py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")

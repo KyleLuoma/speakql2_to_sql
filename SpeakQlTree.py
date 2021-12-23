@@ -97,6 +97,8 @@ class SpeakQlTree:
             for element in new_elements:
                 elements.append(element.strip())
             return elements
+        elif "subQueryTable" in node.get_rule_name():
+            return elements
         else:
             for child in node.get_children():
                 elements = elements + self.get_all_select_elements(child)
@@ -113,18 +115,52 @@ class SpeakQlTree:
                 table_names = table_names + self.get_all_table_names(child)
             return table_names
 
+    def get_all_table_aliases(self, node_id = 0):
+        table_aliases = []
+        node = self.get_node(node_id)
+        if "tableAlias" in node.get_rule_name():
+            table_aliases.append(self.preorder_serialize_tokens(node_id).split()[1])
+            return table_aliases
+        else:
+            for child in node.get_children():
+                table_aliases = table_aliases + self.get_all_table_aliases(child)
+            return table_aliases
+
     def get_select_elements_by_table(self, node_id = 0):
         table_elements = { }
+        alias_name = ""
+        table_name = ""
         node = self.get_node(node_id)
         for rule in self.table_select_agg_rules:
             if rule in node.get_rule_name():
                 select_elements = self.get_all_select_elements(node_id)
                 table_name = self.get_all_table_names(node_id)[0].strip()
-                table_elements[table_name] = select_elements
+                try: #to get alias names, pass if none exist
+                    alias_name = self.get_all_table_aliases(node_id)[0].strip()
+                except:
+                    pass
+                if len(alias_name) > 0:
+                    table_elements[alias_name] = select_elements
+                else:
+                    table_elements[table_name] = select_elements
+                for child in node.get_children():
+                    if child > self.find_node_by_rule_name("subQueryTable", child):
+                        table_elements.update(self.get_select_elements_by_table(child))
                 return table_elements
+    
         for child in node.get_children():
             table_elements.update(self.get_select_elements_by_table(child))
         return table_elements
+
+    def find_node_by_rule_name(self, rule_to_find, node_id = 0):
+        node = self.get_node(node_id)
+        if rule_to_find in node.get_rule_name():
+            return node_id
+        elif not node.get_is_leaf():
+            for child in node.get_children():
+                return self.find_node_by_rule_name(rule_to_find, child)
+        else:
+            return -1
 
     def reorder_select_and_table_expressions(self, node_id):
         node = self.get_node(node_id)
