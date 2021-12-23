@@ -89,7 +89,7 @@ class SpeakQlTree:
             output = output + self.preorder_serialize_tokens(child)
         return output
 
-    def get_all_select_elements(self, node_id = 0):
+    def get_all_select_elements(self, node_id = 0, check_subqueries = False):
         elements = []
         node = self.get_node(node_id)
         if "selectElements" in node.get_rule_name():
@@ -97,14 +97,14 @@ class SpeakQlTree:
             for element in new_elements:
                 elements.append(element.strip())
             return elements
-        elif "subQueryTable" in node.get_rule_name():
+        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
             return elements
         else:
             for child in node.get_children():
                 elements = elements + self.get_all_select_elements(child)
             return elements
 
-    def get_all_table_names(self, node_id = 0):
+    def get_all_table_names(self, node_id = 0, check_subqueries = False):
         table_names = []
         node = self.get_node(node_id)
         if "tableName" in node.get_rule_name():
@@ -115,11 +115,13 @@ class SpeakQlTree:
                 table_names = table_names + self.get_all_table_names(child)
             return table_names
 
-    def get_all_table_aliases(self, node_id = 0):
+    def get_all_table_aliases(self, node_id = 0, check_subqueries = False):
         table_aliases = []
         node = self.get_node(node_id)
         if "tableAlias" in node.get_rule_name():
             table_aliases.append(self.preorder_serialize_tokens(node_id).split()[1])
+            return table_aliases
+        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
             return table_aliases
         else:
             for child in node.get_children():
@@ -134,7 +136,10 @@ class SpeakQlTree:
         for rule in self.table_select_agg_rules:
             if rule in node.get_rule_name():
                 select_elements = self.get_all_select_elements(node_id)
-                table_name = self.get_all_table_names(node_id)[0].strip()
+                try: #to get table names, print warning to console if none exist
+                    table_name = self.get_all_table_names(node_id)[0].strip()
+                except:
+                    print("Warning: expected table name but found none!")
                 try: #to get alias names, pass if none exist
                     alias_name = self.get_all_table_aliases(node_id)[0].strip()
                 except:
@@ -143,9 +148,14 @@ class SpeakQlTree:
                     table_elements[alias_name] = select_elements
                 else:
                     table_elements[table_name] = select_elements
-                for child in node.get_children():
-                    if child > self.find_node_by_rule_name("subQueryTable", child):
-                        table_elements.update(self.get_select_elements_by_table(child))
+                # Uncommenting this also gets the subquery tables and children
+                # I don't think this is what we want. Some external method should call
+                # get_select_elements_by_table(node id of subquery).
+                # This should enable subquery translation as a seperate process from the
+                # main query.
+                # for child in node.get_children():
+                #     if child > self.find_node_by_rule_name("subQueryTable", child):
+                #         table_elements.update(self.get_select_elements_by_table(child))
                 return table_elements
     
         for child in node.get_children():
