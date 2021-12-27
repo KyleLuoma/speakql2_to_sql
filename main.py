@@ -34,7 +34,7 @@ while user_input.upper() != "QUIT":
     elif(user_input.upper() == "PRINT ALL NODES"):
         speakql_tree.print_nodes_to_console()
     elif(user_input.upper() == "PRINT ELEMENTS"):
-        print(speakql_tree.get_select_elements_by_table())
+        print(speakql_tree.get_all_tables_and_elements())
     elif(user_input.upper() == "PRINT TABLES"):
         print(
             "Tables:", speakql_tree.get_all_table_names(), 

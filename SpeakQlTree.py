@@ -101,9 +101,12 @@ class SpeakQlTree:
                 rule_string = rule_string + rule + " "
         return rule_string
 
-    def preorder_serialize_tokens(self, node_id, input = ""):
+    def preorder_serialize_tokens(self, node_id, input = "", ignore_rules = []):
         output = input
         node = self.get_node(node_id)
+        for rule in ignore_rules:
+            if rule in node.get_rule_name():
+                return output
         if node.get_is_leaf():
             return self.get_token_string_from_rule(node)
         if len(node.get_rule_name().split()) > 1:
@@ -112,20 +115,52 @@ class SpeakQlTree:
             output = output + self.preorder_serialize_tokens(child)
         return output
 
-    def get_all_select_elements(self, node_id = 0, check_subqueries = False):
+    def preorder_serialize_functioncall(self, functioncall_node_id, table_name = ""):
+        node = self.get_node(functioncall_node_id)
+        token = ""
+        if "fullColumnName" in node.get_rule_name():
+            token = self.preorder_serialize_tokens(functioncall_node_id)
+            if "." in token:
+                return token
+            elif len(table_name) > 0:
+                return table_name + "." + token
+            else:
+                return token
+        elif node.get_is_leaf():
+            return self.get_token_string_from_rule(node)
+        if len(node.get_rule_name().split()) > 1:
+            token = token + self.get_token_string_from_rule(node)
+        for child in node.get_children():
+            token = token + self.preorder_serialize_functioncall(child, table_name = table_name)
+        return token
+
+    def get_select_elements(
+        self, node_id = 0, check_subqueries = False, table_name = "", in_select_element_tree = False
+        ):
         elements = []
+        ignore = ["selectElementDelimiter"]
         node = self.get_node(node_id)
-        if "selectElements" in node.get_rule_name():
-            new_elements = self.preorder_serialize_tokens(node_id).split(',')
-            for element in new_elements:
+        if in_select_element_tree and "functionCall" in node.get_rule_name():
+            element = self.preorder_serialize_functioncall(node_id, table_name = table_name)
+            return [element] #elements.append(element.strip())
+        elif in_select_element_tree and "selectElementDelimiter" not in node.get_rule_name():
+            element = self.preorder_serialize_tokens(node_id, ignore_rules = ignore)
+            if len(table_name) > 0 and "." not in element:
+                elements.append(table_name + "." + element.strip())
+            else:
                 elements.append(element.strip())
+            return elements            
+        if "subQueryTable" in node.get_rule_name() and not check_subqueries:
             return elements
-        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
+        if "tableExpression" in node.get_rule_name():
             return elements
-        else:
-            for child in node.get_children():
-                elements = elements + self.get_all_select_elements(child)
-            return elements
+        if "selectElement" in node.get_rule_name() and "selectElements" not in node.get_rule_name():
+            in_select_element_tree = True
+        for child in node.get_children():
+            elements = elements + self.get_select_elements(
+                child, table_name = table_name, in_select_element_tree = in_select_element_tree
+                )
+        return elements
 
     def get_all_table_names(self, node_id = 0, check_subqueries = False):
         table_names = []
@@ -155,14 +190,13 @@ class SpeakQlTree:
                 table_aliases = table_aliases + self.get_all_table_aliases(child)
             return table_aliases
 
-    def get_select_elements_by_table(self, node_id = 0):
+    def get_all_tables_and_elements(self, node_id = 0):
         table_elements = { }
         alias_name = ""
         table_name = ""
         node = self.get_node(node_id)
         for rule in self.table_select_agg_rules:
             if rule in node.get_rule_name():
-                select_elements = self.get_all_select_elements(node_id)
                 try: #to get table names, print warning to console if none exist
                     table_name = self.get_all_table_names(node_id)[0].strip()
                 except:
@@ -171,10 +205,13 @@ class SpeakQlTree:
                     alias_name = self.get_all_table_aliases(node_id)[0].strip()
                 except:
                     pass
+                name = ""
                 if len(alias_name) > 0:
-                    table_elements[alias_name] = select_elements
+                    name = alias_name
                 else:
-                    table_elements[table_name] = select_elements
+                    name = table_name
+                select_elements = self.get_select_elements(node_id, table_name = name)
+                table_elements[name] = select_elements
                 # Uncommenting this also gets the subquery tables and children
                 # I don't think this is what we want. Some external method should call
                 # get_select_elements_by_table(node id of subquery).
@@ -186,7 +223,7 @@ class SpeakQlTree:
                 return table_elements
     
         for child in node.get_children():
-            table_elements.update(self.get_select_elements_by_table(child))
+            table_elements.update(self.get_all_tables_and_elements(child))
         return table_elements
 
     def find_node_by_rule_name(self, rule_to_find, node_id = 0):
