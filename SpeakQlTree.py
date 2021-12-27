@@ -223,7 +223,13 @@ class SpeakQlTree:
                 return table_elements
     
         for child in node.get_children():
-            table_elements.update(self.get_all_tables_and_elements(child))
+            new_elements = self.get_all_tables_and_elements(child)
+            for key in new_elements.keys():
+                if key in table_elements.keys():
+                    table_elements[key] = table_elements[key] + new_elements[key]
+                else:
+                    table_elements[key] = new_elements[key]
+            #table_elements.update(self.get_all_tables_and_elements(child))
         return table_elements
 
     def find_node_by_rule_name(self, rule_to_find, node_id = 0):
