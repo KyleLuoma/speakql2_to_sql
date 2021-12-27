@@ -18,7 +18,8 @@ class SpeakQlTree:
         lisp_tree = lisp_tree.replace("rightParen )", "rightParen")
         is_root = True
         depth = 0
-        for i in range (0, len(lisp_tree)):
+        i = 0
+        while i < len(lisp_tree):
             rule_name = ""
             is_leaf = False
             if lisp_tree[i] == "(":
@@ -31,10 +32,23 @@ class SpeakQlTree:
                         )
                         depth = depth + 1
                         is_root = False
-                        i = j + 1
+                        i = j #+ 1
                         break
             elif lisp_tree[i] == ")":
                 depth = depth - 1
+                i = i + 1
+            elif lisp_tree[i] != " ":
+                for j in range (i, len(lisp_tree)):
+                    if lisp_tree[j] == "(" or lisp_tree[j] == ")":
+                        rule_name = lisp_tree[i : j]
+                        is_leaf = True
+                        self.add_node(
+                            rule_name, is_root, is_leaf, depth
+                        )
+                        i = j #+ 1
+                        break
+            else:
+                i = i + 1
             
             
     def print_tree_to_console(self):
@@ -82,8 +96,9 @@ class SpeakQlTree:
     def get_token_string_from_rule(self, node):
         rule_split = node.get_rule_name().split()
         rule_string = ""
-        for rule in rule_split[1:]:
-            rule_string = rule_string + rule + " "
+        for rule in rule_split:
+            if not rule[0].islower():
+                rule_string = rule_string + rule + " "
         return rule_string
 
     def preorder_serialize_tokens(self, node_id, input = ""):
