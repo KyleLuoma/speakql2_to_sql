@@ -33,6 +33,13 @@ while user_input.upper() != "QUIT":
         speakql_tree.print_tree_to_console()
     elif(user_input.upper() == "PRINT ALL NODES"):
         speakql_tree.print_nodes_to_console()
+    elif(user_input.upper() == "PRINT ELEMENTS"):
+        print(speakql_tree.get_select_elements_by_table())
+    elif(user_input.upper() == "PRINT TABLES"):
+        print(
+            "Tables:", speakql_tree.get_all_table_names(), 
+            "\nAliases:", speakql_tree.get_all_table_aliases()
+        )
     else:
         tree = parse_caller.run_select_statement(user_input)
         speakql_tree = st.SpeakQlTree(tree)

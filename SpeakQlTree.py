@@ -118,6 +118,10 @@ class SpeakQlTree:
         if "tableName" in node.get_rule_name():
             table_names.append(self.preorder_serialize_tokens(node_id))
             return table_names
+        elif "joinPart" in node.get_rule_name():
+            return table_names
+        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
+            return table_names
         else:
             for child in node.get_children():
                 table_names = table_names + self.get_all_table_names(child)
@@ -236,7 +240,7 @@ class SpeakQlNode:
 
     def to_tree_string(self):
         pad = ""
-        pad_char = "-"
+        pad_char = ".."
         for i in range(0, self.depth):
             pad = pad + pad_char
         return pad + self.rule_name
