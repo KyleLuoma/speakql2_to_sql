@@ -36,14 +36,7 @@ while user_input.upper() != "QUIT":
     elif(user_input.upper() == "PRINT ELEMENTS"):
         print(speakql_tree.get_all_tables_and_elements())
     elif(user_input.upper() == "PRINT TABLES"):
-        print(
-            "Tables:", speakql_tree.get_all_table_names(), 
-            "\nAliases:", speakql_tree.get_all_table_aliases()
-        )
         tables = speakql_tree.get_all_table_source_items()
-        print(
-            "New function get_all_table_source_items returns:"
-        )
         for table in tables:
             print(table.to_string())
     elif(user_input.upper() in ["PRINT PROPERTIES", "PRINT PROPS"]):
@@ -51,7 +44,7 @@ while user_input.upper() != "QUIT":
     else:
         tree = parse_caller.run_select_statement(user_input)
         speakql_tree = st.SpeakQlTree(tree)
-        print("Serial translator:", translate_speakql_to_sql(tree, verbose = verbose))
+        #print("Serial translator:", translate_speakql_to_sql(tree, verbose = verbose))
         print("Tree translator:", translate_speakql_to_sql_with_st(speakql_tree, verbose = verbose))
 
     

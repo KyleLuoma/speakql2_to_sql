@@ -1,43 +1,13 @@
 #lisp_tree = "(selectStatement (querySpecification (tableThenSelectExpression (tableExpression (fromClause (fromKeyword FROM TABLE) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId A))))))) (whereKeyword WHERE) (expression (predicate (predicate (expressionAtom (fullColumnName (uid (simpleId A))))) (comparisonOperator =) (predicate (expressionAtom (fullColumnName (uid (simpleId B))))))))) (selectExpression (selectClause (selectKeyword DISPLAY)) (selectElements (selectElement (fullColumnName (uid (simpleId B))))))) selectModifierExpression))"
 from os import remove
+from TableSourceItem import TableSourceItem
+from SpeakQlNode import SpeakQlNode
 
 
 lisp_tree = "(selectStatement (querySpecification (selectThenTableExpression (selectExpression (selectClause (selectKeyword SELECT)) (selectElements (selectElement (fullColumnName (uid (simpleId A)))) (selectElementDelimiter AND) (selectElement (functionCall (aggregateWindowedFunction SUM (leftParen () (functionArg (fullColumnName (uid (simpleId B)))) (rightParen ))))))) (tableExpression (fromClause (fromKeyword FROM TABLE) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId (keywordsCanBeId ONE))))))))))) selectModifierExpression))"
 
 level = 0
 
-class TableSourceItem:
-
-    def __init__(self):
-        self.name = ""
-        self.alias = ""
-
-    def set_name(self, new_name):
-        self.name = new_name
-
-    def set_alias(self, new_alias):
-        self.alias = new_alias
-
-    def get_name(self):
-        return self.name.strip()
-
-    def get_alias(self):
-        return self.alias.strip()
-
-    def has_alias(self):
-        return len(self.alias) > 0
-
-    def has_name(self):
-        return len(self.name) > 0
-
-    def to_string(self):
-        return "tableName: " + self.name + ", tableAlias: " + self.alias
-
-    def as_list(self):
-        return [self.name, self.alias]
-
-    def as_dict(self):
-        return {"name" : self.name, "alias" : self.alias}
 
 class SpeakQlTree:
 
@@ -265,13 +235,14 @@ class SpeakQlTree:
                         self.preorder_serialize_tokens(child)
                     )
                 elif "tableAlias" in self.get_node(child).get_rule_name():
+                    alias_token = self.preorder_serialize_tokens(child)
+                    alias_token = alias_token.replace("AS", "")
                     table_source_item.set_alias(
-                        self.preorder_serialize_tokens(child).split()[1]
+                        self.preorder_serialize_tokens(child)
                     )
             if table_source_item.has_alias() and not table_source_item.has_name():
                 table_source_item.set_name("_SUBQUERY_" + table_source_item.get_alias())
             table_source_items.append(table_source_item)
-            for table in table_source_items: print(table.to_string())
             return table_source_items
         for child in node.get_children():
             table_source_items = table_source_items + self.get_all_table_source_items(child, at_start_node = False)
@@ -313,45 +284,39 @@ class SpeakQlTree:
         return list(dict.fromkeys(target_list))
 
     def get_all_tables_and_elements(self, node_id = 0):
-        table_elements = { }
-        alias_name = ""
-        table_name = ""
         node = self.get_node(node_id)
+        table_alias_dict = {}
+        alias_table_dict = {}
+        table_elements = []
+        all_table_source_items = self.get_all_table_source_items()
+        for table in all_table_source_items:
+            table_alias_dict[table.get_name()] = table.get_alias()
+            alias_table_dict[table.get_alias()] = table.get_name()
         for rule in self.table_select_agg_rules:
             if rule in node.get_rule_name():
-                try: #to get table names, print warning to console if none exist
-                    table_name = self.get_all_table_names(node_id)[0].strip()
-                except:
-                    print("Warning: expected table name but found none!")
-                try: #to get alias names, pass if none exist
-                    alias_name = self.get_all_table_aliases(node_id)[0].strip()
-                except:
-                    pass
-                name = ""
-                if len(alias_name) > 0:
-                    name = alias_name
-                else:
-                    name = table_name
-                select_elements = self.get_select_elements(node_id, table_name = name)
-                table_elements[name] = select_elements
-                # Uncommenting this also gets the subquery tables and children
-                # I don't think this is what we want. Some external method should call
-                # get_select_elements_by_table(node id of subquery).
-                # This should enable subquery translation as a seperate process from the
-                # main query.
-                # for child in node.get_children():
-                #     if child > self.find_node_by_rule_name("subQueryTable", child):
-                #         table_elements.update(self.get_select_elements_by_table(child))
+                local_table_source_items = self.get_all_table_source_items(node_id)
+                table_source_item = local_table_source_items[0]
+                if (
+                    not table_source_item.has_alias() 
+                    and table_source_item.get_name() not in table_alias_dict.values()
+                ):
+                    table_source_item.set_alias(table_alias_dict[table_source_item.get_name()])
+                elif (
+                    not table_source_item.has_alias()
+                    and table_source_item.get_name() in table_alias_dict.values()
+                ):
+                    table_source_item.set_alias(table_source_item.get_name())
+                    table_source_item.set_name(alias_table_dict[table_source_item.get_alias()])
+                select_elements = self.get_select_elements(
+                    node_id,
+                    table_name = local_table_source_items[0].get_alias_if_exists_else_name()
+                )
+                
+                    
+                table_elements.append([table_source_item.as_dict(), select_elements])
                 return table_elements
-    
         for child in node.get_children():
-            new_elements = self.get_all_tables_and_elements(child)
-            for key in new_elements.keys():
-                if key in table_elements.keys():
-                    table_elements[key] = table_elements[key] + new_elements[key]
-                else:
-                    table_elements[key] = new_elements[key]
-            #table_elements.update(self.get_all_tables_and_elements(child))
+            table_elements = table_elements + self.get_all_tables_and_elements(child)
         return table_elements
 
     def find_node_by_rule_name(self, rule_to_find, node_id = 0):
@@ -394,66 +359,6 @@ class SpeakQlTree:
     def get_node(self, node_id):
         return self.tree_nodes[node_id]
 
-
-
-class SpeakQlNode:
-
-    def __init__(self, id, rule_name, is_root, is_leaf, depth, parent = -1):
-        self.id = id
-        self.rule_name = rule_name
-        self.is_root = is_root
-        self.is_leaf = is_leaf
-        self.depth = depth
-        self.children = []
-        self.parent = parent
-
-    def to_string(self):
-        return(
-            "ID:" + str(self.id) + 
-            " Rule name: " + self.rule_name + 
-            " Depth: " + str(self.depth) +
-            " Children: " + str(self.children) +
-            " Parent: " + str(self.parent) +
-            " Root: " + str(self.is_root) +
-            " Leaf: " + str(self.is_leaf)
-        )
-
-    def to_tree_string(self):
-        pad = ""
-        pad_char = ".."
-        for i in range(0, self.depth):
-            pad = pad + pad_char
-        return pad + self.rule_name
-
-    def add_child(self, child_id):
-        self.children.append(child_id)
-
-    def add_parent(self, parent_id):
-        self.parent = parent_id
-
-    def update_rule_name(self, new_value):
-        self.rule_name = new_value
-
-    def update_children(self, new_children):
-        self.children = new_children
-
-    def get_children(self):
-        return self.children
-
-    def get_parent(self):
-        return self.parent
-
-    def get_rule_name(self):
-        return self.rule_name
-
-    def get_depth(self):
-        return self.depth
-
-    def get_is_root(self):
-        return self.is_root
-
-    def get_is_leaf(self):
-        return self.is_leaf
 
 class JoinPart:
 
