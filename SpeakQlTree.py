@@ -27,6 +27,9 @@ class TableSourceItem:
     def has_alias(self):
         return len(self.alias) > 0
 
+    def has_name(self):
+        return len(self.name) > 0
+
     def to_string(self):
         return "tableName: " + self.name + ", tableAlias: " + self.alias
 
@@ -222,44 +225,32 @@ class SpeakQlTree:
         return elements
 
     def get_all_table_names(self, node_id = 0, check_subqueries = False):
-        table_items = self.get_all_table_source_items(node_id = 0)
         table_names = []
-        for table in table_items:
-            table_names.append(table.get_name())
-        return table_names
-
-        # table_names = []
-        # node = self.get_node(node_id)
-        # if "tableName" in node.get_rule_name():
-        #     table_names.append(self.preorder_serialize_tokens(node_id))
-        #     return table_names
-        # elif "joinPart" in node.get_rule_name():
-        #     return table_names
-        # elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
-        #     return table_names
-        # else:
-        #     for child in node.get_children():
-        #         table_names = table_names + self.get_all_table_names(child)
-        #     return table_names
+        node = self.get_node(node_id)
+        if "tableName" in node.get_rule_name():
+            table_names.append(self.preorder_serialize_tokens(node_id))
+            return table_names
+        elif "joinPart" in node.get_rule_name():
+            return table_names
+        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
+            return table_names
+        else:
+            for child in node.get_children():
+                table_names = table_names + self.get_all_table_names(child)
+            return table_names
 
     def get_all_table_aliases(self, node_id = 0, check_subqueries = False):
         table_aliases = []
-        table_items = self.get_all_table_source_items(node_id = node_id)
-        for table in table_items:
-            table_aliases.append(table.get_alias())
-        return table_aliases
-
-        # table_aliases = []
-        # node = self.get_node(node_id)
-        # if "tableAlias" in node.get_rule_name():
-        #     table_aliases.append(self.preorder_serialize_tokens(node_id).split()[1])
-        #     return table_aliases
-        # elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
-        #     return table_aliases
-        # else:
-        #     for child in node.get_children():
-        #         table_aliases = table_aliases + self.get_all_table_aliases(child)
-        #     return table_aliases
+        node = self.get_node(node_id)
+        if "tableAlias" in node.get_rule_name():
+            table_aliases.append(self.preorder_serialize_tokens(node_id).split()[1])
+            return table_aliases
+        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
+            return table_aliases
+        else:
+            for child in node.get_children():
+                table_aliases = table_aliases + self.get_all_table_aliases(child)
+            return table_aliases
 
     def get_all_table_source_items(self, node_id = 0, at_start_node = True):
         table_source_items = []
@@ -277,7 +268,10 @@ class SpeakQlTree:
                     table_source_item.set_alias(
                         self.preorder_serialize_tokens(child).split()[1]
                     )
+            if table_source_item.has_alias() and not table_source_item.has_name():
+                table_source_item.set_name("_SUBQUERY_" + table_source_item.get_alias())
             table_source_items.append(table_source_item)
+            for table in table_source_items: print(table.to_string())
             return table_source_items
         for child in node.get_children():
             table_source_items = table_source_items + self.get_all_table_source_items(child, at_start_node = False)
@@ -286,6 +280,7 @@ class SpeakQlTree:
             table_names = []
             table_aliases = []
             table_names_final = []
+            subquery_count = 0
             for table in table_source_items:
                 table_names.append(table.get_name())
                 table_aliases.append(table.get_alias())
