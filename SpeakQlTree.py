@@ -1,7 +1,41 @@
 #lisp_tree = "(selectStatement (querySpecification (tableThenSelectExpression (tableExpression (fromClause (fromKeyword FROM TABLE) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId A))))))) (whereKeyword WHERE) (expression (predicate (predicate (expressionAtom (fullColumnName (uid (simpleId A))))) (comparisonOperator =) (predicate (expressionAtom (fullColumnName (uid (simpleId B))))))))) (selectExpression (selectClause (selectKeyword DISPLAY)) (selectElements (selectElement (fullColumnName (uid (simpleId B))))))) selectModifierExpression))"
+from os import remove
+
+
 lisp_tree = "(selectStatement (querySpecification (selectThenTableExpression (selectExpression (selectClause (selectKeyword SELECT)) (selectElements (selectElement (fullColumnName (uid (simpleId A)))) (selectElementDelimiter AND) (selectElement (functionCall (aggregateWindowedFunction SUM (leftParen () (functionArg (fullColumnName (uid (simpleId B)))) (rightParen ))))))) (tableExpression (fromClause (fromKeyword FROM TABLE) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId (keywordsCanBeId ONE))))))))))) selectModifierExpression))"
 
 level = 0
+
+class TableSourceItem:
+
+    def __init__(self):
+        self.name = ""
+        self.alias = ""
+
+    def set_name(self, new_name):
+        self.name = new_name
+
+    def set_alias(self, new_alias):
+        self.alias = new_alias
+
+    def get_name(self):
+        return self.name.strip()
+
+    def get_alias(self):
+        return self.alias.strip()
+
+    def has_alias(self):
+        return len(self.alias) > 0
+
+    def to_string(self):
+        return "tableName: " + self.name + ", tableAlias: " + self.alias
+
+    def as_list(self):
+        return [self.name, self.alias]
+
+    def as_dict(self):
+        return {"name" : self.name, "alias" : self.alias}
+
 class SpeakQlTree:
 
     def __init__(self, lisp_tree):
@@ -18,13 +52,21 @@ class SpeakQlTree:
     def get_properties_from_parse_tree(self, parse_tree):
         properties = {
             "num_joinpart" : 0,
-            "num_select_and_table_expression" : 0
+            "num_select_and_table_expression" : 0,
+            "num_functioncall" : 0,
+            "num_table_alias" : 0,
+            "num_element_alias" : 0,
+            "num_group_by" : 0
         }
         properties["num_joinpart"] = parse_tree.count("joinPart")
         properties["num_select_and_table_expression"] = (
             parse_tree.count("selectThenTableExpression") + 
             parse_tree.count("tableThenSelectExpression")
         )
+        properties["num_functioncall"] = parse_tree.count("functionCall")
+        properties["num_table_alias"] = parse_tree.count("tableAlias")
+        properties["num_element_alias"] = parse_tree.count("selectElementAs")
+        properties["num_group_by"] = parse_tree.count("groupByClause")
         return properties
 
     def get_properties(self):
@@ -180,32 +222,100 @@ class SpeakQlTree:
         return elements
 
     def get_all_table_names(self, node_id = 0, check_subqueries = False):
+        table_items = self.get_all_table_source_items(node_id = 0)
         table_names = []
-        node = self.get_node(node_id)
-        if "tableName" in node.get_rule_name():
-            table_names.append(self.preorder_serialize_tokens(node_id))
-            return table_names
-        elif "joinPart" in node.get_rule_name():
-            return table_names
-        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
-            return table_names
-        else:
-            for child in node.get_children():
-                table_names = table_names + self.get_all_table_names(child)
-            return table_names
+        for table in table_items:
+            table_names.append(table.get_name())
+        return table_names
+
+        # table_names = []
+        # node = self.get_node(node_id)
+        # if "tableName" in node.get_rule_name():
+        #     table_names.append(self.preorder_serialize_tokens(node_id))
+        #     return table_names
+        # elif "joinPart" in node.get_rule_name():
+        #     return table_names
+        # elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
+        #     return table_names
+        # else:
+        #     for child in node.get_children():
+        #         table_names = table_names + self.get_all_table_names(child)
+        #     return table_names
 
     def get_all_table_aliases(self, node_id = 0, check_subqueries = False):
         table_aliases = []
+        table_items = self.get_all_table_source_items(node_id = node_id)
+        for table in table_items:
+            table_aliases.append(table.get_alias())
+        return table_aliases
+
+        # table_aliases = []
+        # node = self.get_node(node_id)
+        # if "tableAlias" in node.get_rule_name():
+        #     table_aliases.append(self.preorder_serialize_tokens(node_id).split()[1])
+        #     return table_aliases
+        # elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
+        #     return table_aliases
+        # else:
+        #     for child in node.get_children():
+        #         table_aliases = table_aliases + self.get_all_table_aliases(child)
+        #     return table_aliases
+
+    def get_all_table_source_items(self, node_id = 0, at_start_node = True):
+        table_source_items = []
         node = self.get_node(node_id)
-        if "tableAlias" in node.get_rule_name():
-            table_aliases.append(self.preorder_serialize_tokens(node_id).split()[1])
-            return table_aliases
-        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
-            return table_aliases
-        else:
+        if "selectExpression" in node.get_rule_name():
+            return table_source_items
+        if "tableSourceItem" in node.get_rule_name():
+            table_source_item = TableSourceItem()
             for child in node.get_children():
-                table_aliases = table_aliases + self.get_all_table_aliases(child)
-            return table_aliases
+                if "tableName" in self.get_node(child).get_rule_name():
+                    table_source_item.set_name(
+                        self.preorder_serialize_tokens(child)
+                    )
+                elif "tableAlias" in self.get_node(child).get_rule_name():
+                    table_source_item.set_alias(
+                        self.preorder_serialize_tokens(child).split()[1]
+                    )
+            table_source_items.append(table_source_item)
+            return table_source_items
+        for child in node.get_children():
+            table_source_items = table_source_items + self.get_all_table_source_items(child, at_start_node = False)
+        if at_start_node:
+            table_source_items_final = []
+            table_names = []
+            table_aliases = []
+            table_names_final = []
+            for table in table_source_items:
+                table_names.append(table.get_name())
+                table_aliases.append(table.get_alias())
+            for i in range(0, len(table_source_items)):
+                table_one = table_source_items[i]
+                if table_one.get_name() in table_aliases: 
+                    break
+                elif len(table_source_items_final) == 0:
+                    table_source_items_final.append(table_one)
+                    table_names_final.append(table_one.get_name())
+                for j in range(0, len(table_source_items_final)):
+                    table_two = table_source_items_final[j]
+                    if (
+                        table_one.get_name() == table_two.get_name()
+                        and table_one.has_alias()
+                        and not table_two.has_alias()
+                    ):
+                        table_two.set_alias(table_one.get_alias()) 
+                    elif (
+                        table_one.get_name() != table_two.get_name()
+                        and table_one.get_name() not in table_names_final
+                    ):
+                        table_source_items_final.append(table_one)
+                        table_names_final.append(table_one.get_name())
+            return self.remove_duplicates_from_list(table_source_items_final)
+        else:
+            return self.remove_duplicates_from_list(table_source_items)
+
+    def remove_duplicates_from_list(self, target_list):
+        return list(dict.fromkeys(target_list))
 
     def get_all_tables_and_elements(self, node_id = 0):
         table_elements = { }
@@ -350,7 +460,7 @@ class SpeakQlNode:
     def get_is_leaf(self):
         return self.is_leaf
 
-class JoinExpression:
+class JoinPart:
 
     def __init__(self):
         self.from_table = ""

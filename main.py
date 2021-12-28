@@ -40,6 +40,12 @@ while user_input.upper() != "QUIT":
             "Tables:", speakql_tree.get_all_table_names(), 
             "\nAliases:", speakql_tree.get_all_table_aliases()
         )
+        tables = speakql_tree.get_all_table_source_items()
+        print(
+            "New function get_all_table_source_items returns:"
+        )
+        for table in tables:
+            print(table.to_string())
     elif(user_input.upper() in ["PRINT PROPERTIES", "PRINT PROPS"]):
         print(speakql_tree.get_properties())
     else:
