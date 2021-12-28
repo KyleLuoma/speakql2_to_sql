@@ -237,9 +237,7 @@ class SpeakQlTree:
                 elif "tableAlias" in self.get_node(child).get_rule_name():
                     alias_token = self.preorder_serialize_tokens(child)
                     alias_token = alias_token.replace("AS", "")
-                    table_source_item.set_alias(
-                        self.preorder_serialize_tokens(child)
-                    )
+                    table_source_item.set_alias(alias_token)
             if table_source_item.has_alias() and not table_source_item.has_name():
                 table_source_item.set_name("_SUBQUERY_" + table_source_item.get_alias())
             table_source_items.append(table_source_item)
@@ -307,10 +305,13 @@ class SpeakQlTree:
                 ):
                     table_source_item.set_alias(table_source_item.get_name())
                     table_source_item.set_name(alias_table_dict[table_source_item.get_alias()])
-                select_elements = self.get_select_elements(
-                    node_id,
-                    table_name = local_table_source_items[0].get_alias_if_exists_else_name()
-                )
+                if self.properties["num_select_and_table_expression"] > 1:
+                    select_elements = self.get_select_elements(
+                        node_id,
+                        table_name = local_table_source_items[0].get_alias_if_exists_else_name()
+                    )
+                else:
+                    select_elements = self.get_select_elements(node_id)
                 
                     
                 table_elements.append([table_source_item.as_dict(), select_elements])
