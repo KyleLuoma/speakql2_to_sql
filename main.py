@@ -40,6 +40,8 @@ while user_input.upper() != "QUIT":
             "Tables:", speakql_tree.get_all_table_names(), 
             "\nAliases:", speakql_tree.get_all_table_aliases()
         )
+    elif(user_input.upper() in ["PRINT PROPERTIES", "PRINT PROPS"]):
+        print(speakql_tree.get_properties())
     else:
         tree = parse_caller.run_select_statement(user_input)
         speakql_tree = st.SpeakQlTree(tree)

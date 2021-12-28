@@ -11,7 +11,24 @@ class SpeakQlTree:
             "selectThenTableExpression",
             "tableThenSelectExpression"
         ]
-        self.build_tree(lisp_tree)
+        self.parse_tree = lisp_tree
+        self.build_tree(self.parse_tree)
+        self.properties = self.get_properties_from_parse_tree(self.parse_tree)
+
+    def get_properties_from_parse_tree(self, parse_tree):
+        properties = {
+            "num_joinpart" : 0,
+            "num_select_and_table_expression" : 0
+        }
+        properties["num_joinpart"] = parse_tree.count("joinPart")
+        properties["num_select_and_table_expression"] = (
+            parse_tree.count("selectThenTableExpression") + 
+            parse_tree.count("tableThenSelectExpression")
+        )
+        return properties
+
+    def get_properties(self):
+        return self.properties
 
     def build_tree(self, lisp_tree):
         lisp_tree = lisp_tree.replace("leftParen (", "leftParen")
@@ -335,12 +352,18 @@ class SpeakQlNode:
 
 class JoinExpression:
 
-    def __init__(self, join_tree):
+    def __init__(self):
         self.from_table = ""
         self.to_table = ""
         self.from_on_attr = ""
         self.to_on_attr = ""
         self.pred = ""
+
+    def set_from_table(self, table_name):
+        self.from_table = table_name
+ 
+
+
 
 # tree = SpeakQlTree()
 # tree.build_tree(lisp_tree)
