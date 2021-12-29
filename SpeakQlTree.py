@@ -84,8 +84,6 @@ class SpeakQlTree:
             
             
     def print_tree_to_console(self, node_id = 0):
-        # for i in range(0, len(self.tree_nodes)):
-        #     print(self.tree_nodes[i].to_tree_string())
         node = self.get_node(node_id)
         print(node.to_tree_string())
         for child in node.get_children():
@@ -239,10 +237,13 @@ class SpeakQlTree:
             depth = elements_node.get_depth() + 1,
             parent = elements_node.get_id()
         )
-        elements_node.update_children([aggregated_elements_rule_id])
-
-        
+        elements_node.update_children([aggregated_elements_rule_id])       
         #Orphan any following selectElements
+        for element in select_element_nodes[1:]:
+            child = self.get_node(element)
+            parent = self.get_node(child.get_parent())
+            parent.update_children([])
+            child.update_parent(-1)
 
     def get_all_table_names(self, node_id = 0, check_subqueries = False):
         table_names = []
