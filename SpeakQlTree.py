@@ -83,9 +83,13 @@ class SpeakQlTree:
                 i = i + 1
             
             
-    def print_tree_to_console(self):
-        for i in range(0, len(self.tree_nodes)):
-            print(self.tree_nodes[i].to_tree_string())
+    def print_tree_to_console(self, node_id = 0):
+        # for i in range(0, len(self.tree_nodes)):
+        #     print(self.tree_nodes[i].to_tree_string())
+        node = self.get_node(node_id)
+        print(node.to_tree_string())
+        for child in node.get_children():
+            self.print_tree_to_console(child)
 
     def print_nodes_to_console(self):
         for i in range(0, len(self.tree_nodes)):
