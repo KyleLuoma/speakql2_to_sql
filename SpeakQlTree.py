@@ -19,7 +19,7 @@ class SpeakQlTree:
             "tableThenSelectExpression"
         ]
         self.parse_tree = lisp_tree
-        self.build_tree(self.parse_tree)
+        self._build_tree(self.parse_tree)
         self.properties = self.get_properties_from_parse_tree(self.parse_tree)
 
     def get_properties_from_parse_tree(self, parse_tree):
@@ -45,7 +45,7 @@ class SpeakQlTree:
     def get_properties(self):
         return self.properties
 
-    def build_tree(self, lisp_tree):
+    def _build_tree(self, lisp_tree):
         lisp_tree = lisp_tree.replace("leftParen (", "leftParen")
         lisp_tree = lisp_tree.replace("rightParen )", "rightParen")
         is_root = True
@@ -59,7 +59,7 @@ class SpeakQlTree:
                     if lisp_tree[j] == "(" or lisp_tree[j] == ")":
                         rule_name = lisp_tree[i + 1 : j]
                         is_leaf = lisp_tree[j] == ")"
-                        self.__add_node_during_build(
+                        self._add_node_during_build(
                             rule_name, is_root, is_leaf, depth
                         )
                         depth = depth + 1
@@ -74,7 +74,7 @@ class SpeakQlTree:
                     if lisp_tree[j] == "(" or lisp_tree[j] == ")":
                         rule_name = lisp_tree[i : j]
                         is_leaf = True
-                        self.__add_node_during_build(
+                        self._add_node_during_build(
                             rule_name, is_root, is_leaf, depth
                         )
                         i = j #+ 1
@@ -93,13 +93,13 @@ class SpeakQlTree:
         for i in range(0, len(self.tree_nodes)):
             print(self.tree_nodes[i].to_string())
 
-    def __get_next_id_and_increment(self):
+    def _get_next_id_and_increment(self):
         id = self.next_id
         self.next_id = self.next_id + 1
         return id
 
-    def __add_node_under_parent(self, rule_name, is_leaf, depth, parent):
-        new_id = self.__get_next_id_and_increment()
+    def _add_node_under_parent(self, rule_name, is_leaf, depth, parent):
+        new_id = self._get_next_id_and_increment()
         self.tree_nodes[new_id] = SpeakQlNode(
             new_id,
             rule_name,
@@ -110,7 +110,7 @@ class SpeakQlTree:
         )
         return new_id
                 
-    def __add_node_during_build(self, rule_name, is_root, is_leaf, depth):
+    def _add_node_during_build(self, rule_name, is_root, is_leaf, depth):
         parent = -1
         if self.next_id == 1 and self.tree_nodes[0].depth == depth - 1:
             self.tree_nodes[0].add_child(1)
@@ -231,7 +231,7 @@ class SpeakQlTree:
                 aggregated_elements_rule = aggregated_elements_rule + ", " + element
         aggregated_elements_rule = aggregated_elements_rule.replace("_,", "")
         print(aggregated_elements_rule)
-        aggregated_elements_rule_id = self.__add_node_under_parent(
+        aggregated_elements_rule_id = self._add_node_under_parent(
             rule_name = aggregated_elements_rule,
             is_leaf = True,
             depth = elements_node.get_depth() + 1,
