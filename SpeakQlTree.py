@@ -286,6 +286,7 @@ class SpeakQlTree:
         table_alias_dict = {}
         alias_table_dict = {}
         table_elements = []
+        table_dict_list = []
         all_table_source_items = self.get_all_table_source_items()
         for table in all_table_source_items:
             table_alias_dict[table.get_name()] = table.get_alias()
@@ -310,11 +311,12 @@ class SpeakQlTree:
                         node_id,
                         table_name = local_table_source_items[0].get_alias_if_exists_else_name()
                     )
+                    table_dict_list = [table_source_item.as_dict()]
                 else:
                     select_elements = self.get_select_elements(node_id)
-                
-                    
-                table_elements.append([table_source_item.as_dict(), select_elements])
+                    for table in local_table_source_items:
+                        table_dict_list.append(table.as_dict())
+                table_elements.append([table_dict_list, select_elements])
                 return table_elements
         for child in node.get_children():
             table_elements = table_elements + self.get_all_tables_and_elements(child)
