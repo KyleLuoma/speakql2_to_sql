@@ -226,31 +226,50 @@ class SpeakQlTree:
         node = self.get_node(node_id)
         elements_by_table = self.get_all_tables_and_elements(node_id = node_id)
         #Find first selectElements rule in query:
-        select_element_nodes = self.find_nodes_by_rule_name("selectElements")
-        elements_node = self.get_node(select_element_nodes[0])
-        print(select_element_nodes)
-        print(elements_node.get_rule_name())
+        select_elements_node_ids = self.find_nodes_by_rule_name("selectElements")
+        first_select_elements_node = self.get_node(select_elements_node_ids[0])
+        print(select_elements_node_ids)
+        print(first_select_elements_node.get_rule_name())
         #Create a new rule with all elements from the query
-        aggregated_elements_rule = "aggregatedElements_"
+        #aggregated_elements_rule = "aggregatedElements_"
+        new_children = []
         for table in elements_by_table:
-            for element in table[1]:
-                aggregated_elements_rule = aggregated_elements_rule + ", " + element
-        aggregated_elements_rule = aggregated_elements_rule.replace("_,", "")
-        print(aggregated_elements_rule)
-        aggregated_elements_rule_id = self._add_node_under_parent(
-            rule_name = aggregated_elements_rule,
-            is_leaf = True,
-            depth = elements_node.get_depth() + 1,
-            parent = elements_node.get_id()
-        )
-        elements_node.update_children([aggregated_elements_rule_id])       
+            for i in range(0, len(table[1])):
+                element = table[1][i]
+                #aggregated_elements_rule = aggregated_elements_rule + ", " + element
+                new_id = self._add_node_under_parent(
+                    "selectElement " + element,
+                    is_leaf = True,
+                    depth = first_select_elements_node.get_depth() + 1,
+                    parent = first_select_elements_node.get_id()
+                )
+                new_children.append(new_id)
+                if i + 1 < len(table[1]):
+                    delim_id = self._add_node_under_parent(
+                        "selectElementDelimiter ,",
+                        is_leaf = True,
+                        depth = first_select_elements_node.get_depth() + 1,
+                        parent = first_select_elements_node.get_id()
+                    )
+                    new_children.append(delim_id)
+
+        # aggregated_elements_rule = aggregated_elements_rule.replace("_,", "")
+        # print(aggregated_elements_rule)
+        # aggregated_elements_rule_id = self._add_node_under_parent(
+        #     rule_name = aggregated_elements_rule,
+        #     is_leaf = True,
+        #     depth = first_select_elements_node.get_depth() + 1,
+        #     parent = first_select_elements_node.get_id()
+        # )
+        #first_select_elements_node.update_children([aggregated_elements_rule_id])
+        first_select_elements_node.update_children(new_children)       
         #Orphan any following selectElements
-        for element in select_element_nodes[1:]:
+        for element in select_elements_node_ids[1:]:
             self.remove_node_from_tree(element, remove_siblings = True)
 
     def aggregate_tables(self, node_id = 0):
         #multiple different types of conditions can exist:
-        if (self.properties["num_select_and_table_expression"] == 1):
+        if (self.properties["num_select_and_table_expression"] <= 1):
             print("Cannot aggregate tables in a query with only one table expression.")
             return           
         # - no joins, tables > 1, select and table expressions == tables
@@ -258,7 +277,6 @@ class SpeakQlTree:
         #     consolidate where statements into first where expression (probably needs a separate method)
         if (self.properties["num_non_join_table_name"] > 1 and self.properties["num_joinpart"] == 0):
             node = self.get_node(node_id)
-            tables = self.get_all_table_source_items(node_id)
 
             table_sources_node_ids = self.find_nodes_by_rule_name("tableSources")
             print(table_sources_node_ids)
