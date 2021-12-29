@@ -4,7 +4,7 @@ from speakql_to_sql import *
 
 verbose = True
 
-parse_engine = spc.JavaSpeakQlParseEngine("gen_subquery_table")
+parse_engine = spc.JavaSpeakQlParseEngine("gen_table_source_delimiter")
 parse_caller = spc.SpeakQlParseCaller(parse_engine)
 
 py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
@@ -12,6 +12,7 @@ py_parse_caller = spc.SpeakQlParseCaller(py_parse_engine)
 
 tree = ""
 user_input = ""
+speakql_query = ""
 verbose = False
 
 speakql_tree = st.SpeakQlTree(tree)
@@ -47,8 +48,11 @@ while user_input.upper() != "QUIT":
         print(
             remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
         )
+    elif(user_input.upper() in ["PRINT SPEAKQL", "PRINT SPEAKQL QUERY"]):
+        print(speakql_query)
     else:
-        tree = parse_caller.run_select_statement(user_input)
+        speakql_query = user_input
+        tree = parse_caller.run_select_statement(speakql_query)
         speakql_tree = st.SpeakQlTree(tree)
         #print("Serial translator:", translate_speakql_to_sql(tree, verbose = verbose))
         print("Tree translator:", translate_speakql_to_sql_with_st(speakql_tree, verbose = verbose))

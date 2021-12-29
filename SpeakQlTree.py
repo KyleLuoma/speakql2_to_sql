@@ -25,18 +25,24 @@ class SpeakQlTree:
     def get_properties_from_parse_tree(self, parse_tree):
         properties = {
             "num_joinpart" : 0,
+            "num_non_commutative_join" : 0,
             "num_select_and_table_expression" : 0,
             "num_functioncall" : 0,
+            "num_table_name" : 0,
+            "num_non_join_table_name": 0,
             "num_table_alias" : 0,
             "num_element_alias" : 0,
             "num_group_by" : 0
         }
         properties["num_joinpart"] = parse_tree.count("joinPart")
+        properties["num_non_commutative_joins"] = parse_tree.count("joinDirection")
         properties["num_select_and_table_expression"] = (
             parse_tree.count("selectThenTableExpression") + 
             parse_tree.count("tableThenSelectExpression")
         )
         properties["num_functioncall"] = parse_tree.count("functionCall")
+        properties["num_table_name"] = parse_tree.count("tableName")
+        properties["num_non_join_table_name"] = parse_tree.count("(tableSource (tableSourceItem (tableName")
         properties["num_table_alias"] = parse_tree.count("tableAlias")
         properties["num_element_alias"] = parse_tree.count("selectElementAs")
         properties["num_group_by"] = parse_tree.count("groupByClause")
