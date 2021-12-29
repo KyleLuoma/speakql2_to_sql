@@ -41,6 +41,8 @@ while user_input.upper() != "QUIT":
             print(table.to_string())
     elif(user_input.upper() in ["PRINT PROPERTIES", "PRINT PROPS"]):
         print(speakql_tree.get_properties())
+    elif(user_input.upper() == "TEST AGGREGATE"):
+        speakql_tree.aggregate_select_elements()
     else:
         tree = parse_caller.run_select_statement(user_input)
         speakql_tree = st.SpeakQlTree(tree)

@@ -59,7 +59,7 @@ class SpeakQlTree:
                     if lisp_tree[j] == "(" or lisp_tree[j] == ")":
                         rule_name = lisp_tree[i + 1 : j]
                         is_leaf = lisp_tree[j] == ")"
-                        self.add_node(
+                        self.__add_node_during_build(
                             rule_name, is_root, is_leaf, depth
                         )
                         depth = depth + 1
@@ -74,7 +74,7 @@ class SpeakQlTree:
                     if lisp_tree[j] == "(" or lisp_tree[j] == ")":
                         rule_name = lisp_tree[i : j]
                         is_leaf = True
-                        self.add_node(
+                        self.__add_node_during_build(
                             rule_name, is_root, is_leaf, depth
                         )
                         i = j #+ 1
@@ -90,8 +90,25 @@ class SpeakQlTree:
     def print_nodes_to_console(self):
         for i in range(0, len(self.tree_nodes)):
             print(self.tree_nodes[i].to_string())
+
+    def __get_next_id_and_increment(self):
+        id = self.next_id
+        self.next_id = self.next_id + 1
+        return id
+
+    def __add_node_under_parent(self, rule_name, is_leaf, depth, parent):
+        new_id = self.__get_next_id_and_increment()
+        self.tree_nodes[new_id] = SpeakQlNode(
+            new_id,
+            rule_name,
+            False,
+            is_leaf,
+            depth,
+            parent
+        )
+        return new_id
                 
-    def add_node(self, rule_name, is_root, is_leaf, depth):
+    def __add_node_during_build(self, rule_name, is_root, is_leaf, depth):
         parent = -1
         if self.next_id == 1 and self.tree_nodes[0].depth == depth - 1:
             self.tree_nodes[0].add_child(1)
@@ -193,6 +210,35 @@ class SpeakQlTree:
                 child, table_name = table_name, in_select_element_tree = in_select_element_tree
                 )
         return elements
+
+    def aggregate_select_elements(self, node_id = 0):
+        if self.properties["num_select_and_table_expression"] <= 1:
+            print("Cannot aggregate select elements in a query with only one select statement.")
+            return
+        node = self.get_node(node_id)
+        elements_by_table = self.get_all_tables_and_elements(node_id = node_id)
+        #Find first selectElements rule in query:
+        select_element_nodes = self.find_nodes_by_rule_name("selectElements")
+        elements_node = self.get_node(select_element_nodes[0])
+        print(select_element_nodes)
+        print(elements_node.get_rule_name())
+        #Create a new rule with all elements from the query
+        aggregated_elements_rule = "aggregatedElements_"
+        for table in elements_by_table:
+            for element in table[1]:
+                aggregated_elements_rule = aggregated_elements_rule + ", " + element
+        aggregated_elements_rule = aggregated_elements_rule.replace("_,", "")
+        print(aggregated_elements_rule)
+        aggregated_elements_rule_id = self.__add_node_under_parent(
+            rule_name = aggregated_elements_rule,
+            is_leaf = True,
+            depth = elements_node.get_depth() + 1,
+            parent = elements_node.get_id()
+        )
+        elements_node.update_children([aggregated_elements_rule_id])
+
+        
+        #Orphan any following selectElements
 
     def get_all_table_names(self, node_id = 0, check_subqueries = False):
         table_names = []
@@ -331,6 +377,16 @@ class SpeakQlTree:
                 return self.find_node_by_rule_name(rule_to_find, child)
         else:
             return -1
+
+    def find_nodes_by_rule_name(self, rule_to_find, node_id = 0):
+        node = self.get_node(node_id)
+        node_list = []
+        if rule_to_find in node.get_rule_name():
+            node_list.append(node_id)
+            return node_list
+        for child in node.get_children():
+            node_list = node_list + self.find_nodes_by_rule_name(rule_to_find, child)
+        return node_list
 
     def reorder_select_and_table_expressions(self, node_id):
         node = self.get_node(node_id)

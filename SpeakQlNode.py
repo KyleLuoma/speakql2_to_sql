@@ -56,3 +56,6 @@ class SpeakQlNode:
 
     def get_is_leaf(self):
         return self.is_leaf
+
+    def get_id(self):
+        return self.id
