@@ -42,8 +42,10 @@ while user_input.upper() != "QUIT":
             print(table.to_string())
     elif(user_input.upper() in ["PRINT PROPERTIES", "PRINT PROPS"]):
         print(speakql_tree.get_properties())
-    elif(user_input.upper() == "TEST AGGREGATE"):
+    elif(user_input.upper() == "TEST AGGREGATE COLUMNS"):
         speakql_tree.aggregate_select_elements()
+    elif(user_input.upper() == "TEST AGGREGATE TABLES"):
+        speakql_tree.aggregate_tables()
     elif(user_input.upper() in ["PRINT SERIAL TREE", "PRINT SQL"]):
         print(
             remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))

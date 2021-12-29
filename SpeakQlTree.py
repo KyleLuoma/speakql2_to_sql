@@ -248,6 +248,50 @@ class SpeakQlTree:
         for element in select_element_nodes[1:]:
             self.remove_node_from_tree(element, remove_siblings = True)
 
+    def aggregate_tables(self, node_id = 0):
+        #multiple different types of conditions can exist:
+        if (self.properties["num_select_and_table_expression"] == 1):
+            print("Cannot aggregate tables in a query with only one table expression.")
+            return           
+        # - no joins, tables > 1, select and table expressions == tables
+        #     consolidate table calls into first table expression (similar to select element agg)
+        #     consolidate where statements into first where expression (probably needs a separate method)
+        if (self.properties["num_non_join_table_name"] > 1 and self.properties["num_joinpart"] == 0):
+            node = self.get_node(node_id)
+            tables = self.get_all_table_source_items(node_id)
+
+            table_sources_node_ids = self.find_nodes_by_rule_name("tableSources")
+            print(table_sources_node_ids)
+            first_table_sources_node = self.get_node(table_sources_node_ids[0])
+
+            all_table_source_node_ids = self.find_nodes_by_rule_name("tableSource")
+            print(all_table_source_node_ids)
+
+            new_table_sources_children = []
+
+            for i in range(0, len(all_table_source_node_ids)):
+                node_id = all_table_source_node_ids[i]
+                table_source_node = self.get_node(node_id)
+                table_source_node.update_parent(first_table_sources_node.get_id())
+                new_table_sources_children.append(node_id)
+                if i + 1 < len(all_table_source_node_ids):
+                    new_delimiter_id = self._add_node_under_parent(
+                        rule_name = "tableSourceDelimiter ,",
+                        is_leaf = True,
+                        depth = first_table_sources_node.get_depth() + 1,
+                        parent = first_table_sources_node.get_id()
+                    )
+                    new_table_sources_children.append(new_delimiter_id)
+
+            first_table_sources_node.update_children(new_table_sources_children)
+
+            for node_id in table_sources_node_ids[1:]:
+                self.remove_node_from_tree(node_id, remove_siblings = False)
+
+
+        # - joins exist, select and table expressions > 1
+        #     call to join aggregation method
+
     def remove_node_from_tree(self, node_id, remove_siblings = False):
         child = self.get_node(node_id)
         parent = self.get_node(child.get_parent())
@@ -361,6 +405,8 @@ class SpeakQlTree:
         for rule in self.table_select_agg_rules:
             if rule in node.get_rule_name():
                 local_table_source_items = self.get_all_table_source_items(node_id)
+                if len(local_table_source_items) == 0:
+                    break
                 table_source_item = local_table_source_items[0]
                 if (
                     not table_source_item.has_alias() 
@@ -408,7 +454,7 @@ class SpeakQlTree:
         if not check_subqueries:
             if "subQueryTable" in node.get_rule_name():
                 return node_list
-        if rule_to_find in node.get_rule_name():
+        if rule_to_find == node.get_rule_name().strip().split()[0]:
             node_list.append(node_id)
             return node_list
         for child in node.get_children():

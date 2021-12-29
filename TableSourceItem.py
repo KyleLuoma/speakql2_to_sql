@@ -35,3 +35,9 @@ class TableSourceItem:
 
     def as_dict(self):
         return {"name" : self.name, "alias" : self.alias}
+
+    def as_sql_fragment(self):
+        sql_fragment = self.name
+        if self.has_alias():
+            sql_fragment = sql_fragment + " AS " + self.alias
+        return sql_fragment
