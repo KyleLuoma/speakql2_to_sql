@@ -240,10 +240,20 @@ class SpeakQlTree:
         elements_node.update_children([aggregated_elements_rule_id])       
         #Orphan any following selectElements
         for element in select_element_nodes[1:]:
-            child = self.get_node(element)
-            parent = self.get_node(child.get_parent())
+            self.remove_node_from_tree(element, remove_siblings = True)
+
+    def remove_node_from_tree(self, node_id, remove_siblings = False):
+        child = self.get_node(node_id)
+        parent = self.get_node(child.get_parent())
+        children = parent.get_children()
+        print(children)
+        if len(children) > 1 and not remove_siblings:
+            children.remove(node_id)
+            parent.update_children(children)
+            print(children)
+        else:
             parent.update_children([])
-            child.update_parent(-1)
+        child.update_parent(-1)
 
     def get_all_table_names(self, node_id = 0, check_subqueries = False):
         table_names = []
@@ -373,9 +383,12 @@ class SpeakQlTree:
             table_elements = table_elements + self.get_all_tables_and_elements(child)
         return table_elements
 
-    def find_node_by_rule_name(self, rule_to_find, node_id = 0):
+    def find_node_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False):
         node = self.get_node(node_id)
-        if rule_to_find in node.get_rule_name():
+        if not check_subqueries:
+            if "subQueryTable" in node.get_rule_name():
+                return -1
+        elif rule_to_find in node.get_rule_name():
             return node_id
         elif not node.get_is_leaf():
             for child in node.get_children():
@@ -383,9 +396,12 @@ class SpeakQlTree:
         else:
             return -1
 
-    def find_nodes_by_rule_name(self, rule_to_find, node_id = 0):
+    def find_nodes_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False):
         node = self.get_node(node_id)
         node_list = []
+        if not check_subqueries:
+            if "subQueryTable" in node.get_rule_name():
+                return node_list
         if rule_to_find in node.get_rule_name():
             node_list.append(node_id)
             return node_list

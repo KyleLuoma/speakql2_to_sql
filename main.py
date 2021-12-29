@@ -43,6 +43,10 @@ while user_input.upper() != "QUIT":
         print(speakql_tree.get_properties())
     elif(user_input.upper() == "TEST AGGREGATE"):
         speakql_tree.aggregate_select_elements()
+    elif(user_input.upper() in ["PRINT SERIAL TREE", "PRINT SQL"]):
+        print(
+            remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
+        )
     else:
         tree = parse_caller.run_select_statement(user_input)
         speakql_tree = st.SpeakQlTree(tree)
