@@ -569,6 +569,28 @@ class SpeakQlTree:
     def get_node(self, node_id):
         return self.tree_nodes[node_id]
 
+    def aggregate_select_and_table_statements(self, node_id = 0):
+        if self.properties["num_select_and_table_expression"] <= 1:
+            print("Cannot aggregate statements in a query with only one select and table statement.")
+            return
+        self.aggregate_select_elements(node_id)
+        self.aggregate_tables(node_id)
+        self.aggregate_where_statements(node_id)
+
+        #remove empty statements:
+        garbage_nodes = []
+        for expression in self.table_select_agg_rules:
+            garbage_nodes = garbage_nodes + self.find_nodes_by_rule_name(expression)
+            garbage_nodes = garbage_nodes + self.find_nodes_by_rule_name("expressionDelimiter")
+        garbage_nodes = self.remove_duplicates_from_list(garbage_nodes)
+        garbage_nodes.sort()
+        print("Garbage nodes:", garbage_nodes)
+        if(len(garbage_nodes) > 1):
+            garbage_nodes = garbage_nodes[1:]
+            for node_id in garbage_nodes:
+                self.remove_node_from_tree(node_id)
+
+
 
 class JoinPart:
 

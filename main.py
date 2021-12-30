@@ -48,6 +48,8 @@ while user_input.upper() != "QUIT":
         speakql_tree.aggregate_tables()
     elif(user_input.upper() == "TEST AGGREGATE WHERE"):
         speakql_tree.aggregate_where_statements()
+    elif(user_input.upper() == "TEST AGGREGATE ALL"):
+        speakql_tree.aggregate_select_and_table_statements()
     elif(user_input.upper() in ["PRINT SERIAL TREE", "PRINT SQL"]):
         print(
             remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
