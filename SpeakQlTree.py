@@ -235,8 +235,7 @@ class SpeakQlTree:
         #Create a new rule with all elements from the query
         new_children = []
         for table in elements_by_table:
-            for i in range(0, len(table[1])):
-                element = table[1][i]
+            for element in table[1]:
                 new_id = self._add_node_under_parent(
                     "selectElement " + element,
                     is_leaf = True,
@@ -244,7 +243,11 @@ class SpeakQlTree:
                     parent = first_select_elements_node.get_id()
                 )
                 new_children.append(new_id)
-                if i + 1 < len(table[1]):
+                #Avoid adding comma after last element:
+                if not (
+                    elements_by_table.index(table) == len(elements_by_table) - 1
+                    and table[1].index(element) == len(table[1]) - 1
+                ):
                     delim_id = self._add_node_under_parent(
                         "selectElementDelimiter ,",
                         is_leaf = True,
