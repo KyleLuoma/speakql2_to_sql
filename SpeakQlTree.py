@@ -18,9 +18,15 @@ class SpeakQlTree:
             "selectThenTableExpression",
             "tableThenSelectExpression"
         ]
+        if("(" not in lisp_tree and ")" not in lisp_tree):
+            lisp_tree = "(emptyTree)"
         self.parse_tree = lisp_tree
         self._build_tree(self.parse_tree)
         self.properties = self.get_properties_from_parse_tree(self.parse_tree)
+        self.initial_table_source_items = self.get_all_table_source_items(
+            node_id = 0,
+            return_initial_list = False
+        )
 
     def get_properties_from_parse_tree(self, parse_tree):
         properties = {
@@ -260,20 +266,42 @@ class SpeakQlTree:
         for element in select_elements_node_ids[1:]:
             self.remove_node_from_tree(element, remove_siblings = True)
 
+    def get_tablesourceitem_by_name_from_initial_list(self, table_name):
+        print("Searching for table in initial list by name:", table_name)
+        for table in self.initial_table_source_items:
+            if table.get_name() == table_name.strip():
+                return table    
+        raise ValueError()
+
+    def get_tablesourceitem_by_alias_from_initial_list(self, table_alias):
+        print("Searching for table in initial list by alias:", table_alias)
+        for table in self.initial_table_source_items:
+            if table.get_alias() == table_alias.strip():
+                return table
+        raise ValueError()
+
     def _aggregate_where_statements(self, node_id = 0):
         if (self.properties["num_select_and_table_expression"] <= 1):
             print("Cannot aggregate where statements in a query with only one table expression.")
             return
-
         from_clause_node_ids = self.find_nodes_by_rule_name("fromClause", node_id = node_id)
         first_from_clause_node = self.get_node(from_clause_node_ids[0])
-
         where_expression_ids = []
         where_expression_table_lookup = {}
+        #Find the table name or alias associated with the where clauses:
         for from_clause_node_id in from_clause_node_ids:
             new_expressions = self.find_nodes_by_rule_name("whereExpression", from_clause_node_id)
             for expression in new_expressions:
-                where_expression_table_lookup[expression] = self.get_all_table_names(from_clause_node_id)
+                if self.rule_exists_in_tree(rule_to_find = "tableName", node_id = from_clause_node_id):
+                    table_name = self.get_all_table_names(from_clause_node_id)[0]
+                    table_source_item = self.get_tablesourceitem_by_name_from_initial_list(table_name)
+                else:
+                    alias_name = self.preorder_serialize_tokens(
+                        self.find_nodes_by_rule_name("tableAlias", node_id = from_clause_node_id)[0]
+                    ).replace("AS ", "")
+                    print("ALIAS NAME:", alias_name)
+                    table_source_item = self.get_tablesourceitem_by_alias_from_initial_list(alias_name)
+                where_expression_table_lookup[expression] = table_source_item.get_alias_if_exists_else_name()
             where_expression_ids = where_expression_ids + new_expressions
             print(where_expression_ids)
             print(where_expression_table_lookup)
@@ -303,7 +331,7 @@ class SpeakQlTree:
                     simple_id_id = self.find_nodes_by_rule_name("simpleId", uid_id)[0]
                     old_simple_id_rule = self.get_token_string_from_rule(self.get_node(simple_id_id))
                     self.get_node(simple_id_id).update_rule_name(
-                        "simpleId " + where_expression_table_lookup[expression_id][0]
+                        "simpleId " + where_expression_table_lookup[expression_id]
                     )
                     self._add_node_under_parent(
                         rule_name = "dottedId ." + old_simple_id_rule,
@@ -433,7 +461,15 @@ class SpeakQlTree:
                 table_aliases = table_aliases + self.get_all_table_aliases(child)
             return table_aliases
 
-    def get_all_table_source_items(self, node_id = 0, at_start_node = True):
+    # Creates a list of all tables and their aliases within a query
+    # Examines all possible mentions of tables within the query
+    # If a table is referenced without an alias, but then later an alias is assigned
+    # to the same table, this will update the existing entry to add the alias.
+    # If it finds a subquery, it will label it as SUBQUERY_<ALIAS>
+    # Returns: List of TableSourceItem objects, one for each table in a query
+    def get_all_table_source_items(self, node_id = 0, at_start_node = True, return_initial_list = True):
+        if return_initial_list:
+            return self.initial_table_source_items
         table_source_items = []
         node = self.get_node(node_id)
         if "selectExpression" in node.get_rule_name():
@@ -454,7 +490,9 @@ class SpeakQlTree:
             table_source_items.append(table_source_item)
             return table_source_items
         for child in node.get_children():
-            table_source_items = table_source_items + self.get_all_table_source_items(child, at_start_node = False)
+            table_source_items = table_source_items + self.get_all_table_source_items(
+                child, at_start_node = False, return_initial_list = return_initial_list
+            )
         if at_start_node:
             table_source_items_final = []
             table_names = []
