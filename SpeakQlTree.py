@@ -260,40 +260,71 @@ class SpeakQlTree:
     def aggregate_where_statements(self, node_id = 0):
         if (self.properties["num_select_and_table_expression"] <= 1):
             print("Cannot aggregate where statements in a query with only one table expression.")
-            return  
+            return
+
         from_clause_node_ids = self.find_nodes_by_rule_name("fromClause", node_id = node_id)
-        first_where_expression_id = -1
-        first_where_keyword_id = -1
-        donor_from_clause_id = -1
         first_from_clause_node = self.get_node(from_clause_node_ids[0])
+
+        where_expression_ids = []
         for from_clause_node_id in from_clause_node_ids:
-            where_expression_ids = self.find_nodes_by_rule_name("whereExpression", from_clause_node_id)
-            if len(where_expression_ids) > 0:
-                first_where_expression_id = where_expression_ids[0]
-                first_where_keyword_id = self.find_nodes_by_rule_name("whereKeyword", from_clause_node_id)[0]
-                donor_from_clause_id = from_clause_node_id
-                break
-        if first_where_expression_id == -1:
+            where_expression_ids = where_expression_ids + self.find_nodes_by_rule_name("whereExpression", from_clause_node_id)
+            print(where_expression_ids)
+        
+        if len(where_expression_ids) == 0:
             print("No where expressions exist in this query.")
             return
-        first_where_expression_node = self.get_node(first_where_expression_id)
-        first_where_keyword_node = self.get_node(first_where_keyword_id)
-        donor_from_clause = self.get_node(donor_from_clause_id)
-        # Move where expression to the first from clause
-        if first_where_expression_id not in first_from_clause_node.get_children():
-            first_from_clause_node.add_child(first_where_keyword_id)
+
+        if not self.rule_exists_in_tree("whereKeyword", first_from_clause_node.get_id()):
             self._add_node_under_parent(
-                "leftParen (", True, first_from_clause_node.depth + 1, first_from_clause_node.get_id()
+                "whereKeyword WHERE", 
+                True, 
+                first_from_clause_node.get_depth() + 1, 
+                first_from_clause_node.get_id()
             )
-            first_from_clause_node.add_child(first_where_expression_id)
-            self._add_node_under_parent(
-                "rightParen )", True, first_from_clause_node.depth + 1, first_from_clause_node.get_id()
-            )
-            donor_from_clause.remove_child(first_where_keyword_id)
-            donor_from_clause.remove_child(first_where_expression_id)
+
+        for expression_id in where_expression_ids:
+            where_expression_node = self.get_node(expression_id)
+            if expression_id in first_from_clause_node.get_children():
+                self.surround_node_with_parens(expression_id)
+            else:
+                self._add_node_under_parent(
+                    "logicalOperator AND",
+                    True,
+                    first_from_clause_node.get_depth() + 1,
+                    first_from_clause_node.get_id()
+                )        
+                old_parent = self.get_node(where_expression_node.get_parent())
+                old_parent.remove_child(expression_id)
+                first_from_clause_node.add_child(expression_id)
+                where_expression_node.update_parent(first_from_clause_node.get_id())
+                self.surround_node_with_parens(expression_id)
+                
         
-
-
+    def surround_node_with_parens(self, node_id):
+        node = self.get_node(node_id)
+        parent = self.get_node(node.get_parent())
+        siblings = parent.get_children()
+        left_id = self._add_node_under_parent(
+            rule_name = "leftParen (",
+            is_leaf = True,
+            depth = parent.get_depth() + 1,
+            parent = parent.get_id()
+        )
+        right_id = self._add_node_under_parent(
+            rule_name = "rightParen )",
+            is_leaf = True,
+            depth = parent.get_depth() + 1,
+            parent = parent.get_id()
+        )
+        new_children = []
+        for i in range(0, len(siblings)):
+            if siblings[i] not in [node_id, left_id, right_id]:
+                new_children.append(siblings[i])
+            elif siblings[i] == node_id:
+                new_children = new_children + [left_id, node_id, right_id]
+            else:
+                pass
+        parent.update_children(new_children)
 
     def aggregate_tables(self, node_id = 0):
         #multiple different types of conditions can exist:
@@ -506,7 +537,7 @@ class SpeakQlTree:
             node_id,
             check_subqueries
         )
-        return rule_list > 0
+        return len(rule_list) > 0
 
     def reorder_select_and_table_expressions(self, node_id):
         node = self.get_node(node_id)
