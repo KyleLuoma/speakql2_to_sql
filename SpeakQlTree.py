@@ -303,7 +303,7 @@ class SpeakQlTree:
                     simple_id_id = self.find_nodes_by_rule_name("simpleId", uid_id)[0]
                     old_simple_id_rule = self.get_token_string_from_rule(self.get_node(simple_id_id))
                     self.get_node(simple_id_id).update_rule_name(
-                        where_expression_table_lookup[expression_id][0]
+                        "simpleId " + where_expression_table_lookup[expression_id][0]
                     )
                     self._add_node_under_parent(
                         rule_name = "dottedId ." + old_simple_id_rule,
