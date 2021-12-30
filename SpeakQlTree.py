@@ -320,25 +320,7 @@ class SpeakQlTree:
 
         for expression_id in where_expression_ids:
             #Check if predicates in expression have dotted ids and add them if not
-            predicate_ids = self.find_nodes_by_rule_name("predicate", expression_id)
-            for predicate_id in predicate_ids:
-                if (
-                    not self.rule_exists_in_tree("dottedId", predicate_id) 
-                    and self.rule_exists_in_tree("fullColumnName", predicate_id)
-                ):
-                    column_name_id = self.find_nodes_by_rule_name("fullColumnName", predicate_id)[0]
-                    uid_id = self.find_nodes_by_rule_name("uid", column_name_id)[0]
-                    simple_id_id = self.find_nodes_by_rule_name("simpleId", uid_id)[0]
-                    old_simple_id_rule = self.get_token_string_from_rule(self.get_node(simple_id_id))
-                    self.get_node(simple_id_id).update_rule_name(
-                        "simpleId " + where_expression_table_lookup[expression_id]
-                    )
-                    self._add_node_under_parent(
-                        rule_name = "dottedId ." + old_simple_id_rule,
-                        is_leaf = True,
-                        depth = self.get_node(column_name_id).get_depth() + 1,
-                        parent = column_name_id
-                    )
+            self.add_dotted_ids_to_predicates(expression_id, where_expression_table_lookup[expression_id])
 
             where_expression_node = self.get_node(expression_id)
             if expression_id in first_from_clause_node.get_children():
@@ -356,7 +338,35 @@ class SpeakQlTree:
                 first_from_clause_node.add_child(expression_id)
                 where_expression_node.update_parent(first_from_clause_node.get_id())
                 self.surround_node_with_parens(expression_id)
-                
+
+    def add_dotted_ids_to_predicates(self, expression_id, table_or_alias, recursive = True):
+        predicate_ids = self.find_nodes_by_rule_name("predicate", expression_id)
+        for predicate_id in predicate_ids:
+            if (
+                not self.rule_exists_in_tree("dottedId", predicate_id) 
+                and self.rule_exists_in_tree("fullColumnName", predicate_id)
+            ):
+                self.replace_simple_id_with_dotted_id(
+                    predicate_id, table_or_alias
+                )
+            if recursive:
+                for child in self.get_node(predicate_id).get_children():
+                    self.add_dotted_ids_to_predicates(child, table_or_alias)
+
+    def replace_simple_id_with_dotted_id(self, node_id, table_or_alias):
+        column_name_id = self.find_nodes_by_rule_name("fullColumnName", node_id)[0]
+        uid_id = self.find_nodes_by_rule_name("uid", column_name_id)[0]
+        simple_id_id = self.find_nodes_by_rule_name("simpleId", uid_id)[0]
+        old_simple_id_rule = self.get_token_string_from_rule(self.get_node(simple_id_id))
+        self.get_node(simple_id_id).update_rule_name(
+            "simpleId " + table_or_alias
+        )
+        self._add_node_under_parent(
+            rule_name = "dottedId ." + old_simple_id_rule,
+            is_leaf = True,
+            depth = self.get_node(column_name_id).get_depth() + 1,
+            parent = column_name_id
+        )
         
     def surround_node_with_parens(self, node_id):
         node = self.get_node(node_id)
@@ -536,13 +546,13 @@ class SpeakQlTree:
         alias_table_dict = {}
         table_elements = []
         table_dict_list = []
-        all_table_source_items = self.get_all_table_source_items()
+        all_table_source_items = self.get_all_table_source_items(return_initial_list=False)
         for table in all_table_source_items:
             table_alias_dict[table.get_name()] = table.get_alias()
             alias_table_dict[table.get_alias()] = table.get_name()
         for rule in self.table_select_agg_rules:
             if rule in node.get_rule_name():
-                local_table_source_items = self.get_all_table_source_items(node_id)
+                local_table_source_items = self.get_all_table_source_items(node_id, return_initial_list=False)
                 if len(local_table_source_items) == 0:
                     break
                 table_source_item = local_table_source_items[0]
