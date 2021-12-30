@@ -4,7 +4,7 @@ from speakql_to_sql import *
 
 verbose = True
 
-parse_engine = spc.JavaSpeakQlParseEngine("gen_table_source_delimiter")
+parse_engine = spc.JavaSpeakQlParseEngine("gen_where_expression")
 parse_caller = spc.SpeakQlParseCaller(parse_engine)
 
 py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
@@ -46,6 +46,8 @@ while user_input.upper() != "QUIT":
         speakql_tree.aggregate_select_elements()
     elif(user_input.upper() == "TEST AGGREGATE TABLES"):
         speakql_tree.aggregate_tables()
+    elif(user_input.upper() == "TEST AGGREGATE WHERE"):
+        speakql_tree.aggregate_where_statements()
     elif(user_input.upper() in ["PRINT SERIAL TREE", "PRINT SQL"]):
         print(
             remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))

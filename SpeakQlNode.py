@@ -33,6 +33,9 @@ class SpeakQlNode:
     def add_parent(self, parent_id):
         self.parent = parent_id
 
+    def remove_child(self, child_id):
+        self.children.remove(child_id)
+
     def update_rule_name(self, new_value):
         self.rule_name = new_value
 

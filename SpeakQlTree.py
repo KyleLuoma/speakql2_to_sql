@@ -114,6 +114,8 @@ class SpeakQlTree:
             depth,
             parent
         )
+        parent = self.get_node(parent)
+        parent.add_child(new_id)
         return new_id
                 
     def _add_node_during_build(self, rule_name, is_root, is_leaf, depth):
@@ -226,17 +228,15 @@ class SpeakQlTree:
         node = self.get_node(node_id)
         elements_by_table = self.get_all_tables_and_elements(node_id = node_id)
         #Find first selectElements rule in query:
-        select_elements_node_ids = self.find_nodes_by_rule_name("selectElements")
+        select_elements_node_ids = self.find_nodes_by_rule_name("selectElements", node_id = node_id)
         first_select_elements_node = self.get_node(select_elements_node_ids[0])
         print(select_elements_node_ids)
         print(first_select_elements_node.get_rule_name())
         #Create a new rule with all elements from the query
-        #aggregated_elements_rule = "aggregatedElements_"
         new_children = []
         for table in elements_by_table:
             for i in range(0, len(table[1])):
                 element = table[1][i]
-                #aggregated_elements_rule = aggregated_elements_rule + ", " + element
                 new_id = self._add_node_under_parent(
                     "selectElement " + element,
                     is_leaf = True,
@@ -252,20 +252,48 @@ class SpeakQlTree:
                         parent = first_select_elements_node.get_id()
                     )
                     new_children.append(delim_id)
-
-        # aggregated_elements_rule = aggregated_elements_rule.replace("_,", "")
-        # print(aggregated_elements_rule)
-        # aggregated_elements_rule_id = self._add_node_under_parent(
-        #     rule_name = aggregated_elements_rule,
-        #     is_leaf = True,
-        #     depth = first_select_elements_node.get_depth() + 1,
-        #     parent = first_select_elements_node.get_id()
-        # )
-        #first_select_elements_node.update_children([aggregated_elements_rule_id])
         first_select_elements_node.update_children(new_children)       
         #Orphan any following selectElements
         for element in select_elements_node_ids[1:]:
             self.remove_node_from_tree(element, remove_siblings = True)
+
+    def aggregate_where_statements(self, node_id = 0):
+        if (self.properties["num_select_and_table_expression"] <= 1):
+            print("Cannot aggregate where statements in a query with only one table expression.")
+            return  
+        from_clause_node_ids = self.find_nodes_by_rule_name("fromClause", node_id = node_id)
+        first_where_expression_id = -1
+        first_where_keyword_id = -1
+        donor_from_clause_id = -1
+        first_from_clause_node = self.get_node(from_clause_node_ids[0])
+        for from_clause_node_id in from_clause_node_ids:
+            where_expression_ids = self.find_nodes_by_rule_name("whereExpression", from_clause_node_id)
+            if len(where_expression_ids) > 0:
+                first_where_expression_id = where_expression_ids[0]
+                first_where_keyword_id = self.find_nodes_by_rule_name("whereKeyword", from_clause_node_id)[0]
+                donor_from_clause_id = from_clause_node_id
+                break
+        if first_where_expression_id == -1:
+            print("No where expressions exist in this query.")
+            return
+        first_where_expression_node = self.get_node(first_where_expression_id)
+        first_where_keyword_node = self.get_node(first_where_keyword_id)
+        donor_from_clause = self.get_node(donor_from_clause_id)
+        # Move where expression to the first from clause
+        if first_where_expression_id not in first_from_clause_node.get_children():
+            first_from_clause_node.add_child(first_where_keyword_id)
+            self._add_node_under_parent(
+                "leftParen (", True, first_from_clause_node.depth + 1, first_from_clause_node.get_id()
+            )
+            first_from_clause_node.add_child(first_where_expression_id)
+            self._add_node_under_parent(
+                "rightParen )", True, first_from_clause_node.depth + 1, first_from_clause_node.get_id()
+            )
+            donor_from_clause.remove_child(first_where_keyword_id)
+            donor_from_clause.remove_child(first_where_expression_id)
+        
+
+
 
     def aggregate_tables(self, node_id = 0):
         #multiple different types of conditions can exist:
@@ -276,17 +304,12 @@ class SpeakQlTree:
         #     consolidate table calls into first table expression (similar to select element agg)
         #     consolidate where statements into first where expression (probably needs a separate method)
         if (self.properties["num_non_join_table_name"] > 1 and self.properties["num_joinpart"] == 0):
-            node = self.get_node(node_id)
-
-            table_sources_node_ids = self.find_nodes_by_rule_name("tableSources")
+            table_sources_node_ids = self.find_nodes_by_rule_name("tableSources", node_id = node_id)
             print(table_sources_node_ids)
             first_table_sources_node = self.get_node(table_sources_node_ids[0])
-
-            all_table_source_node_ids = self.find_nodes_by_rule_name("tableSource")
+            all_table_source_node_ids = self.find_nodes_by_rule_name("tableSource", node_id = node_id)
             print(all_table_source_node_ids)
-
             new_table_sources_children = []
-
             for i in range(0, len(all_table_source_node_ids)):
                 node_id = all_table_source_node_ids[i]
                 table_source_node = self.get_node(node_id)
@@ -300,9 +323,7 @@ class SpeakQlTree:
                         parent = first_table_sources_node.get_id()
                     )
                     new_table_sources_children.append(new_delimiter_id)
-
             first_table_sources_node.update_children(new_table_sources_children)
-
             for node_id in table_sources_node_ids[1:]:
                 self.remove_node_from_tree(node_id, remove_siblings = False)
 
@@ -478,6 +499,14 @@ class SpeakQlTree:
         for child in node.get_children():
             node_list = node_list + self.find_nodes_by_rule_name(rule_to_find, child)
         return node_list
+
+    def rule_exists_in_tree(self, rule_to_find, node_id = 0, check_subqueries = False):
+        rule_list = self.find_nodes_by_rule_name(
+            rule_to_find,
+            node_id,
+            check_subqueries
+        )
+        return rule_list > 0
 
     def reorder_select_and_table_expressions(self, node_id):
         node = self.get_node(node_id)
