@@ -221,7 +221,7 @@ class SpeakQlTree:
                 )
         return elements
 
-    def aggregate_select_elements(self, node_id = 0):
+    def _aggregate_select_elements(self, node_id = 0):
         if self.properties["num_select_and_table_expression"] <= 1:
             print("Cannot aggregate select elements in a query with only one select statement.")
             return
@@ -257,7 +257,7 @@ class SpeakQlTree:
         for element in select_elements_node_ids[1:]:
             self.remove_node_from_tree(element, remove_siblings = True)
 
-    def aggregate_where_statements(self, node_id = 0):
+    def _aggregate_where_statements(self, node_id = 0):
         if (self.properties["num_select_and_table_expression"] <= 1):
             print("Cannot aggregate where statements in a query with only one table expression.")
             return
@@ -266,9 +266,14 @@ class SpeakQlTree:
         first_from_clause_node = self.get_node(from_clause_node_ids[0])
 
         where_expression_ids = []
+        where_expression_table_lookup = {}
         for from_clause_node_id in from_clause_node_ids:
-            where_expression_ids = where_expression_ids + self.find_nodes_by_rule_name("whereExpression", from_clause_node_id)
+            new_expressions = self.find_nodes_by_rule_name("whereExpression", from_clause_node_id)
+            for expression in new_expressions:
+                where_expression_table_lookup[expression] = self.get_all_table_names(from_clause_node_id)
+            where_expression_ids = where_expression_ids + new_expressions
             print(where_expression_ids)
+            print(where_expression_table_lookup)
         
         if len(where_expression_ids) == 0:
             print("No where expressions exist in this query.")
@@ -283,16 +288,38 @@ class SpeakQlTree:
             )
 
         for expression_id in where_expression_ids:
+            #Check if predicates in expression have dotted ids and add them if not
+            predicate_ids = self.find_nodes_by_rule_name("predicate", expression_id)
+            for predicate_id in predicate_ids:
+                if (
+                    not self.rule_exists_in_tree("dottedId", predicate_id) 
+                    and self.rule_exists_in_tree("fullColumnName", predicate_id)
+                ):
+                    column_name_id = self.find_nodes_by_rule_name("fullColumnName", predicate_id)[0]
+                    uid_id = self.find_nodes_by_rule_name("uid", column_name_id)[0]
+                    simple_id_id = self.find_nodes_by_rule_name("simpleId", uid_id)[0]
+                    old_simple_id_rule = self.get_token_string_from_rule(self.get_node(simple_id_id))
+                    self.get_node(simple_id_id).update_rule_name(
+                        where_expression_table_lookup[expression_id][0]
+                    )
+                    self._add_node_under_parent(
+                        rule_name = "dottedId ." + old_simple_id_rule,
+                        is_leaf = True,
+                        depth = self.get_node(column_name_id).get_depth() + 1,
+                        parent = column_name_id
+                    )
+
             where_expression_node = self.get_node(expression_id)
             if expression_id in first_from_clause_node.get_children():
                 self.surround_node_with_parens(expression_id)
             else:
-                self._add_node_under_parent(
-                    "logicalOperator AND",
-                    True,
-                    first_from_clause_node.get_depth() + 1,
-                    first_from_clause_node.get_id()
-                )        
+                if not where_expression_ids.index(expression_id) == 0:
+                    self._add_node_under_parent(
+                        "logicalOperator AND",
+                        True,
+                        first_from_clause_node.get_depth() + 1,
+                        first_from_clause_node.get_id()
+                    )        
                 old_parent = self.get_node(where_expression_node.get_parent())
                 old_parent.remove_child(expression_id)
                 first_from_clause_node.add_child(expression_id)
@@ -326,7 +353,7 @@ class SpeakQlTree:
                 pass
         parent.update_children(new_children)
 
-    def aggregate_tables(self, node_id = 0):
+    def _aggregate_tables(self, node_id = 0):
         #multiple different types of conditions can exist:
         if (self.properties["num_select_and_table_expression"] <= 1):
             print("Cannot aggregate tables in a query with only one table expression.")
@@ -379,7 +406,7 @@ class SpeakQlTree:
         table_names = []
         node = self.get_node(node_id)
         if "tableName" in node.get_rule_name():
-            table_names.append(self.preorder_serialize_tokens(node_id))
+            table_names.append(self.preorder_serialize_tokens(node_id).strip())
             return table_names
         elif "joinPart" in node.get_rule_name():
             return table_names
@@ -573,9 +600,10 @@ class SpeakQlTree:
         if self.properties["num_select_and_table_expression"] <= 1:
             print("Cannot aggregate statements in a query with only one select and table statement.")
             return
-        self.aggregate_select_elements(node_id)
-        self.aggregate_tables(node_id)
-        self.aggregate_where_statements(node_id)
+        #The order in which these are called matters: select -> where -> tables
+        self._aggregate_select_elements(node_id)
+        self._aggregate_where_statements(node_id)
+        self._aggregate_tables(node_id)
 
         #remove empty statements:
         garbage_nodes = []
