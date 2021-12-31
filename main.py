@@ -27,9 +27,11 @@ while user_input.upper() != "QUIT":
     elif(user_input.upper() == "VERBOSE ON"):
         print("Verbose mode is on. Type verbose off to turn it off again")
         verbose = True
+        speakql_tree.set_verbose(verbose)
     elif(user_input.upper() == "VERBOSE OFF"):
         print("Verbose mode is off. Type verbose on to turn it back on.")
         verbose = False
+        speakql_tree.set_verbose(verbose)
     elif(user_input.upper() == "PRINT SPEAKQL TREE"):
         speakql_tree.print_tree_to_console()
     elif(user_input.upper() == "PRINT ALL NODES"):
@@ -59,7 +61,7 @@ while user_input.upper() != "QUIT":
     else:
         speakql_query = user_input
         tree = parse_caller.run_select_statement(speakql_query)
-        speakql_tree = st.SpeakQlTree(tree)
+        speakql_tree = st.SpeakQlTree(tree, verbose)
         #print("Serial translator:", translate_speakql_to_sql(tree, verbose = verbose))
         print("Tree translator:", translate_speakql_to_sql_with_st(speakql_tree, verbose = verbose))
 
