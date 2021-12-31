@@ -37,7 +37,7 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
         return tree
 
     def write_query_file(self, query):
-        f = open("query.txt", "w")
+        f = open("../query.txt", "w")
         f.write(query.upper())
         f.close()
 
