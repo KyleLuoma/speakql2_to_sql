@@ -1,8 +1,8 @@
-#from app import app
+from app import app
 from flask import render_template
 from flask import request
 import flask
-from app.src import translator as tr
+from .src.translator import *
 from flask_cors import CORS
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
@@ -16,7 +16,7 @@ def index():
 @app.route('/test_query')
 def test_query():
     speakql_query = "FROM TABLE ONE SHOW ME A, B AND C AND THEN FROM TABLE TWO T WHERE C = ONE.C SHOW ME C, D AND E"
-    sql_query = tr.run_test_query_translation(speakql_query)
+    sql_query = run_test_query_translation(speakql_query)
     response = flask.jsonify({'sql_query': sql_query, 'speakql_query': speakql_query})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return (
@@ -28,7 +28,7 @@ def do_query():
     print("Data payload received from requestor", request.get_data(as_text = True))
     query = request.get_json()['query']
     print("Query Received from requestor:", query)
-    sql_query = tr.run_test_query_translation(query)
+    sql_query = run_test_query_translation(query)
     response = flask.jsonify({'query': sql_query})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return(response)

@@ -32,9 +32,10 @@ class SpeakQlParseEngine:
 class JavaSpeakQlParseEngine(SpeakQlParseEngine):
 
     def get_parse_tree(self, rule, query):
-        self.write_query_file(query)
+        query_path = "C:/research_projects/speakql2_to_sql/app/query.txt"
+        self.write_query_file(query, query_path)
         tree = subprocess.run(
-            "java org.antlr.v4.gui.TestRig SpeakQl " + rule + " -inputFile \"../../../../query.txt\" -tree", 
+            "java org.antlr.v4.gui.TestRig SpeakQl " + rule + " -inputFile \"" + query_path + "\" -tree", 
             capture_output=True,
             cwd="c:/research_projects/speakql2_to_sql/app/src/speakql_translator/antlr_builds/" + self.build_name
             )
@@ -45,8 +46,8 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
 
         return tree
 
-    def write_query_file(self, query):
-        f = open("query.txt", "w")
+    def write_query_file(self, query, file_path):
+        f = open(file_path, "w")
         f.write(query.upper())
         f.close()
 
