@@ -1,5 +1,6 @@
 #lisp_tree = "(selectStatement (querySpecification (tableThenSelectExpression (tableExpression (fromClause (fromKeyword FROM TABLE) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId A))))))) (whereKeyword WHERE) (expression (predicate (predicate (expressionAtom (fullColumnName (uid (simpleId A))))) (comparisonOperator =) (predicate (expressionAtom (fullColumnName (uid (simpleId B))))))))) (selectExpression (selectClause (selectKeyword DISPLAY)) (selectElements (selectElement (fullColumnName (uid (simpleId B))))))) selectModifierExpression))"
 from os import remove
+import json
 from .TableSourceItem import TableSourceItem
 from .SpeakQlNode import SpeakQlNode
 
@@ -174,6 +175,18 @@ class SpeakQlTree:
             if not rule[0].islower():
                 rule_string = rule_string + rule + " "
         return rule_string
+
+    def as_json(self, node_id = 0, at_start = True):
+        node = self.get_node(node_id)
+        tree_dict = {}
+        tree_dict['name'] = node.get_rule_name()
+        tree_dict['children'] = []
+        for child in node.get_children():
+            tree_dict['children'].append(self.as_json(child, at_start = False))
+        if at_start:
+            return json.JSONEncoder().encode(tree_dict)
+        else: 
+            return tree_dict
 
     def preorder_serialize_tokens(self, node_id, input = "", ignore_rules = []):
         output = input

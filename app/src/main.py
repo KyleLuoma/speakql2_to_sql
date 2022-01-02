@@ -1,5 +1,6 @@
 import speakql_translator.SpeakQlParseCaller as spc
 import speakql_translator.SpeakQlTree as st
+import json
 from speakql_translator.speakql_to_sql import *
 
 verbose = True
@@ -52,6 +53,8 @@ while user_input.upper() != "QUIT":
         speakql_tree._aggregate_where_statements()
     elif(user_input.upper() == "TEST AGGREGATE ALL"):
         speakql_tree.aggregate_select_and_table_statements()
+    elif(user_input.upper() == "PRINT JSON"):
+        print(speakql_tree.as_json())
     elif(user_input.upper() in ["PRINT SERIAL TREE", "PRINT SQL"]):
         print(
             remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))

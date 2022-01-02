@@ -28,8 +28,8 @@ def do_query():
     print("Data payload received from requestor", request.get_data(as_text = True))
     query = request.get_json()['query']
     print("Query Received from requestor:", query)
-    sql_query = run_test_query_translation(query)
-    response = flask.jsonify({'query': sql_query})
+    translator_results = run_test_query_translation(query)
+    response = flask.jsonify({'query': translator_results['sql_query'], 'speakql_tree_json': translator_results['speakql_tree_json']})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return(response)
 
