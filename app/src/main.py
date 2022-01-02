@@ -1,6 +1,6 @@
-import SpeakQlParseCaller as spc
-import SpeakQlTree as st
-from speakql_to_sql import *
+import speakql_translator.SpeakQlParseCaller as spc
+import speakql_translator.SpeakQlTree as st
+from speakql_translator.speakql_to_sql import *
 
 verbose = True
 

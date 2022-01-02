@@ -1,10 +1,12 @@
 import subprocess
 import antlr4
-import antlr_builds.pySpeakQl.SpeakQlLexer as SpeakQlLexer
-import antlr_builds.pySpeakQl.SpeakQlParser as SpeakQlParser
-import antlr_builds.pySpeakQl.SpeakQlParserListener as SpeakQlParserListener
-import antlr_builds.pySpeakQl.SpeakQlParserVisitor as SpeakQlParserVisitor
 from antlr4.tree.Trees import Trees
+
+from .antlr_builds.pySpeakQl.SpeakQlLexer import SpeakQlLexer
+from .antlr_builds.pySpeakQl.SpeakQlParser import SpeakQlParser
+from .antlr_builds.pySpeakQl.SpeakQlParserListener import SpeakQlParserListener
+from .antlr_builds.pySpeakQl.SpeakQlParserVisitor import SpeakQlParserVisitor
+
 
 
 class SpeakQlParseCaller:
@@ -32,9 +34,9 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
     def get_parse_tree(self, rule, query):
         self.write_query_file(query)
         tree = subprocess.run(
-            "java org.antlr.v4.gui.TestRig SpeakQl " + rule + " -inputFile \"../../../query.txt\" -tree", 
+            "java org.antlr.v4.gui.TestRig SpeakQl " + rule + " -inputFile \"../../../../query.txt\" -tree", 
             capture_output=True,
-            cwd="c:/research_projects/speakql2_to_sql/src/speakql_translator/antlr_builds/" + self.build_name
+            cwd="c:/research_projects/speakql2_to_sql/app/src/speakql_translator/antlr_builds/" + self.build_name
             )
         tree = str(tree)
         tree_start = tree.find("stdout=b") + len("stdout=b*")

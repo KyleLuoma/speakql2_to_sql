@@ -6,7 +6,7 @@ Created on Tue Nov 23 17:00:11 2021
 @author: KYLEL
 """
 
-import SpeakQlTree as st
+#from .SpeakQlTree import SpeakQlTree as st
 
 open_paren = 0
 close_paren = 0

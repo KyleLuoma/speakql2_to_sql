@@ -1,6 +1,6 @@
-from SpeakQlParseCaller import *
-from SpeakQlTree import *
-from speakql_to_sql import *
+from .speakql_translator.SpeakQlParseCaller import *
+from .speakql_translator.SpeakQlTree import *
+from .speakql_translator.speakql_to_sql import *
 
 parse_engine = JavaSpeakQlParseEngine("gen_where_expression")
 parse_caller = SpeakQlParseCaller(parse_engine)

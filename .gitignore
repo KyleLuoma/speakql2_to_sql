@@ -1,2 +1,4 @@
 /venv/
-/antlr_builds/
+*/antlr_builds/*
+src/speakql_translator/antlr_builds/
+*/__pycache__/*

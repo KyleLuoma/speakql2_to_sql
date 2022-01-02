@@ -1,8 +1,8 @@
-from app import app
+#from app import app
 from flask import render_template
 from flask import request
 import flask
-from src.speakql_translator import translator as tr
+from app.src import translator as tr
 from flask_cors import CORS
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
