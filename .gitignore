@@ -1,4 +1,4 @@
-/venv/
+*/venv/*
 */antlr_builds/*
 src/speakql_translator/antlr_builds/
 app/src/speakql_translator/antlr_builds/
