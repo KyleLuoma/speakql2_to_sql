@@ -17,6 +17,7 @@ SQL_KEYWORDS = {
     "fromKeyword" : "FROM",
     "selectElementDelimiter" : ",",
     "tableSourceDelimiter" : ",",
+    "groupByItemDelimiter" : ",",
     "selectElementDot" : ".",
     "joinKeyword" : "JOIN"
     }
