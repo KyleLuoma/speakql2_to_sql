@@ -2,5 +2,9 @@ venv/
 antlr_builds/
 /src/speakql_translator/antlr_builds/
 /app/src/speakql_translator/antlr_builds/
+app/src/speakql_translator/__pycache__
 */__pycache__/*
 *__pycache__*
+
+
+*.pyc
