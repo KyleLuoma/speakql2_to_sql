@@ -29,6 +29,7 @@ def do_query():
     query = request.get_json()['query']
     print("Query Received from requestor:", query)
     translator_results = full_query_translation(query)
+    print("Returning translator results for query", query)
     response = flask.jsonify({'query': translator_results['sql_query'], 'speakql_tree_json': translator_results['speakql_tree_json']})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return(response)
@@ -39,6 +40,7 @@ def do_progressive_query():
     query = request.get_json()['query']
     print("Query Received from requestor:", query)
     translator_results = full_query_translation_with_intermediate_steps(query)
+    print("Returning translator results for query", query)
     response = flask.jsonify(translator_results)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return(response)

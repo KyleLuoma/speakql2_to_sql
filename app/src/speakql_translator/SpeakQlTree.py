@@ -14,8 +14,9 @@ class SpeakQlTree:
         self.next_id = 0
         self.tree_nodes = {}
         self.table_select_agg_rules = [
-            "selectThenTableExpression",
-            "tableThenSelectExpression"
+            #"selectThenTableExpression",
+            #"tableThenSelectExpression"
+            "queryOrderSpecification"
         ]
         if("(" not in lisp_tree and ")" not in lisp_tree):
             lisp_tree = "(emptyTree)"
@@ -53,8 +54,9 @@ class SpeakQlTree:
         properties["num_joinpart"] = parse_tree.count("joinPart")
         properties["num_non_commutative_joins"] = parse_tree.count("joinDirection")
         properties["num_select_and_table_expression"] = (
-            parse_tree.count("selectThenTableExpression") + 
-            parse_tree.count("tableThenSelectExpression")
+            #parse_tree.count("selectThenTableExpression") + 
+            #parse_tree.count("tableThenSelectExpression") +
+            parse_tree.count("queryOrderSpecification")
         )
         properties["num_functioncall"] = parse_tree.count("functionCall")
         properties["num_table_name"] = parse_tree.count("tableName")
@@ -306,20 +308,20 @@ class SpeakQlTree:
         if (self.properties["num_select_and_table_expression"] <= 1):
             self.print_verbose("Cannot aggregate where statements in a query with only one table expression.")
             return
-        from_clause_node_ids = self.find_nodes_by_rule_name("fromClause", node_id = node_id)
-        first_from_clause_node = self.get_node(from_clause_node_ids[0])
+        query_order_spec_node_ids = self.find_nodes_by_rule_name("queryOrderSpecification", node_id = node_id)
+        first_qos_node = self.get_node(query_order_spec_node_ids[0])
         where_expression_ids = []
         where_expression_table_lookup = {}
         #Find the table name or alias associated with the where clauses:
-        for from_clause_node_id in from_clause_node_ids:
-            new_expressions = self.find_nodes_by_rule_name("whereExpression", from_clause_node_id)
+        for qos_node_id in query_order_spec_node_ids:
+            new_expressions = self.find_nodes_by_rule_name("whereExpression", qos_node_id)
             for expression in new_expressions:
-                if self.rule_exists_in_tree(rule_to_find = "tableName", node_id = from_clause_node_id):
-                    table_name = self.get_all_table_names(from_clause_node_id)[0]
+                if self.rule_exists_in_tree(rule_to_find = "tableName", node_id = qos_node_id):
+                    table_name = self.get_all_table_names(qos_node_id)[0]
                     table_source_item = self.get_tablesourceitem_by_name_from_initial_list(table_name)
                 else:
                     alias_name = self.preorder_serialize_tokens(
-                        self.find_nodes_by_rule_name("tableAlias", node_id = from_clause_node_id)[0]
+                        self.find_nodes_by_rule_name("tableAlias", node_id = qos_node_id)[0]
                     ).replace("AS ", "")
                     self.print_verbose("ALIAS NAME:", alias_name)
                     table_source_item = self.get_tablesourceitem_by_alias_from_initial_list(alias_name)
@@ -332,12 +334,12 @@ class SpeakQlTree:
             self.print_verbose("No where expressions exist in this query.")
             return
 
-        if not self.rule_exists_in_tree("whereKeyword", first_from_clause_node.get_id()):
+        if not self.rule_exists_in_tree("whereKeyword", first_qos_node.get_id()):
             self._add_node_under_parent(
                 "whereKeyword WHERE", 
                 True, 
-                first_from_clause_node.get_depth() + 1, 
-                first_from_clause_node.get_id()
+                first_qos_node.get_depth() + 1, 
+                first_qos_node.get_id()
             )
 
         for expression_id in where_expression_ids:
@@ -345,20 +347,20 @@ class SpeakQlTree:
             self.add_dotted_ids_to_predicates(expression_id, where_expression_table_lookup[expression_id])
 
             where_expression_node = self.get_node(expression_id)
-            if expression_id in first_from_clause_node.get_children():
+            if expression_id in first_qos_node.get_children():
                 self.surround_node_with_parens(expression_id)
             else:
                 if not where_expression_ids.index(expression_id) == 0:
                     self._add_node_under_parent(
                         "logicalOperator AND",
                         True,
-                        first_from_clause_node.get_depth() + 1,
-                        first_from_clause_node.get_id()
+                        first_qos_node.get_depth() + 1,
+                        first_qos_node.get_id()
                     )        
                 old_parent = self.get_node(where_expression_node.get_parent())
                 old_parent.remove_child(expression_id)
-                first_from_clause_node.add_child(expression_id)
-                where_expression_node.update_parent(first_from_clause_node.get_id())
+                first_qos_node.add_child(expression_id)
+                where_expression_node.update_parent(first_qos_node.get_id())
                 self.surround_node_with_parens(expression_id)
 
     def add_dotted_ids_to_predicates(self, expression_id, table_or_alias, recursive = True):
@@ -643,6 +645,8 @@ class SpeakQlTree:
         node = self.get_node(node_id)
         select_expression = -1
         table_expression = -1
+        where_expression = -1
+        where_keyword = -1
         select_modifier_expression = -1
         new_children = []
         for child in node.get_children():
@@ -652,16 +656,32 @@ class SpeakQlTree:
                 table_expression = child
             if "selectModifierExpression" in self.get_node(child).get_rule_name():
                 select_modifier_expression = -1
-        if select_expression > table_expression:
+            if "whereExpression" in self.get_node(child).get_rule_name():
+                where_expression = child
+            if "whereKeyword" in self.get_node(child).get_rule_name():
+                where_keyword = child
+        if select_expression > table_expression: #swap the select and table expression positions in parent children list
             for child in node.get_children():
-                if child != table_expression and child != select_expression:
+                if child not in [table_expression, select_expression, where_keyword, where_expression]:
                     new_children.append(child)
                 if child == table_expression:
                     new_children.append(select_expression)
                 if child == select_expression:
                     new_children.append(table_expression)
+                    new_children.append(where_keyword)
+                    new_children.append(where_expression)
             if select_modifier_expression >= 0:
                 new_children.append(table_expression)
+            self.get_node(node_id).update_children(new_children)
+        elif table_expression > where_expression: #The where occurs before tableExpression and so where must be moved to position following table expression
+            self.print_verbose("table expression occurs after where expression.")
+            for child in node.get_children():
+                if child not in [table_expression, where_keyword, where_expression]:
+                    new_children.append(child)
+                if child == table_expression:
+                    new_children.append(table_expression)
+                    new_children.append(where_keyword)
+                    new_children.append(where_expression)
             self.get_node(node_id).update_children(new_children)
         for child in node.get_children():
             self.reorder_select_and_table_expressions(child)

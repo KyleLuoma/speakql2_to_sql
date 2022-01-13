@@ -2,7 +2,7 @@ from .speakql_translator.SpeakQlParseCaller import *
 from .speakql_translator.SpeakQlTree import *
 from .speakql_translator.speakql_to_sql import *
 
-parse_engine = JavaSpeakQlParseEngine("gen_queryorderspec")
+parse_engine = JavaSpeakQlParseEngine("gen_optional_where")
 parse_caller = SpeakQlParseCaller(parse_engine)
 
 def run_test_query_translation(test_query):
@@ -23,7 +23,7 @@ def full_query_translation(query):
 
 def full_query_translation_with_intermediate_steps(query):
     tree = parse_caller.run_select_statement(query)
-    speakql_tree = SpeakQlTree(tree)
+    speakql_tree = SpeakQlTree(tree, verbose = True)
     query_results = {}
     query_results["speakql_tree"] = speakql_tree.as_json()
     query_results["speakql_query"] = remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
