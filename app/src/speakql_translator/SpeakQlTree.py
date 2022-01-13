@@ -673,7 +673,7 @@ class SpeakQlTree:
             if select_modifier_expression >= 0:
                 new_children.append(table_expression)
             self.get_node(node_id).update_children(new_children)
-        elif table_expression > where_expression: #The where occurs before tableExpression and so where must be moved to position following table expression
+        elif table_expression > where_expression and (table_expression * where_expression > 0): #The where occurs before tableExpression and so where must be moved to position following table expression
             self.print_verbose("table expression occurs after where expression.")
             for child in node.get_children():
                 if child not in [table_expression, where_keyword, where_expression]:
