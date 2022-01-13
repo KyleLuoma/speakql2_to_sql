@@ -243,6 +243,8 @@ class SpeakQlTree:
             return elements
         if "tableExpression" in node.get_rule_name():
             return elements
+        if "whereExpression" in node.get_rule_name():
+            return elements
         if "selectElement" in node.get_rule_name() and "selectElements" not in node.get_rule_name():
             in_select_element_tree = True
         for child in node.get_children():
@@ -258,7 +260,9 @@ class SpeakQlTree:
         node = self.get_node(node_id)
         elements_by_table = self.get_all_tables_and_elements(node_id = node_id)
         #Find first selectElements rule in query:
-        select_elements_node_ids = self.find_nodes_by_rule_name("selectElements", node_id = node_id)
+        select_elements_node_ids = self.find_nodes_by_rule_name(
+            "selectElements", node_id = node_id, stop_at_rules=["whereExpression"]
+        )
         first_select_elements_node = self.get_node(select_elements_node_ids[0])
         self.print_verbose(select_elements_node_ids)
         self.print_verbose(first_select_elements_node.get_rule_name())
@@ -428,7 +432,7 @@ class SpeakQlTree:
         #     consolidate table calls into first table expression (similar to select element agg)
         #     consolidate where statements into first where expression (probably needs a separate method)
         if (self.properties["num_non_join_table_name"] > 1 and self.properties["num_joinpart"] == 0):
-            table_sources_node_ids = self.find_nodes_by_rule_name("tableSources", node_id = node_id)
+            table_sources_node_ids = self.find_nodes_by_rule_name("tableSources", node_id = node_id, stop_at_rules=['whereExpression'])
             self.print_verbose(table_sources_node_ids)
             first_table_sources_node = self.get_node(table_sources_node_ids[0])
             all_table_source_node_ids = self.find_nodes_by_rule_name("tableSource", node_id = node_id)
@@ -620,17 +624,20 @@ class SpeakQlTree:
         else:
             return -1
 
-    def find_nodes_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False):
+    def find_nodes_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False, stop_at_rules = []):
         node = self.get_node(node_id)
         node_list = []
         if not check_subqueries:
             if "subQueryTable" in node.get_rule_name():
                 return node_list
+        for rule in stop_at_rules:
+            if rule in node.get_rule_name():
+                return node_list
         if rule_to_find == node.get_rule_name().strip().split()[0]:
             node_list.append(node_id)
             return node_list
         for child in node.get_children():
-            node_list = node_list + self.find_nodes_by_rule_name(rule_to_find, child)
+            node_list = node_list + self.find_nodes_by_rule_name(rule_to_find, child, stop_at_rules=stop_at_rules)
         return node_list
 
     def rule_exists_in_tree(self, rule_to_find, node_id = 0, check_subqueries = False):
