@@ -308,6 +308,40 @@ class SpeakQlTree:
                 return table
         raise ValueError()
 
+    def _consolidate_join_parts(self, node_id = 0):
+        if(self.properties["num_joinpart"] == 0):
+            self.print_verbose("Cannot consolidate join parts in a query without join parts")
+            return
+        query_order_spec_node_ids = self.find_nodes_by_rule_name("queryOrderSpecification", node_id = node_id)
+        first_tablesource_node_id = self.find_nodes_by_rule_name("tableSource", node_id = node_id)[0]
+        first_tablesource_node = self.get_node(first_tablesource_node_id)
+        join_part_ids = []
+        for node_id in query_order_spec_node_ids:
+            join_part_ids = join_part_ids + self.find_nodes_by_rule_name(
+                "joinPart", 
+                node_id = node_id, 
+                stop_at_rules = ["subQueryTable"]
+            )
+        new_tablesource_children = []
+        for child in first_tablesource_node.get_children():
+            child_node = self.get_node(child)
+            if "tableSourceItem" in child_node.get_rule_name():
+                new_tablesource_children.append(child)
+                for join_part_id in join_part_ids:
+                    new_tablesource_children.append(join_part_id)
+                    temp_join_part_node = self.get_node(join_part_id)
+                    temp_join_part_node.update_parent(first_tablesource_node.get_id())
+                    join_part_parent_id = temp_join_part_node.get_parent()
+                    temp_parent_node = self.get_node(join_part_parent_id)
+                    #temp_parent_node.remove_child(join_part_id)
+                    if temp_join_part_node.get_parent() != first_tablesource_node_id:
+                        first_tablesource_node.add_child(join_part_id)
+                break
+            new_tablesource_children.append(child)
+        first_tablesource_node.update_children(new_tablesource_children)
+        
+        
+
     def _aggregate_where_statements(self, node_id = 0):
         if (self.properties["num_select_and_table_expression"] <= 1):
             self.print_verbose("Cannot aggregate where statements in a query with only one table expression.")
@@ -675,8 +709,9 @@ class SpeakQlTree:
                     new_children.append(select_expression)
                 if child == select_expression:
                     new_children.append(table_expression)
-                    new_children.append(where_keyword)
-                    new_children.append(where_expression)
+                    if where_keyword >= 0 and where_expression >= 0:
+                        new_children.append(where_keyword)
+                        new_children.append(where_expression)
             if select_modifier_expression >= 0:
                 new_children.append(table_expression)
             self.get_node(node_id).update_children(new_children)
@@ -703,6 +738,7 @@ class SpeakQlTree:
         #The order in which these are called matters: select -> where -> tables
         self._aggregate_select_elements(node_id)
         self._aggregate_where_statements(node_id)
+        self._consolidate_join_parts(node_id)
         self._aggregate_tables(node_id)
 
         #remove empty statements:
