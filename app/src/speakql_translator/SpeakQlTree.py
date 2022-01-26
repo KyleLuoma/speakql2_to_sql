@@ -2,6 +2,7 @@
 from os import remove
 import json
 from .TableSourceItem import TableSourceItem
+from .JoinPartItem import JoinPartItem
 from .SpeakQlNode import SpeakQlNode
 
 
@@ -315,29 +316,77 @@ class SpeakQlTree:
         query_order_spec_node_ids = self.find_nodes_by_rule_name("queryOrderSpecification", node_id = node_id)
         first_tablesource_node_id = self.find_nodes_by_rule_name("tableSource", node_id = node_id)[0]
         first_tablesource_node = self.get_node(first_tablesource_node_id)
-        join_part_ids = []
-        for node_id in query_order_spec_node_ids:
-            join_part_ids = join_part_ids + self.find_nodes_by_rule_name(
-                "joinPart", 
-                node_id = node_id, 
-                stop_at_rules = ["subQueryTable"]
+        join_part_ids = self.find_nodes_by_rule_name("joinPart")
+        join_part_items = []
+        join_table_list = []
+        join_table_alias_lookup = {}
+        #Build a list of all joins in the query
+        for join_part_id in join_part_ids:
+            join_part_node = self.get_node(join_part_id)
+            #Get the join part's parent table source:
+            table_source_node = self.get_node(join_part_node.get_parent())
+            #Get the from table tableSourceItem
+            from_table_source_item_id = table_source_node.get_children()[0]
+            #Get the table name and alias (if exists) under the from_table_source_item_id
+            from_table_name = self.preorder_serialize_tokens(self.find_nodes_by_rule_name("tableName", from_table_source_item_id)[0])
+            from_table_alias_id = self.find_nodes_by_rule_name("tableAlias", from_table_source_item_id)
+            from_table_alias = ""
+            if len(from_table_alias_id) > 0:
+                from_table_alias = self.preorder_serialize_tokens(from_table_alias_id[0])
+            #get the join table name / alias
+            join_table_name_or_alias = self.preorder_serialize_tokens(self.find_nodes_by_rule_name("tableName", join_part_id)[0])
+            #Get the join part join type
+            join_type = ""
+            if(len(self.find_nodes_by_rule_name("innerJoin", join_part_id)) > 0):
+                join_type = "inner"
+            elif(len(self.find_nodes_by_rule_name("outerJoin", join_part_id)) > 0):
+                join_type = "outer"
+            #Get the join part join direction
+            join_direction = ""
+            if(join_type == "outer"):
+                join_direction_id = self.find_nodes_by_rule_name("joinDirection", join_part_id)
+                if len(join_direction_id) > 0:
+                    join_direction = self.preorder_serialize_tokens(join_direction_id[0])
+
+            join_part_item = JoinPartItem(
+                join_part_node_id=join_part_id,
+                from_table_name=from_table_name,
+                join_table_name=join_table_name_or_alias,
+                join_type = join_type,
+                join_direction = join_direction,
+                from_table_alias = from_table_alias,
+                join_table_alias = ""
             )
-        new_tablesource_children = []
-        for child in first_tablesource_node.get_children():
-            child_node = self.get_node(child)
-            if "tableSourceItem" in child_node.get_rule_name():
-                new_tablesource_children.append(child)
-                for join_part_id in join_part_ids:
-                    new_tablesource_children.append(join_part_id)
-                    temp_join_part_node = self.get_node(join_part_id)
-                    temp_join_part_node.update_parent(first_tablesource_node.get_id())
-                    join_part_parent_id = temp_join_part_node.get_parent()
-                    temp_parent_node = self.get_node(join_part_parent_id)
-                    #temp_parent_node.remove_child(join_part_id)
-                    if temp_join_part_node.get_parent() != first_tablesource_node_id:
-                        first_tablesource_node.add_child(join_part_id)
-                break
-            new_tablesource_children.append(child)
+            join_table_list.append(from_table_name)
+            join_table_list.append(join_table_name_or_alias)
+            if(len(from_table_alias) > 0):
+                join_table_alias_lookup[from_table_alias] = from_table_name
+            join_part_items.append(join_part_item)
+            self.print_verbose(join_part_item.as_sql_fragment())
+
+        #Is each table / alias referenced in at least one join part?
+        table_source_items = self.get_all_table_source_items()
+        full_coverage = True
+        table_name_list = []
+        table_alias_lookup = {}
+        for table_source_item in table_source_items:
+            table_name_list.append(table_source_item.get_name())
+            if(table_source_item.has_alias()):
+                table_alias_lookup[table_source_item.get_alias()] = table_source_item.get_name()
+
+
+
+
+        #Is there more than one join part with the same table-table association?
+
+        #If there is more than one join part with the same table-table association, are they equivalent joins?
+
+        #Does the first tableSource have a joinPart?
+
+        #Does the nth (not including the first) tableSource have a joinPart?
+
+
+        
         first_tablesource_node.update_children(new_tablesource_children)
         
         

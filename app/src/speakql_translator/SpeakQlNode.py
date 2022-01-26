@@ -45,6 +45,9 @@ class SpeakQlNode:
     def update_parent(self, new_parent):
         self.add_parent(new_parent)
 
+    def update_depth(self, new_depth):
+        self.depth = new_depth
+
     def get_children(self):
         return self.children
 

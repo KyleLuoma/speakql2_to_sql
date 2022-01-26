@@ -3,7 +3,7 @@ from .SpeakQlNode import SpeakQlNode
 class JoinPartItem:
 
     def __init__(
-        self, from_table_name, join_table_name, join_type = "inner", 
+        self, join_part_node_id, from_table_name, join_table_name, join_type = "inner", 
         join_direction = "", from_table_alias = "", join_table_alias = ""
     ):
         self.from_table_name = from_table_name
@@ -12,6 +12,7 @@ class JoinPartItem:
         self.join_direction = join_direction # left  | right
         self.join_table_name = join_table_name
         self.join_table_alias = join_table_alias
+        self.join_part_node_id = -1
 
     def is_equivalent_to(self, compare_jp):
         compare_jp = JoinPartItem()
@@ -58,6 +59,9 @@ class JoinPartItem:
             from_table_alias = self.join_table_alias,
             join_table_alias = self.from_table_alias
         )
+
+    def get_join_part_node_id(self):
+        return self.join_part_node_id
 
     def get_from_table_name(self):
         return self.from_table_name
