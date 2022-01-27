@@ -12,7 +12,7 @@ class JoinPartItem:
         self.join_direction = join_direction # left  | right
         self.join_table_name = join_table_name
         self.join_table_alias = join_table_alias
-        self.join_part_node_id = -1
+        self.join_part_node_id = join_part_node_id
 
     def is_equivalent_to(self, compare_jp):
         compare_jp = JoinPartItem()
@@ -59,6 +59,12 @@ class JoinPartItem:
             from_table_alias = self.join_table_alias,
             join_table_alias = self.from_table_alias
         )
+
+    def get_from_table_alias_if_exists_else_name(self):
+        if len(self.from_table_alias) > 0:
+            return self.from_table_alias
+        else:
+            return self.from_table_name
 
     def get_join_part_node_id(self):
         return self.join_part_node_id
