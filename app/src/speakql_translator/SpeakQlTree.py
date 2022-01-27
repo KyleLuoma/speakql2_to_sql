@@ -840,7 +840,7 @@ class SpeakQlTree:
         if self.properties["num_select_and_table_expression"] <= 1:
             self.print_verbose("Cannot aggregate statements in a query with only one select and table statement.")
             return
-        #The order in which these are called matters: select -> where -> tables
+        #The order in which these are called matters: select -> where -> join -> tables
         self._aggregate_select_elements(node_id)
         self._aggregate_where_statements(node_id)
         self._consolidate_join_parts(node_id)
