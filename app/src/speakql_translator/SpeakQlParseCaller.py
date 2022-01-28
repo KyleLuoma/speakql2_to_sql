@@ -20,8 +20,9 @@ class SpeakQlParseCaller:
 
 class SpeakQlParseEngine:
 
-    def __init__(self, build_name):
+    def __init__(self, build_name, simple_speakql = False):
         self.build_name = build_name
+        self.simple_speakql = simple_speakql
         pass
 
     def get_parse_tree(rule):
@@ -34,8 +35,10 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
     def get_parse_tree(self, rule, query):
         query_path = "C:/research_projects/speakql2_to_sql/app/query.txt"
         self.write_query_file(query, query_path)
+        simple = ""
+        if self.simple_speakql: simple = "Simple" 
         tree = subprocess.run(
-            "java org.antlr.v4.gui.TestRig SpeakQl " + rule + " -inputFile \"" + query_path + "\" -tree", 
+            "java org.antlr.v4.gui.TestRig " + simple + "SpeakQl " + rule + " -inputFile \"" + query_path + "\" -tree", 
             capture_output=True,
             cwd="c:/research_projects/speakql2_to_sql/app/src/speakql_translator/antlr_builds/" + self.build_name
             )

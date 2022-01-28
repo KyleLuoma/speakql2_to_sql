@@ -5,7 +5,7 @@ from speakql_translator.speakql_to_sql import *
 
 verbose = True
 
-parse_engine = spc.JavaSpeakQlParseEngine("gen_where_expression")
+parse_engine = spc.JavaSpeakQlParseEngine("gen_simple_multi_join", simple_speakql= True)
 parse_caller = spc.SpeakQlParseCaller(parse_engine)
 
 py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
