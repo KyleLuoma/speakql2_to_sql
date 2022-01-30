@@ -2,7 +2,7 @@
 from os import remove
 import json
 from .TableSourceItem import TableSourceItem
-from .JoinPartItem import JoinPartItem
+from .MultiJoinPartItem import MultiJoinPartItem
 from .SpeakQlNode import SpeakQlNode
 
 
@@ -15,9 +15,8 @@ class SpeakQlTree:
         self.next_id = 0
         self.tree_nodes = {}
         self.table_select_agg_rules = [
-            #"selectThenTableExpression",
-            #"tableThenSelectExpression"
-            "queryOrderSpecification"
+            "queryOrderSpecification",
+            "multiQueryOrderSpecification"
         ]
         if("(" not in lisp_tree and ")" not in lisp_tree):
             lisp_tree = "(emptyTree)"
@@ -28,7 +27,27 @@ class SpeakQlTree:
             node_id = 0,
             return_initial_list = False
         )
+        self.table_lookup_by_alias_dict = self._gen_table_lookup_by_alias_dict(
+            self.initial_table_source_items
+        )
+        self.alias_lookup_by_table_dict = self._gen_alias_lookup_by_table_dict(
+            self.initial_table_source_items
+        )
         self.verbose = verbose
+
+    def _gen_table_lookup_by_alias_dict(self, initial_table_source_items):
+        table_lookup_by_alias_dict = {}
+        for tsi in initial_table_source_items:
+            if tsi.has_alias():
+                table_lookup_by_alias_dict[tsi.get_alias()] = tsi.get_name()
+        return table_lookup_by_alias_dict
+
+    def _gen_alias_lookup_by_table_dict(self, initial_table_source_items):
+        alias_lookup_by_table = {}
+        for tsi in initial_table_source_items:
+            if tsi.has_alias():
+                alias_lookup_by_table[tsi.get_table_name] = tsi.get_alias()
+        return alias_lookup_by_table
 
     def set_verbose(self, verbose):
         self.verbose = verbose
@@ -47,7 +66,7 @@ class SpeakQlTree:
             "num_select_and_table_expression" : 0,
             "num_functioncall" : 0,
             "num_table_name" : 0,
-            "num_non_join_table_name": 0,
+            "num_non_right_table_name": 0,
             "num_table_alias" : 0,
             "num_element_alias" : 0,
             "num_group_by" : 0
@@ -55,13 +74,11 @@ class SpeakQlTree:
         properties["num_joinpart"] = parse_tree.count("joinPart")
         properties["num_non_commutative_joins"] = parse_tree.count("joinDirection")
         properties["num_select_and_table_expression"] = (
-            #parse_tree.count("selectThenTableExpression") + 
-            #parse_tree.count("tableThenSelectExpression") +
-            parse_tree.count("queryOrderSpecification")
+            parse_tree.count("queryOrderSpecification") + parse_tree.count("multiQueryOrderSpecification")
         )
         properties["num_functioncall"] = parse_tree.count("functionCall")
         properties["num_table_name"] = parse_tree.count("tableName")
-        properties["num_non_join_table_name"] = parse_tree.count("(tableSource (tableSourceItem (tableName")
+        properties["num_non_right_table_name"] = parse_tree.count("(tableSource (tableSourceItem (tableName")
         properties["num_table_alias"] = parse_tree.count("tableAlias")
         properties["num_element_alias"] = parse_tree.count("selectElementAs")
         properties["num_group_by"] = parse_tree.count("groupByClause")
@@ -309,149 +326,115 @@ class SpeakQlTree:
                 return table
         raise ValueError()
 
+
+
     def _consolidate_join_parts(self, node_id = 0):
+        
         if(self.properties["num_joinpart"] == 0):
             self.print_verbose("Cannot consolidate join parts in a query without join parts")
             return
-        query_order_spec_node_ids = self.find_nodes_by_rule_name("queryOrderSpecification", node_id = node_id)
-        first_tablesource_node_id = self.find_nodes_by_rule_name("tableSource", node_id = node_id)[0]
-        first_tablesource_node = self.get_node(first_tablesource_node_id)
-        join_part_ids = self.find_nodes_by_rule_name("joinPart")
-        join_part_items = []
-        join_table_list = []
-        #Build a list of all joins in the query
-        for join_part_id in join_part_ids:
-            join_part_node = self.get_node(join_part_id)
-            #Get the join part's parent table source:
-            table_source_node = self.get_node(join_part_node.get_parent())
-            #Get the from table tableSourceItem
-            from_table_source_item_id = table_source_node.get_children()[0]
-            #Get the table name and alias (if exists) under the from_table_source_item_id
-            from_table_name = self.preorder_serialize_tokens(self.find_nodes_by_rule_name("tableName", from_table_source_item_id)[0])
-            from_table_alias_id = self.find_nodes_by_rule_name("tableAlias", from_table_source_item_id)
-            from_table_alias = ""
-            if len(from_table_alias_id) > 0:
-                from_table_alias = self.preorder_serialize_tokens(from_table_alias_id[0])
-            #get the join table name / alias
-            join_table_name_or_alias = self.preorder_serialize_tokens(self.find_nodes_by_rule_name("tableName", join_part_id)[0])
-            #Get the join part join type
-            join_type = ""
-            if(len(self.find_nodes_by_rule_name("innerJoin", join_part_id)) > 0):
-                join_type = "inner"
-            elif(len(self.find_nodes_by_rule_name("outerJoin", join_part_id)) > 0):
-                join_type = "outer"
-            #Get the join part join direction
-            join_direction = ""
-            if(join_type == "outer"):
-                join_direction_id = self.find_nodes_by_rule_name("joinDirection", join_part_id)
-                if len(join_direction_id) > 0:
-                    join_direction = self.preorder_serialize_tokens(join_direction_id[0])
+        
+        #Retrieve the first MultiQueryOrderSpecification that contains a TableExpressionNoJoin rule
+        multi_query_order_specification_ids = self.find_nodes_by_rule_name("multiQueryOrderSpecification")
 
-            join_part_item = JoinPartItem(
-                join_part_node_id=join_part_id,
-                from_table_name=from_table_name,
-                join_table_name=join_table_name_or_alias,
-                join_type = join_type,
-                join_direction = join_direction,
-                from_table_alias = from_table_alias,
-                join_table_alias = ""
+        #first_table_expression_node is where we will align all of the consolidated join parts
+        first_table_expression_node = SpeakQlNode()
+        for node_id in multi_query_order_specification_ids:
+            if self.rule_exists_in_tree("tableExpressionNoJoin"):
+                first_table_expression_node = self.find_nodes_by_rule_name("tableExpressionNoJoin", node_id)[0]
+
+        #Retrieve all MultiJoinExpressions
+        multi_join_expression_ids = self.find_nodes_by_rule_name("multiJoinExpression")
+
+        #Create a list of JoinParts
+        join_part_items = []
+        for node_id in multi_join_expression_ids:
+            join_part_node = self.get_node(node_id)
+            
+            join_type = "inner"
+            if self.rule_exists_in_tree("multiOuterJoin", node_id):
+                join_type = "outer"
+
+            join_direction = ""
+            if self.rule_exists_in_tree("joinDirection"):
+                join_direction = self.preorder_serialize_tokens(
+                    self.find_nodes_by_rule_name("joinDirection", node_id)[0]
+                )
+
+            table_source_item_ids = self.find_nodes_by_rule_name(
+                "tableSourceItem", node_id, stop_at_rules=["expression"]
             )
-            join_table_list.append(from_table_name)
-            join_table_list.append(join_table_name_or_alias)
-            join_part_items.append(join_part_item)
-            self.print_verbose(join_part_item.as_sql_fragment())
+
+            left_table_name = self.preorder_serialize_tokens(
+                self.find_nodes_by_rule_name("tableName", table_source_item_ids[0])[0]
+            )
+
+            right_table_name = self.preorder_serialize_tokens(
+                self.find_nodes_by_rule_name("tableName", table_source_item_ids[1])[0]
+            )
+
+            left_table_alias = ""
+            if self.rule_exists_in_tree("tableAlias", table_source_item_ids[0]):
+                left_table_alias = self.preorder_serialize_tokens(
+                    self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[0])[0]
+                )
+
+            right_table_alias = ""
+            if self.rule_exists_in_tree("tableAlias", table_source_item_ids[1]):
+                left_table_alias = self.preorder_serialize_tokens(
+                    self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[1])[0]
+                )
+
+            join_part_items.append(
+                MultiJoinPartItem(
+                    node_id, 
+                    left_table_name=left_table_name,
+                    right_table_name=right_table_name,
+                    join_type=join_type,
+                    join_direction=join_direction,
+                    left_table_alias=left_table_alias,
+                    right_table_alias=right_table_alias
+                )
+            )
+
+        #Order the join_parts together
+        # - First join part must reference the base table
+        # - succeeding join parts must also reference the base table or a table in a previous join
+        base_table_name = self.initial_table_source_items[0].get_table_name()
+        base_table_alias = self.initial_table_source_items[0].get_alias()
+
+        ordered_join_part_items = []
+        while len(ordered_join_part_items) < len(join_part_items):
+            for join_part in join_part_items:
+                if (join_part.get_left_table_name() == base_table_name 
+                    or (join_part.left_table_has_alias() 
+                        and join_part.get_left_table_alias() == base_table_alias
+                    )
+                ):
+                    ordered_join_part_items.append(join_part)
+
+
 
         #Is each table / alias referenced in at least one join part?
         table_source_items = self.get_all_table_source_items()
-        full_coverage = True
-        for table_source_item in table_source_items:
-            if (
-                (table_source_item.get_name() not in join_table_list) and 
-                (table_source_item.get_alias() not in join_table_list)
-            ):
-                full_coverage = False
-                print("SPEAKQL QUERY WARNING: not all tables referenced in a multi-table query with join expressions")
+        for tsi in table_source_items:
+            1
         
-        #Does the first tableSource have a joinPart?
+        #Move all join expressions to the base query
 
-        #Does the nth (not including the first) tableSource have a joinPart?
-        for join_part_item in join_part_items:
-            join_part_node = self.get_node(join_part_item.get_join_part_node_id())
-            if join_part_node.get_parent() != first_tablesource_node_id:
-                #Change the join table to the from table where the join part exists
-                query_table_source_item_id = self.find_nodes_by_rule_name("tableSourceItem", join_part_node.get_parent())[0]
-                join_table_source_item_id = self.find_nodes_by_rule_name("tableSourceItem", join_part_node.get_id())[0]
-                join_part_sub_node = self.get_node(join_part_node.get_children()[0])
-                self.print_verbose("join_part_sub_node:", join_part_sub_node.get_rule_name())
-                #Here we replace join_part_sub_node's tableSource_item child with query_table_source_item
-                new_children = []
-                for child_id in join_part_sub_node.get_children():
-                    if child_id == join_table_source_item_id:
-                        self.print_verbose(
-                            "Replacing", self.get_node(join_table_source_item_id).get_rule_name(),
-                            "with", self.get_node(query_table_source_item_id).get_rule_name()
-                        )
-                        new_children.append(query_table_source_item_id)
-                    elif child_id == join_table_source_item_id:
-                        self.get_node(child_id).update_parent(-1)
-                    else:
-                        new_children.append(child_id)
-                join_part_sub_node.update_children(new_children)
-                #Now we can move our join_part_node to underneath the first join part in the first query
-                new_tablesource_node_children = first_tablesource_node.get_children()
-                new_tablesource_node_children.append(join_part_node.get_id())
-                join_part_node.update_parent(first_tablesource_node_id)
-                first_tablesource_node.update_children(new_tablesource_node_children)
-                #We need to make sure at least one predicate column name has a dottedID that is not equal to the original table
-                expression_id = self.find_nodes_by_rule_name("expression", join_part_node.get_id(), stop_at_rules=["tableSourceItem"])[0]
-                if len(self.find_nodes_by_rule_name("dottedId", expression_id)) == 0:
-                    print("SPEAKQL QUERY WARNING: encountered join without dotted ids in the 'on' predicate statement")
-                elif len(self.find_nodes_by_rule_name("dottedId", expression_id)) == 1:
-                    self.print_verbose("Encountered join with one dotted id")
-                    predicate_node = self.get_node(self.get_node(expression_id).get_children()[0])
-                    self.print_verbose("Predicate node rule name:", predicate_node.get_rule_name())
-                    for child_id in predicate_node.get_children():
-                        if self.rule_exists_in_tree("dottedId", child_id):
-                            table_name_ref = self.preorder_serialize_tokens(self.find_nodes_by_rule_name("simpleId", child_id)[0])
-                            if table_name_ref.strip().lower() in [join_part_item.get_from_table_name(), join_part_item.get_from_table_alias()]:
-                                print("SPEAKQL QUERY WARNING: encountered join with one dotted id in the 'on' predicate statement that references its own table only")
-                        else:
-                            simple_id_node_ids = self.find_nodes_by_rule_name("simpleId", child_id)
-                            if len(simple_id_node_ids) > 0: #This is here to skip the comparisonOperator between the two sub predicates
-                                simple_id_node_id = simple_id_node_ids[0]
-                                column_name = self.preorder_serialize_tokens(simple_id_node_id)
-                                table_name = join_part_item.get_from_table_alias_if_exists_else_name()
-                                simple_id_node = self.get_node(simple_id_node_id)
-                                simple_id_node.update_rule_name("simpleId " + table_name)
-                                full_column_name_node = self.get_node(self.find_nodes_by_rule_name("fullColumnName", child_id)[0])
-                                self._add_node_under_parent(
-                                    rule_name = "dottedId ." + column_name,
-                                    is_leaf = True,
-                                    depth = full_column_name_node.get_depth() + 1,
-                                    parent = full_column_name_node.get_id()
-                                )
+        return 1
+                
 
 
 
-                #If only one has a dottedID, then assume that the non-dotted ID takes on the original table name
-
-                #If our joinPart is an outer join, we need to reverse it when we move it
-                self.print_verbose("Checking if we have a join direction, which is", join_part_item.get_join_direction().lower())
-                if join_part_item.get_join_direction().lower().strip() == "left" or join_part_item.get_join_direction().lower().strip() == "right":
-                    self.print_verbose("Reversing direction of outer join")
-                    reverse_direction = "RIGHT"
-                    if join_part_item.get_join_direction().lower().strip() == "right":
-                        reverse_direction = "LEFT"
-                    self.get_node(
-                        self.find_nodes_by_rule_name("joinDirection", join_part_node.get_id())[0]
-                    ).update_rule_name("joinDirection " + reverse_direction)
+               
         
 
     def _aggregate_where_statements(self, node_id = 0):
         if (self.properties["num_select_and_table_expression"] <= 1):
             self.print_verbose("Cannot aggregate where statements in a query with only one table expression.")
             return
-        query_order_spec_node_ids = self.find_nodes_by_rule_name("queryOrderSpecification", node_id = node_id)
+        query_order_spec_node_ids = self.find_nodes_by_rule_name("multiQueryOrderSpecification", node_id = node_id)
         first_qos_node = self.get_node(query_order_spec_node_ids[0])
         where_expression_ids = []
         where_expression_table_lookup = {}
@@ -570,7 +553,7 @@ class SpeakQlTree:
         # - no joins, tables > 1, select and table expressions == tables
         #     consolidate table calls into first table expression (similar to select element agg)
         #     consolidate where statements into first where expression (probably needs a separate method)
-        if (self.properties["num_non_join_table_name"] > 1 and self.properties["num_joinpart"] == 0):
+        if (self.properties["num_non_right_table_name"] > 1 and self.properties["num_joinpart"] == 0):
             table_sources_node_ids = self.find_nodes_by_rule_name("tableSources", node_id = node_id, stop_at_rules=['whereExpression'])
             self.print_verbose(table_sources_node_ids)
             first_table_sources_node = self.get_node(table_sources_node_ids[0])
