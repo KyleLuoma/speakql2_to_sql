@@ -386,12 +386,9 @@ class SpeakQlTree:
                     self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[1])[0]
                 )
 
-            #remove the first table and with rules
-            left_table_parent_id = self.get_node(table_source_item_ids[0]).get_parent()
-            left_table_parent_node = self.get_node(left_table_parent_id)
-            left_table_parent_node.remove_child(table_source_item_ids[0])
-            with_keyword_node_id = self.find_nodes_by_rule_name("withKeyword", left_table_parent_id)[0]
-            left_table_parent_node.remove_child(with_keyword_node_id)
+            self.remove_node_from_tree(
+                self.find_nodes_by_rule_name("withKeyword", node_id)[0]
+            )
 
             join_part_items.append(
                 MultiJoinPartItem(
@@ -426,8 +423,23 @@ class SpeakQlTree:
                 ):
                     ordered_join_part_items.append(join_part)
                     already_ordered.append(join_part.get_join_part_node_id())
+                    self.remove_node_from_tree(
+                        self.find_nodes_by_rule_name("tableSourceItem", join_part.get_join_part_node_id())[0]
+                    )
                     self.print_verbose("Added", join_part.get_left_table_name(), "to ordered query list")
-                    break
+                elif ((join_part.get_right_table_name().strip() in tables_in_query) 
+                        or (join_part.right_table_has_alias() 
+                            and join_part.get_right_table_alias().strip() in aliases_in_query
+                        )
+                    and join_part.get_join_part_node_id() not in already_ordered 
+                ):
+                    ordered_join_part_items.append(join_part)
+                    already_ordered.append(join_part.get_join_part_node_id())
+                    self.remove_node_from_tree(
+                        self.find_nodes_by_rule_name("tableSourceItem", join_part.get_join_part_node_id())[1]
+                    )
+                    self.print_verbose("Added", join_part.get_right_table_name(), "to ordered query list")
+                    
 
         #Is each table / alias referenced in at least one join part?
         table_source_items = self.get_all_table_source_items()
@@ -440,14 +452,16 @@ class SpeakQlTree:
                 )
         
         #Move all join expressions to the base query
-        table_expression_children = first_table_expression_node.get_children() + already_ordered
-        first_table_expression_node.update_children(table_expression_children)
+        self.print_verbose("Moving all joins underneath node", first_table_expression_node.get_rule_name())
+        join_nodes = self.find_nodes_by_rule_name("multiJoinExpression")
+        table_expression_node = self.get_node(self.find_nodes_by_rule_name("tableExpressionNoJoin")[0])
+        for node_id in join_nodes:
+            table_expression_node.add_child(node_id)
+            table_expression_node.update_rule_name("tableExpression")
+            parent = self.get_node(self.get_node(node_id).get_parent())
+            parent.remove_child(node_id)
 
-        for node_id in already_ordered:
-            node = self.get_node(node_id)
-            node.update_parent(first_table_expression_node.get_id())
-
-            
+        
 
     def _aggregate_where_statements(self, node_id = 0):
         if (self.properties["num_select_and_table_expression"] <= 1):
@@ -850,16 +864,19 @@ class SpeakQlTree:
 
         #remove empty statements:
         garbage_nodes = []
+        
         for expression in self.table_select_agg_rules:
             garbage_nodes = garbage_nodes + self.find_nodes_by_rule_name(expression)
-            garbage_nodes = garbage_nodes + self.find_nodes_by_rule_name("expressionDelimiter")
+        if(len(garbage_nodes) > 1):
+            garbage_nodes = garbage_nodes[1:]
+        garbage_nodes = garbage_nodes + self.find_nodes_by_rule_name("expressionDelimiter")
+
         garbage_nodes = self.remove_duplicates_from_list(garbage_nodes)
         garbage_nodes.sort()
         self.print_verbose("Garbage nodes:", garbage_nodes)
-        if(len(garbage_nodes) > 1):
-            garbage_nodes = garbage_nodes[1:]
-            for node_id in garbage_nodes:
-                self.remove_node_from_tree(node_id)
+
+        for node_id in garbage_nodes:
+            self.remove_node_from_tree(node_id)
 
 
 
