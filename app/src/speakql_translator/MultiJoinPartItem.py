@@ -1,41 +1,41 @@
 from .SpeakQlNode import SpeakQlNode
 
-class JoinPartItem:
+class MultiJoinPartItem:
 
     def __init__(
-        self, join_part_node_id, from_table_name, join_table_name, join_type = "inner", 
-        join_direction = "", from_table_alias = "", join_table_alias = ""
+        self, join_part_node_id, left_table_name, right_table_name, join_type = "inner", 
+        join_direction = "", left_table_alias = "", right_table_alias = ""
     ):
-        self.from_table_name = from_table_name
-        self.from_table_alias = from_table_alias
+        self.left_table_name = left_table_name
+        self.left_table_alias = left_table_alias
         self.join_type = join_type # inner | outer
         self.join_direction = join_direction # left  | right
-        self.join_table_name = join_table_name
-        self.join_table_alias = join_table_alias
+        self.right_table_name = right_table_name
+        self.right_table_alias = right_table_alias
         self.join_part_node_id = join_part_node_id
 
     def is_equivalent_to(self, compare_jp):
-        compare_jp = JoinPartItem()
+        compare_jp = MultiJoinPartItem()
         #Identical join:
-        if (self.from_table_name == compare_jp.get_from_table_name()
-            and self.from_table_alias == compare_jp.get_from_table_alias()
+        if (self.left_table_name == compare_jp.get_left_table_name()
+            and self.left_table_alias == compare_jp.get_left_table_alias()
             and self.join_type == compare_jp.get_join_type()
             and self.join_direction == compare_jp.get_join_direction()
         ):
             return True
         #Commutative inner join:
-        elif (self.from_table_name == compare_jp.get_join_table_name()
-            and self.from_table_alias == compare_jp.get_join_table_alias()
-            and self.join_table_name == compare_jp.get_from_table_name()
-            and self.join_table_alias == compare_jp.get_from_table_alias()
+        elif (self.left_table_name == compare_jp.get_right_table_name()
+            and self.left_table_alias == compare_jp.get_join_table_alias()
+            and self.right_table_name == compare_jp.get_left_table_name()
+            and self.right_table_alias == compare_jp.get_left_table_alias()
             and self.join_type == "inner" and compare_jp.get_join_type() == "inner"
         ):
             return True
         #Commutative outer join (have to have reverse join direction):
-        elif (self.from_table_name == compare_jp.get_join_table_name()
-            and self.from_table_alias == compare_jp.get_join_table_alias()
-            and self.join_table_name == compare_jp.get_from_table_name()
-            and self.join_table_alias == compare_jp.get_from_table_alias()
+        elif (self.left_table_name == compare_jp.get_right_table_name()
+            and self.left_table_alias == compare_jp.get_join_table_alias()
+            and self.right_table_name == compare_jp.get_left_table_name()
+            and self.right_table_alias == compare_jp.get_left_table_alias()
             and self.join_type == "outer" and compare_jp.get_join_type() == "outer"
             and (
                 (self.join_direction == "left" and compare_jp.get_join_direction() == "right")
@@ -51,35 +51,35 @@ class JoinPartItem:
             new_join_direction = "right"
         else:
             new_join_direction = "left"
-        return JoinPartItem(
-            from_table_name = self.join_table_name,
-            join_table_name = self.from_table_name,
+        return MultiJoinPartItem(
+            left_table_name = self.right_table_name,
+            right_table_name = self.left_table_name,
             join_type = self.join_type,
             join_direction = new_join_direction,
-            from_table_alias = self.join_table_alias,
-            join_table_alias = self.from_table_alias
+            left_table_alias = self.right_table_alias,
+            right_table_alias = self.left_table_alias
         )
 
-    def get_from_table_alias_if_exists_else_name(self):
-        if len(self.from_table_alias) > 0:
-            return self.from_table_alias
+    def get_left_table_alias_if_exists_else_name(self):
+        if len(self.left_table_alias) > 0:
+            return self.left_table_alias
         else:
-            return self.from_table_name
+            return self.left_table_name
 
     def get_join_part_node_id(self):
         return self.join_part_node_id
 
-    def get_from_table_name(self):
-        return self.from_table_name
+    def get_left_table_name(self):
+        return self.left_table_name
 
-    def get_from_table_alias(self):
-        return self.from_table_alias
+    def get_left_table_alias(self):
+        return self.left_table_alias
 
-    def get_join_table_name(self):
-        return self.join_table_name
+    def get_right_table_name(self):
+        return self.right_table_name
 
     def get_join_table_alias(self):
-        return self.join_table_alias
+        return self.right_table_alias
 
     def get_join_type(self):
         return self.join_type
@@ -87,17 +87,23 @@ class JoinPartItem:
     def get_join_direction(self):
         return self.join_direction
 
-    def set_from_table_name(self, name):
-        self.from_table_name = name
+    def left_table_has_alias(self):
+        return len(self.left_table_alias) > 0
 
-    def set_from_table_alias(self, alias):
-        self.from_table_alias = alias
+    def right_table_has_alias(self):
+        return len(self.right_table_alias) > 0
+
+    def set_left_table_name(self, name):
+        self.left_table_name = name
+
+    def set_left_table_alias(self, alias):
+        self.left_table_alias = alias
 
     def set_table_two_name(self, name):
-        self.join_table_name = name
+        self.right_table_name = name
 
     def set_table_two_alias(self, alias):
-        self.join_table_alias = alias
+        self.right_table_alias = alias
 
     def set_join_type(self, joinType):
         self.join_type = joinType
@@ -108,6 +114,6 @@ class JoinPartItem:
     def as_sql_fragment(self):
         return (
             self.join_type + " " + self.join_direction + 
-            " JOIN " + self.join_table_name + " " + 
-            self.join_table_alias
+            " JOIN " + self.right_table_name + " " + 
+            self.right_table_alias
         ).strip()

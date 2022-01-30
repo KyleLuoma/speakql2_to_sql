@@ -46,7 +46,7 @@ class SpeakQlTree:
         alias_lookup_by_table = {}
         for tsi in initial_table_source_items:
             if tsi.has_alias():
-                alias_lookup_by_table[tsi.get_table_name] = tsi.get_alias()
+                alias_lookup_by_table[tsi.get_name()] = tsi.get_alias()
         return alias_lookup_by_table
 
     def set_verbose(self, verbose):
@@ -71,7 +71,7 @@ class SpeakQlTree:
             "num_element_alias" : 0,
             "num_group_by" : 0
         }
-        properties["num_joinpart"] = parse_tree.count("joinPart")
+        properties["num_joinpart"] = parse_tree.count("joinPart") + parse_tree.count("multiJoinPart")
         properties["num_non_commutative_joins"] = parse_tree.count("joinDirection")
         properties["num_select_and_table_expression"] = (
             parse_tree.count("queryOrderSpecification") + parse_tree.count("multiQueryOrderSpecification")
@@ -338,10 +338,11 @@ class SpeakQlTree:
         multi_query_order_specification_ids = self.find_nodes_by_rule_name("multiQueryOrderSpecification")
 
         #first_table_expression_node is where we will align all of the consolidated join parts
-        first_table_expression_node = SpeakQlNode()
         for node_id in multi_query_order_specification_ids:
             if self.rule_exists_in_tree("tableExpressionNoJoin"):
-                first_table_expression_node = self.find_nodes_by_rule_name("tableExpressionNoJoin", node_id)[0]
+                first_table_expression_node = self.get_node(
+                    self.find_nodes_by_rule_name("tableExpressionNoJoin", node_id)[0]
+                )
 
         #Retrieve all MultiJoinExpressions
         multi_join_expression_ids = self.find_nodes_by_rule_name("multiJoinExpression")
@@ -385,6 +386,13 @@ class SpeakQlTree:
                     self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[1])[0]
                 )
 
+            #remove the first table and with rules
+            left_table_parent_id = self.get_node(table_source_item_ids[0]).get_parent()
+            left_table_parent_node = self.get_node(left_table_parent_id)
+            left_table_parent_node.remove_child(table_source_item_ids[0])
+            with_keyword_node_id = self.find_nodes_by_rule_name("withKeyword", left_table_parent_id)[0]
+            left_table_parent_node.remove_child(with_keyword_node_id)
+
             join_part_items.append(
                 MultiJoinPartItem(
                     node_id, 
@@ -400,35 +408,46 @@ class SpeakQlTree:
         #Order the join_parts together
         # - First join part must reference the base table
         # - succeeding join parts must also reference the base table or a table in a previous join
-        base_table_name = self.initial_table_source_items[0].get_table_name()
-        base_table_alias = self.initial_table_source_items[0].get_alias()
-
+        tables_in_query = []
+        tables_in_query.append(self.initial_table_source_items[0].get_name())
+        aliases_in_query = []
+        aliases_in_query.append(self.initial_table_source_items[0].get_alias())
         ordered_join_part_items = []
+        already_ordered = []
+
         while len(ordered_join_part_items) < len(join_part_items):
+            self.print_verbose(str(len(ordered_join_part_items)), str(len(join_part_items)))
             for join_part in join_part_items:
-                if (join_part.get_left_table_name() == base_table_name 
-                    or (join_part.left_table_has_alias() 
-                        and join_part.get_left_table_alias() == base_table_alias
-                    )
+                if ((join_part.get_left_table_name().strip() in tables_in_query) 
+                        or (join_part.left_table_has_alias() 
+                            and join_part.get_left_table_alias().strip() in aliases_in_query
+                        )
+                    and join_part.get_join_part_node_id() not in already_ordered 
                 ):
                     ordered_join_part_items.append(join_part)
-
-
+                    already_ordered.append(join_part.get_join_part_node_id())
+                    self.print_verbose("Added", join_part.get_left_table_name(), "to ordered query list")
+                    break
 
         #Is each table / alias referenced in at least one join part?
         table_source_items = self.get_all_table_source_items()
         for tsi in table_source_items:
-            1
+            if not ((tsi.has_alias() and tsi.get_alias() in aliases_in_query) 
+                or (tsi.get_name() in tables_in_query)
+            ):
+                self.print_verbose("WARNING: Table", tsi.get_name(), 
+                    "referenced in multi query without corresponding join"
+                )
         
         #Move all join expressions to the base query
+        table_expression_children = first_table_expression_node.get_children() + already_ordered
+        first_table_expression_node.update_children(table_expression_children)
 
-        return 1
-                
+        for node_id in already_ordered:
+            node = self.get_node(node_id)
+            node.update_parent(first_table_expression_node.get_id())
 
-
-
-               
-        
+            
 
     def _aggregate_where_statements(self, node_id = 0):
         if (self.properties["num_select_and_table_expression"] <= 1):
