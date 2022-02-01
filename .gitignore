@@ -10,3 +10,5 @@ app/src/speakql_translator/__pycache__
 *.pyc
 
 update_react_app.ps1
+
+db_info.json
