@@ -25,14 +25,13 @@ course_table = """CREATE TABLE IF NOT EXISTS course (
 
 commands.append(course_table)
 
-# CourseOffering(offeringId, courseId, termId, facultyName, locationId, roomNumber, onDays, startTime, endTime, capacity)
+# CourseOffering(offeringId, courseId, termId, roomId, facultyName, onDays, startTime, endTime, capacity)
 course_offering_table = """CREATE TABLE IF NOT EXISTS courseOffering (
                         id int NOT NULL AUTO_INCREMENT,
-                        courseId int NOT NULL,
-                        termId int NOT NULL,
-                        locationId int NOT NULL,
+                        courseId varchar(16) NOT NULL,
+                        termId varchar(16) NOT NULL,
+                        roomId varchar(32) NOT NULL,
                         facultyName varchar(255),
-                        roomNumber varchar(255),
                         onDays varchar(255),
                         startTime time(6),
                         endTime time(6),
@@ -42,12 +41,13 @@ course_offering_table = """CREATE TABLE IF NOT EXISTS courseOffering (
 
 commands.append(course_offering_table)
 
-# Term(termId, startDate, endDate, termPeriod)
+# Term(termId, startDate, endDate, termPeriod, year)
 term_table = """CREATE TABLE IF NOT EXISTS term (
-             id int NOT NULL AUTO_INCREMENT,
+             id varchar(16) NOT NULL,
              startDate date,
              endDate date,
-             termPeriod varchar(12),
+             termPeriod varchar(16),
+             year int,
              primary key(id)
              )"""
 

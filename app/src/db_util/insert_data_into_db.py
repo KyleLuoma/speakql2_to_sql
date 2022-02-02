@@ -159,7 +159,37 @@ def insert_room_values():
         cnx.close()
         print("MySQL connection is closed")
 
-insert_room_values()
+#insert_room_values()
+
+# Term(termId, startDate, endDate, termPeriod, year)
+def insert_term_values():
+    insert_term_query = """INSERT INTO speakql_university.term (id, startDate, endDate, termPeriod, year)
+                                                                  VALUES ('{}', '{}', '{}', '{}', {})"""
+    terms = pandas.read_csv("./app/src/db_util/university_data - terms.csv")
+    print(terms.head())
+    for row in terms.itertuples():
+        command = insert_term_query.format(
+            row[1],
+            row[2],
+            row[3],
+            row[4],
+            int(row[5])
+        )
+        try:
+            cnx = db_connector.get_speakql_university_connector()
+            cursor = cnx.cursor()
+            result = cursor.execute(command)
+            cnx.commit()
+
+        except mysql.connector.Error as error:
+            print("Failed to execute query {} in MySQL: {}".format(command, error))
+        
+    if cnx.is_connected():
+        cursor.close()
+        cnx.close()
+        print("MySQL connection is closed")
+
+#insert_term_values()
 
 def insert_department_values():
     tree = ET.parse('./app/src/db_util/ucsd_departments.xml')
@@ -183,3 +213,91 @@ def insert_department_values():
         cursor.close()
         cnx.close()
         print("MySQL connection is closed")
+
+
+# CourseOffering(offeringId, courseId, termId, roomId, facultyName, onDays, startTime, endTime, capacity)
+def insert_course_offering_values():
+    try:
+        cnx = db_connector.get_speakql_university_connector()
+        cursor = cnx.cursor(buffered=True, dictionary=True)
+        
+        cursor.execute("SELECT * FROM speakql_university.term;")
+        term_ids = []
+        for (tuple) in cursor:
+            term_ids.append(tuple["id"])
+
+        cursor.execute("SELECT * FROM speakql_university.course;")
+        course_ids = []
+        for (tuple) in cursor:
+            course_ids.append(tuple["id"])
+
+        cursor.execute("SELECT * from speakql_university.room;")
+        room_ids = []
+        room_capacities = {}
+        for (tuple) in cursor:
+            room_ids.append(tuple["id"])
+            room_capacities[tuple["id"]] = tuple["capacity"]
+
+        print(len(term_ids))
+        print(len(course_ids))
+        print(len(room_ids))
+
+        on_day_list = ["MonWed", "TueThu"]
+        start_time_end_time_list = [
+            ["08:00:00", "09:50:00"],
+            ["10:00:00", "11:50:00"],
+            ["12:00:00", "13:50:00"],
+            ["14:00:00", "15:50:00"],
+            ["16:00:00", "17:50:00"],
+            ["18:00:00", "19:50:00"]
+        ]
+    except mysql.connector.Error as error:
+        print("Failed to DO SOMETHING in MySQL: {}".format(error))
+
+    try:
+        course_offerings = []
+
+        for term in term_ids:
+            for room in room_ids:
+                course_offering = {}
+                for i in range(0, len(start_time_end_time_list)):
+                    for j in range(0, len(on_day_list)):
+                        course_offering["courseId"] = course_ids[random.randint(0, len(course_ids) - 1)]
+                        course_offering["termId"] = term
+                        course_offering["roomId"] = room
+                        course_offering["startTime"] = start_time_end_time_list[i][0]
+                        course_offering["endTime"] = start_time_end_time_list[i][1]
+                        course_offering["onDays"] = on_day_list[j]
+                        course_offering["capacity"] = random.randint(int(room_capacities[room] / 2), int(room_capacities[room]))
+                        course_offering["facultyName"] = "Nida Namegen Algorithm"
+
+                        command = """INSERT INTO speakql_university.courseOffering (courseId, termId, roomId, facultyName, onDays, 
+                                     startTime, endTime, capacity) VALUES('{}', '{}', '{}', '{}', '{}', '{}', '{}', {})"""
+
+                        command = command.format(
+                            course_offering["courseId"],
+                            course_offering["termId"],
+                            course_offering["roomId"],
+                            course_offering["facultyName"],
+                            course_offering["onDays"],
+                            course_offering["startTime"],
+                            course_offering["endTime"],
+                            course_offering["capacity"]
+                        )
+                        cursor.execute(command)
+                        cnx.commit()
+
+
+    except mysql.connector.Error as error:
+        print("Failed {} in MySQL: {}".format(command, error))
+
+    cursor.close()
+    cnx.close()    
+
+
+        
+    
+
+    
+
+insert_course_offering_values()
