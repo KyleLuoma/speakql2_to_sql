@@ -6,7 +6,7 @@ commands = []
 
 # Department(deptId, departmentName)
 department_table = """CREATE TABLE IF NOT EXISTS department (
-                    id int NOT NULL AUTO_INCREMENT,
+                    id varchar(8) NOT NULL,
                     departmentName varchar(255),
                     primary key(id)
                     )"""
@@ -15,10 +15,10 @@ commands.append(department_table)
 
 # Course(courseId, deptId, title, number, units)
 course_table = """CREATE TABLE IF NOT EXISTS course (
-                id int NOT NULL AUTO_INCREMENT,
+                id varchar(16) NOT NULL,
                 deptId int NOT NULL,
                 title varchar(255),
-                number int,
+                code varchar(8),
                 units int,
                 primary key(id)
                 )"""
@@ -53,16 +53,45 @@ term_table = """CREATE TABLE IF NOT EXISTS term (
 
 commands.append(term_table)
 
-# Location(locationId, buildingNumber, buildingName)
-course_location_table = """CREATE TABLE IF NOT EXISTS courseLocation (
-                        id int NOT NULL AUTO_INCREMENT,
+# Building(id, buildingNumber, buildingName)
+building_table = """CREATE TABLE IF NOT EXISTS building (
+                        id varchar(16) NOT NULL,
                         buildingNumber varchar(32),
                         buildingName varchar(255),
                         primary key(id)
                         )"""
 
-commands.append(course_location_table)
+commands.append(building_table)
 
+#R Room(id, buildingId, roomNumber, floor, area, capacity, roomType, overflowCapable, floorType, 
+#       seatingType, boards, acoustics, ventilation, windows, windowDarkenability, windowCoverings, 
+#       lighting, lectern, instructorTables, clock, wheelchairSpaces)
+room_table = """CREATE TABLE IF NOT EXISTS room (
+                    id varchar(32) NOT NULL,
+                    buildingId varchar(16) NOT NULL,
+                    roomNumber varchar(16),
+                    floor varchar(16),
+                    area int,
+                    capacity int,
+                    roomType varchar(32),
+                    overFlowCapable varchar(8),
+                    floorType varchar(255),
+                    seatingType varchar(255),
+                    boards varchar(255),
+                    acoustics varchar(255),
+                    ventilation varchar(64),
+                    windows varchar(32),
+                    windowDarkenability varchar(64),
+                    windowCoverings varchar(64),
+                    lighting varchar(32),
+                    lectern varchar(128),
+                    instructorTables varchar(32),
+                    clock varchar(32),
+                    wheelchairSpaces int,
+                    primary key(id)
+                    )"""
+
+commands.append(room_table)
 
 for command in commands:
     try:

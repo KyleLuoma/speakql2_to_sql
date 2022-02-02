@@ -51,4 +51,4 @@ courses["course_names"] = pandas.Series(course_names)
 courses["course_descriptions"] = pandas.Series(course_descriptions)
 
 courses.to_csv("./courses.csv", sep = "|")
-courses.to_excel("./courses.xlsx")
+#courses.to_excel("./courses.xlsx")
