@@ -63,9 +63,7 @@ building_table = """CREATE TABLE IF NOT EXISTS building (
 
 commands.append(building_table)
 
-#R Room(id, buildingId, roomNumber, floor, area, capacity, roomType, overflowCapable, floorType, 
-#       seatingType, boards, acoustics, ventilation, windows, windowDarkenability, windowCoverings, 
-#       lighting, lectern, instructorTables, clock, wheelchairSpaces)
+#R Room(id, buildingId, roomNumber, floor, area, capacity, wheelchairSpaces)
 room_table = """CREATE TABLE IF NOT EXISTS room (
                     id varchar(32) NOT NULL,
                     buildingId varchar(16) NOT NULL,
@@ -73,20 +71,6 @@ room_table = """CREATE TABLE IF NOT EXISTS room (
                     floor varchar(16),
                     area int,
                     capacity int,
-                    roomType varchar(32),
-                    overFlowCapable varchar(8),
-                    floorType varchar(255),
-                    seatingType varchar(255),
-                    boards varchar(255),
-                    acoustics varchar(255),
-                    ventilation varchar(64),
-                    windows varchar(32),
-                    windowDarkenability varchar(64),
-                    windowCoverings varchar(64),
-                    lighting varchar(32),
-                    lectern varchar(128),
-                    instructorTables varchar(32),
-                    clock varchar(32),
                     wheelchairSpaces int,
                     primary key(id)
                     )"""

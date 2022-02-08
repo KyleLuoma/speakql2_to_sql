@@ -350,57 +350,59 @@ class SpeakQlTree:
         #Create a list of JoinParts
         join_part_items = []
         for node_id in multi_join_expression_ids:
-            join_part_node = self.get_node(node_id)
-            
-            join_type = "inner"
-            if self.rule_exists_in_tree("multiOuterJoin", node_id):
-                join_type = "outer"
+            multi_join_part_ids = self.find_nodes_by_rule_name("multiJoinPart", node_id = node_id)
+            for join_part_id in multi_join_part_ids:
+                
+                join_type = "inner"
+                if self.rule_exists_in_tree("multiOuterJoin", join_part_id):
+                    join_type = "outer"
 
-            join_direction = ""
-            if self.rule_exists_in_tree("joinDirection"):
-                join_direction = self.preorder_serialize_tokens(
-                    self.find_nodes_by_rule_name("joinDirection", node_id)[0]
+                join_direction = ""
+                if self.rule_exists_in_tree("joinDirection"):
+                    join_direction = self.preorder_serialize_tokens(
+                        self.find_nodes_by_rule_name("joinDirection", join_part_id)[0]
+                    )
+
+                table_source_item_ids = self.find_nodes_by_rule_name(
+                    "tableSourceItem", join_part_id, stop_at_rules=["expression"]
                 )
 
-            table_source_item_ids = self.find_nodes_by_rule_name(
-                "tableSourceItem", node_id, stop_at_rules=["expression"]
-            )
-
-            left_table_name = self.preorder_serialize_tokens(
-                self.find_nodes_by_rule_name("tableName", table_source_item_ids[0])[0]
-            )
-
-            right_table_name = self.preorder_serialize_tokens(
-                self.find_nodes_by_rule_name("tableName", table_source_item_ids[1])[0]
-            )
-
-            left_table_alias = ""
-            if self.rule_exists_in_tree("tableAlias", table_source_item_ids[0]):
-                left_table_alias = self.preorder_serialize_tokens(
-                    self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[0])[0]
+                left_table_name = self.preorder_serialize_tokens(
+                    self.find_nodes_by_rule_name("tableName", table_source_item_ids[0])[0]
                 )
 
-            right_table_alias = ""
-            if self.rule_exists_in_tree("tableAlias", table_source_item_ids[1]):
-                left_table_alias = self.preorder_serialize_tokens(
-                    self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[1])[0]
+                right_table_name = self.preorder_serialize_tokens(
+                    self.find_nodes_by_rule_name("tableName", table_source_item_ids[1])[0]
                 )
 
-            self.remove_node_from_tree(
-                self.find_nodes_by_rule_name("withKeyword", node_id)[0]
-            )
+                left_table_alias = ""
+                if self.rule_exists_in_tree("tableAlias", table_source_item_ids[0]):
+                    left_table_alias = self.preorder_serialize_tokens(
+                        self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[0])[0]
+                    )
 
-            join_part_items.append(
-                MultiJoinPartItem(
-                    node_id, 
-                    left_table_name=left_table_name,
-                    right_table_name=right_table_name,
-                    join_type=join_type,
-                    join_direction=join_direction,
-                    left_table_alias=left_table_alias,
-                    right_table_alias=right_table_alias
+                right_table_alias = ""
+                if self.rule_exists_in_tree("tableAlias", table_source_item_ids[1]):
+                    left_table_alias = self.preorder_serialize_tokens(
+                        self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[1])[0]
+                    )
+
+                while len(self.find_nodes_by_rule_name("withKeyword", join_part_id)) > 0:
+                    self.remove_node_from_tree(
+                        self.find_nodes_by_rule_name("withKeyword", join_part_id)[0]
+                    )
+
+                join_part_items.append(
+                    MultiJoinPartItem(
+                        join_part_id, 
+                        left_table_name=left_table_name,
+                        right_table_name=right_table_name,
+                        join_type=join_type,
+                        join_direction=join_direction,
+                        left_table_alias=left_table_alias,
+                        right_table_alias=right_table_alias
+                    )
                 )
-            )
 
         #Order the join_parts together
         # - First join part must reference the base table
@@ -411,14 +413,16 @@ class SpeakQlTree:
         aliases_in_query.append(self.initial_table_source_items[0].get_alias())
         ordered_join_part_items = []
         already_ordered = []
-
-        while len(ordered_join_part_items) < len(join_part_items):
+        time_out = 0
+        while len(ordered_join_part_items) < len(join_part_items) and time_out < 20:
+            time_out = time_out + 1
             self.print_verbose(str(len(ordered_join_part_items)), str(len(join_part_items)))
             for join_part in join_part_items:
-                if ((join_part.get_left_table_name().strip() in tables_in_query) 
+                self.print_verbose("JOIN PARTS IN QUERY:", join_part.get_left_table_name(), join_part.get_right_table_name())
+                if (((join_part.get_left_table_name().strip() in tables_in_query) 
                         or (join_part.left_table_has_alias() 
                             and join_part.get_left_table_alias().strip() in aliases_in_query
-                        )
+                        ))
                     and join_part.get_join_part_node_id() not in already_ordered 
                 ):
                     ordered_join_part_items.append(join_part)
@@ -426,11 +430,14 @@ class SpeakQlTree:
                     self.remove_node_from_tree(
                         self.find_nodes_by_rule_name("tableSourceItem", join_part.get_join_part_node_id())[0]
                     )
-                    self.print_verbose("Added", join_part.get_left_table_name(), "to ordered query list")
-                elif ((join_part.get_right_table_name().strip() in tables_in_query) 
+                    tables_in_query.append(join_part.get_right_table_name().strip())
+                    if join_part.right_table_has_alias():
+                        aliases_in_query.append(join_part.get_right_table_alias().strip())
+                    self.print_verbose("Added", join_part.get_right_table_name().strip(), "to ordered query list")
+                elif (((join_part.get_right_table_name().strip() in tables_in_query) 
                         or (join_part.right_table_has_alias() 
                             and join_part.get_right_table_alias().strip() in aliases_in_query
-                        )
+                        ))
                     and join_part.get_join_part_node_id() not in already_ordered 
                 ):
                     ordered_join_part_items.append(join_part)
@@ -438,7 +445,11 @@ class SpeakQlTree:
                     self.remove_node_from_tree(
                         self.find_nodes_by_rule_name("tableSourceItem", join_part.get_join_part_node_id())[1]
                     )
-                    self.print_verbose("Added", join_part.get_right_table_name(), "to ordered query list")
+                    tables_in_query.append(join_part.get_left_table_name().strip())
+                    if join_part.left_table_has_alias():
+                        aliases_in_query.append(join_part.get_left_table_alias().strip())
+                    self.print_verbose("Added", join_part.get_left_table_name().strip(), "to ordered query list")
+                self.print_verbose("TABLES IN QUERY:", tables_in_query)
                     
 
         #Is each table / alias referenced in at least one join part?

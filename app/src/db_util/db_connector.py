@@ -11,6 +11,6 @@ def get_speakql_university_connector():
         'database': db_info["database"],
         'raise_on_warnings': True
     }
-
+    
     cnx = mysql.connector.connect(**config)
     return cnx
