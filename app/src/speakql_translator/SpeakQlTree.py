@@ -685,6 +685,7 @@ class SpeakQlTree:
             self.print_verbose(table_sources_node_ids)
             first_table_sources_node = self.get_node(table_sources_node_ids[0])
             all_table_source_node_ids = self.find_nodes_by_rule_name("tableSource", node_id = node_id)
+            all_table_source_node_ids = all_table_source_node_ids + self.find_nodes_by_rule_name("tableSourceNoJoin", node_id = node_id)
             self.print_verbose(all_table_source_node_ids)
             new_table_sources_children = []
             for node_id in all_table_source_node_ids:
