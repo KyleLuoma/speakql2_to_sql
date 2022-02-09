@@ -27,6 +27,7 @@ class SpeakQlTree:
             node_id = 0,
             return_initial_list = False
         )
+        self.initial_tables_and_elements = self.get_all_tables_and_elements(0)
         self.table_lookup_by_alias_dict = self._gen_table_lookup_by_alias_dict(
             self.initial_table_source_items
         )
@@ -62,8 +63,10 @@ class SpeakQlTree:
     def get_properties_from_parse_tree(self, parse_tree):
         properties = {
             "num_joinpart" : 0,
+            "num_multijoinpart" : 0,
             "num_non_commutative_join" : 0,
             "num_select_and_table_expression" : 0,
+            "num_multi_query_order_specification" : 0, 
             "num_functioncall" : 0,
             "num_table_name" : 0,
             "num_non_right_table_name": 0,
@@ -71,11 +74,11 @@ class SpeakQlTree:
             "num_element_alias" : 0,
             "num_group_by" : 0
         }
-        properties["num_joinpart"] = parse_tree.count("joinPart") + parse_tree.count("multiJoinPart")
+        properties["num_joinpart"] = parse_tree.count("joinPart")
+        properties["num_multijoinpart"] = parse_tree.count("multiJoinPart")
         properties["num_non_commutative_joins"] = parse_tree.count("joinDirection")
-        properties["num_select_and_table_expression"] = (
-            parse_tree.count("queryOrderSpecification") + parse_tree.count("multiQueryOrderSpecification")
-        )
+        properties["num_select_and_table_expression"] = parse_tree.count("queryOrderSpecification")
+        properties["num_multi_query_order_specification"] = parse_tree.count("multiQueryOrderSpecification")
         properties["num_functioncall"] = parse_tree.count("functionCall")
         properties["num_table_name"] = parse_tree.count("tableName")
         properties["num_non_right_table_name"] = parse_tree.count("(tableSource (tableSourceItem (tableName")
@@ -261,6 +264,8 @@ class SpeakQlTree:
             return elements
         if "tableExpression" in node.get_rule_name():
             return elements
+        if "tableExpressionNoJoin" in node.get_rule_name():
+            return elements
         if "whereExpression" in node.get_rule_name():
             return elements
         if "selectElement" in node.get_rule_name() and "selectElements" not in node.get_rule_name():
@@ -269,10 +274,11 @@ class SpeakQlTree:
             elements = elements + self.get_select_elements(
                 child, table_name = table_name, in_select_element_tree = in_select_element_tree
                 )
+        print(elements)
         return elements
 
     def _aggregate_select_elements(self, node_id = 0):
-        if self.properties["num_select_and_table_expression"] <= 1:
+        if self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0:
             self.print_verbose("Cannot aggregate select elements in a query with only one select statement.")
             return
         node = self.get_node(node_id)
@@ -307,6 +313,28 @@ class SpeakQlTree:
                         parent = first_select_elements_node.get_id()
                     )
                     new_children.append(delim_id)
+
+        #Find the group by clause (if exists) and append any aggregatedWindowedFunctions to the first select element node
+        group_by_id = self.find_nodes_by_rule_name("groupByClause")[0]
+        function_ids = self.find_nodes_by_rule_name("aggregateWindowedFunction", group_by_id)
+        for node_id in function_ids:
+            delim_id = self._add_node_under_parent(
+                        "selectElementDelimiter ,",
+                        is_leaf = True,
+                        depth = first_select_elements_node.get_depth() + 1,
+                        parent = first_select_elements_node.get_id()
+                    )
+            new_children.append(delim_id)
+            node = self.get_node(node_id)
+            new_children.append(node_id)
+            self.remove_node_from_tree(node_id)
+            node.update_parent(first_select_elements_node.get_id())
+            node.update_depth(first_select_elements_node.get_depth() + 1)
+        group_by_select = self.find_nodes_by_rule_name("selectKeyword", group_by_id)
+        if len(group_by_select) > 0:
+            select_node = self.get_node(group_by_select[0])
+            self.remove_node_from_tree(select_node.get_id())
+
         first_select_elements_node.update_children(new_children)       
         #Orphan any following selectElements
         for element in select_elements_node_ids[1:]:
@@ -330,7 +358,7 @@ class SpeakQlTree:
 
     def _consolidate_join_parts(self, node_id = 0):
         
-        if(self.properties["num_joinpart"] == 0):
+        if(self.properties["num_joinpart"] == 0 and self.properties["num_multijoinpart"] == 0):
             self.print_verbose("Cannot consolidate join parts in a query without join parts")
             return
         
@@ -591,7 +619,8 @@ class SpeakQlTree:
     def _aggregate_tables(self, node_id = 0):
         #TODO: add logic to only aggregate a table ID once so you can create multiple expressions sourcing the same table
         #multiple different types of conditions can exist:
-        if (self.properties["num_select_and_table_expression"] <= 1):
+        if (self.properties["num_select_and_table_expression"] <= 1 and 
+                self.properties["num_multi_query_order_specification"] == 0):
             self.print_verbose("Cannot aggregate tables in a query with only one table expression.")
             return           
         # - no joins, tables > 1, select and table expressions == tables
@@ -665,6 +694,14 @@ class SpeakQlTree:
                 table_aliases = table_aliases + self.get_all_table_aliases(child)
             return table_aliases
 
+    def get_initial_table_source_items_as_json(self):
+        table_source_list = []
+        table_source_items = self.get_all_table_source_items()
+        for item in table_source_items:
+            table_source_list.append(item.as_dict())
+        return  json.JSONEncoder().encode(table_source_list)
+
+
     # Creates a list of all tables and their aliases within a query
     # Examines all possible mentions of tables within the query
     # If a table is referenced without an alias, but then later an alias is assigned
@@ -734,7 +771,18 @@ class SpeakQlTree:
     def remove_duplicates_from_list(self, target_list):
         return list(dict.fromkeys(target_list))
 
-    def get_all_tables_and_elements(self, node_id = 0):
+    def get_initial_tables_and_elements_as_json(self):
+        table_list = self.get_all_tables_and_elements(self, initial_list = True)
+        tl_for_json = []
+        for table in table_list:
+            table_dict = table[0][0]
+            table_dict["elements"] = table[1]
+            tl_for_json.append(table_dict)
+        return json.JSONEncoder().encode(tl_for_json)
+
+    def get_all_tables_and_elements(self, node_id = 0, initial_list = False):
+        if initial_list:
+            return self.initial_tables_and_elements
         node = self.get_node(node_id)
         table_alias_dict = {}
         alias_table_dict = {}
@@ -761,7 +809,7 @@ class SpeakQlTree:
                 ):
                     table_source_item.set_alias(table_source_item.get_name())
                     table_source_item.set_name(alias_table_dict[table_source_item.get_alias()])
-                if self.properties["num_select_and_table_expression"] > 1:
+                if self.properties["num_select_and_table_expression"] > 1 or self.properties["num_multi_query_order_specification"] > 0:
                     select_elements = self.get_select_elements(
                         node_id,
                         table_name = local_table_source_items[0].get_alias_if_exists_else_name()
@@ -864,7 +912,7 @@ class SpeakQlTree:
         return self.tree_nodes[node_id]
 
     def aggregate_select_and_table_statements(self, node_id = 0):
-        if self.properties["num_select_and_table_expression"] <= 1:
+        if self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0:
             self.print_verbose("Cannot aggregate statements in a query with only one select and table statement.")
             return
         #The order in which these are called matters: select -> where -> join -> tables

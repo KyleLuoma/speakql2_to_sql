@@ -16,30 +16,15 @@ commands.append(department_table)
 # Course(courseId, deptId, title, number, units)
 course_table = """CREATE TABLE IF NOT EXISTS course (
                 id varchar(16) NOT NULL,
-                deptId int NOT NULL,
+                deptId varchar(8) NOT NULL,
                 title varchar(255),
                 code varchar(8),
                 units int,
-                primary key(id)
+                primary key(id),
+                foreign key(deptId) references department(id)
                 )"""
 
 commands.append(course_table)
-
-# CourseOffering(offeringId, courseId, termId, roomId, facultyName, onDays, startTime, endTime, capacity)
-course_offering_table = """CREATE TABLE IF NOT EXISTS courseOffering (
-                        id int NOT NULL AUTO_INCREMENT,
-                        courseId varchar(16) NOT NULL,
-                        termId varchar(16) NOT NULL,
-                        roomId varchar(32) NOT NULL,
-                        facultyName varchar(255),
-                        onDays varchar(255),
-                        startTime time(6),
-                        endTime time(6),
-                        capacity int,
-                        primary key(id)
-                        )"""
-
-commands.append(course_offering_table)
 
 # Term(termId, startDate, endDate, termPeriod, year)
 term_table = """CREATE TABLE IF NOT EXISTS term (
@@ -72,8 +57,28 @@ room_table = """CREATE TABLE IF NOT EXISTS room (
                     area int,
                     capacity int,
                     wheelchairSpaces int,
-                    primary key(id)
+                    primary key(id),
+                    foreign key(buildingId) references building(id)
                     )"""
+
+# CourseOffering(offeringId, courseId, termId, roomId, facultyName, onDays, startTime, endTime, capacity)
+course_offering_table = """CREATE TABLE IF NOT EXISTS courseOffering (
+                        id int NOT NULL AUTO_INCREMENT,
+                        courseId varchar(16) NOT NULL,
+                        termId varchar(16) NOT NULL,
+                        roomId varchar(32) NOT NULL,
+                        facultyName varchar(255),
+                        onDays varchar(255),
+                        startTime time(6),
+                        endTime time(6),
+                        capacity int,
+                        primary key(id),
+                        foreign key(courseId) references course(id),
+                        foreign key(termId) references term(id),
+                        foreign key(roomId) references room(id)
+                        )"""
+
+commands.append(course_offering_table)
 
 commands.append(room_table)
 

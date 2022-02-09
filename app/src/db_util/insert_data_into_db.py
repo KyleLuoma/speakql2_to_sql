@@ -98,7 +98,6 @@ def insert_location_values():
         cnx.close()
         print("MySQL connection is closed")
 
-#insert_location_values()
 
 #R Room(id, buildingId, roomNumber, floor, area, capacity, wheelchairSpaces)
 
@@ -138,7 +137,7 @@ def insert_room_values():
         cnx.close()
         print("MySQL connection is closed")
 
-insert_room_values()
+
 
 # Term(termId, startDate, endDate, termPeriod, year)
 def insert_term_values():
@@ -168,7 +167,7 @@ def insert_term_values():
         cnx.close()
         print("MySQL connection is closed")
 
-#insert_term_values()
+
 
 def insert_department_values():
     tree = ET.parse('./app/src/db_util/ucsd_departments.xml')
@@ -233,6 +232,8 @@ def insert_course_offering_values():
     except mysql.connector.Error as error:
         print("Failed to DO SOMETHING in MySQL: {}".format(error))
 
+    mock_names = pandas.read_csv("./app/src/db_util/MOCK_NAMES.csv")
+
     try:
         course_offerings = []
 
@@ -248,7 +249,8 @@ def insert_course_offering_values():
                         course_offering["endTime"] = start_time_end_time_list[i][1]
                         course_offering["onDays"] = on_day_list[j]
                         course_offering["capacity"] = random.randint(int(room_capacities[room] / 2), int(room_capacities[room]))
-                        course_offering["facultyName"] = "Nida Namegen Algorithm"
+                        rand_name_ix = random.randint(0, 99)
+                        course_offering["facultyName"] = mock_names.iloc[rand_name_ix].first_name + " " + mock_names.iloc[rand_name_ix].last_name
 
                         command = """INSERT INTO speakql_university.courseOffering (courseId, termId, roomId, facultyName, onDays, 
                                      startTime, endTime, capacity) VALUES('{}', '{}', '{}', '{}', '{}', '{}', '{}', {})"""
@@ -273,10 +275,9 @@ def insert_course_offering_values():
     cursor.close()
     cnx.close()    
 
-
-        
-    
-
-    
-
-#insert_course_offering_values()
+#insert_term_values()
+#insert_location_values()
+#insert_department_values()
+#insert_course_values()
+#insert_room_values()
+insert_course_offering_values()

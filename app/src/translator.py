@@ -2,7 +2,7 @@ from .speakql_translator.SpeakQlParseCaller import *
 from .speakql_translator.SpeakQlTree import *
 from .speakql_translator.speakql_to_sql import *
 
-parse_engine = JavaSpeakQlParseEngine("gen_simple_multi_join", simple_speakql=True)
+parse_engine = JavaSpeakQlParseEngine("gen_simple_groupby_agg", simple_speakql=True)
 parse_caller = SpeakQlParseCaller(parse_engine)
 
 def run_test_query_translation(test_query):
@@ -37,6 +37,7 @@ def full_query_translation_with_intermediate_steps(query):
     speakql_tree.aggregate_select_and_table_statements()
     query_results["sql_query_tree"] = speakql_tree.as_json()
     query_results["sql_query"] = remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
+    query_results["table_list"] = speakql_tree.get_initial_tables_and_elements_as_json()
     return query_results
 
 def translate_speakql_to_sql_query(speakql_tree, verbose = False):
