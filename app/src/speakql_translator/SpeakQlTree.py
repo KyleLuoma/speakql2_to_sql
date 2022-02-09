@@ -354,25 +354,27 @@ class SpeakQlTree:
                     new_children.append(delim_id)
 
         #Find the group by clause (if exists) and append any aggregatedWindowedFunctions to the first select element node
-        group_by_id = self.find_nodes_by_rule_name("groupByClause")[0]
-        function_ids = self.find_nodes_by_rule_name("aggregateWindowedFunction", group_by_id)
-        for node_id in function_ids:
-            delim_id = self._add_node_under_parent(
-                        "selectElementDelimiter ,",
-                        is_leaf = True,
-                        depth = first_select_elements_node.get_depth() + 1,
-                        parent = first_select_elements_node.get_id()
-                    )
-            new_children.append(delim_id)
-            node = self.get_node(node_id)
-            new_children.append(node_id)
-            self.remove_node_from_tree(node_id)
-            node.update_parent(first_select_elements_node.get_id())
-            node.update_depth(first_select_elements_node.get_depth() + 1)
-        group_by_select = self.find_nodes_by_rule_name("selectKeyword", group_by_id)
-        if len(group_by_select) > 0:
-            select_node = self.get_node(group_by_select[0])
-            self.remove_node_from_tree(select_node.get_id())
+        has_group_by = self.rule_exists_in_tree("groupByClause")
+        if has_group_by:
+            group_by_id = self.find_nodes_by_rule_name("groupByClause")[0]
+            function_ids = self.find_nodes_by_rule_name("aggregateWindowedFunction", group_by_id)
+            for node_id in function_ids:
+                delim_id = self._add_node_under_parent(
+                            "selectElementDelimiter ,",
+                            is_leaf = True,
+                            depth = first_select_elements_node.get_depth() + 1,
+                            parent = first_select_elements_node.get_id()
+                        )
+                new_children.append(delim_id)
+                node = self.get_node(node_id)
+                new_children.append(node_id)
+                self.remove_node_from_tree(node_id)
+                node.update_parent(first_select_elements_node.get_id())
+                node.update_depth(first_select_elements_node.get_depth() + 1)
+            group_by_select = self.find_nodes_by_rule_name("selectKeyword", group_by_id)
+            if len(group_by_select) > 0:
+                select_node = self.get_node(group_by_select[0])
+                self.remove_node_from_tree(select_node.get_id())
 
         first_select_elements_node.update_children(new_children)       
         #Orphan any following selectElements
@@ -993,9 +995,21 @@ class SpeakQlTree:
     def _infer_group_by(self, node_id = 0):
         select_elements = self.get_all_tables_and_elements()
         aggregate_exists = False
-        group_by_id = self.find_nodes_by_rule_name("groupByClause")[0]
+        group_by_ids = self.find_nodes_by_rule_name("groupByClause")
+
+        if len(group_by_ids) > 0:
+            group_by_id = group_by_ids[0]
+        else:
+            return
+
+
+        automatic_ids = self.find_nodes_by_rule_name("automaticGroupByKeyword", group_by_id)
+        for auto_id in automatic_ids:
+            self.remove_node_from_tree(self.get_node(auto_id).get_parent())
+
         group_by_node = self.get_node(group_by_id)
         group_by_items = self.find_nodes_by_rule_name("groupByItem", group_by_id)
+
         existing_items = []
         for item in group_by_items:
             existing_items.append(self.preorder_serialize_tokens(item).strip().replace(" ", ""))
