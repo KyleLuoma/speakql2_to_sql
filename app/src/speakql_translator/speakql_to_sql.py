@@ -19,7 +19,8 @@ SQL_KEYWORDS = {
     "tableSourceDelimiter" : ",",
     "groupByItemDelimiter" : ",",
     "selectElementDot" : ".",
-    "joinKeyword" : "JOIN"
+    "joinKeyword" : "JOIN",
+    "groupByKeyword" : "GROUP BY"
     }
 
 SQL_KEYWORDS_FOR_ST = SQL_KEYWORDS.copy()
