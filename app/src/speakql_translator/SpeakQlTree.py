@@ -36,12 +36,16 @@ class SpeakQlTree:
         )
         self.verbose = verbose
 
+
+
     def _gen_table_lookup_by_alias_dict(self, initial_table_source_items):
         table_lookup_by_alias_dict = {}
         for tsi in initial_table_source_items:
             if tsi.has_alias():
                 table_lookup_by_alias_dict[tsi.get_alias()] = tsi.get_name()
         return table_lookup_by_alias_dict
+
+
 
     def _gen_alias_lookup_by_table_dict(self, initial_table_source_items):
         alias_lookup_by_table = {}
@@ -50,8 +54,12 @@ class SpeakQlTree:
                 alias_lookup_by_table[tsi.get_name()] = tsi.get_alias()
         return alias_lookup_by_table
 
+
+
     def set_verbose(self, verbose):
         self.verbose = verbose
+
+
 
     def print_verbose(self, *args):
         if self.verbose:
@@ -59,6 +67,8 @@ class SpeakQlTree:
             for arg in args:
                 print_this = print_this + str(arg) + " "
             print(print_this)
+
+
 
     def get_properties_from_parse_tree(self, parse_tree):
         properties = {
@@ -87,8 +97,12 @@ class SpeakQlTree:
         properties["num_group_by"] = parse_tree.count("groupByClause")
         return properties
 
+
+
     def get_properties(self):
         return self.properties
+
+
 
     def _build_tree(self, lisp_tree):
         lisp_tree = lisp_tree.replace("leftParen (", "leftParen")
@@ -126,7 +140,8 @@ class SpeakQlTree:
                         break
             else:
                 i = i + 1
-            
+
+
             
     def print_tree_to_console(self, node_id = 0):
         node = self.get_node(node_id)
@@ -134,14 +149,20 @@ class SpeakQlTree:
         for child in node.get_children():
             self.print_tree_to_console(child)
 
+
+
     def print_nodes_to_console(self):
         for i in range(0, len(self.tree_nodes)):
             print(self.tree_nodes[i].to_string())
+
+
 
     def _get_next_id_and_increment(self):
         id = self.next_id
         self.next_id = self.next_id + 1
         return id
+
+
 
     def _add_node_under_parent(self, rule_name, is_leaf, depth, parent):
         new_id = self._get_next_id_and_increment()
@@ -157,6 +178,8 @@ class SpeakQlTree:
         parent.add_child(new_id)
         return new_id
                 
+
+
     def _add_node_during_build(self, rule_name, is_root, is_leaf, depth):
         parent = -1
         if self.next_id == 1 and self.tree_nodes[0].depth == depth - 1:
@@ -177,12 +200,16 @@ class SpeakQlTree:
         )
         self.next_id = self.next_id + 1
 
+
+
     def replace_keywords_for_rule_name(self, rule_name, new_keyword):
         for i in range(0, len(self.tree_nodes)):
             if rule_name in self.tree_nodes[i].get_rule_name():
                 self.tree_nodes[i].update_rule_name(
                     rule_name + " " + new_keyword
                 )       
+
+
 
     def scan_serialize_leafs(self):
         output = ""
@@ -191,6 +218,8 @@ class SpeakQlTree:
                 output = output + self.get_token_string_from_rule(self.get_node(i))
         return output
 
+
+
     def get_token_string_from_rule(self, node):
         rule_split = node.get_rule_name().split()
         rule_string = ""
@@ -198,6 +227,8 @@ class SpeakQlTree:
             if not rule[0].islower():
                 rule_string = rule_string + rule + " "
         return rule_string
+
+
 
     def as_json(self, node_id = 0, at_start = True):
         node = self.get_node(node_id)
@@ -210,6 +241,8 @@ class SpeakQlTree:
             return json.JSONEncoder().encode(tree_dict)
         else: 
             return tree_dict
+
+
 
     def preorder_serialize_tokens(self, node_id, input = "", ignore_rules = []):
         output = input
@@ -224,6 +257,8 @@ class SpeakQlTree:
         for child in node.get_children():
             output = output + self.preorder_serialize_tokens(child)
         return output
+
+
 
     def preorder_serialize_functioncall(self, functioncall_node_id, table_name = ""):
         node = self.get_node(functioncall_node_id)
@@ -243,6 +278,8 @@ class SpeakQlTree:
         for child in node.get_children():
             token = token + self.preorder_serialize_functioncall(child, table_name = table_name)
         return token
+
+
 
     def get_select_elements(
         self, node_id = 0, check_subqueries = False, table_name = "", in_select_element_tree = False
@@ -276,6 +313,8 @@ class SpeakQlTree:
                 )
         print(elements)
         return elements
+
+
 
     def _aggregate_select_elements(self, node_id = 0):
         if self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0:
@@ -340,12 +379,16 @@ class SpeakQlTree:
         for element in select_elements_node_ids[1:]:
             self.remove_node_from_tree(element, remove_siblings = True)
 
+
+
     def get_tablesourceitem_by_name_from_initial_list(self, table_name):
         self.print_verbose("Searching for table in initial list by name:", table_name)
         for table in self.initial_table_source_items:
             if table.get_name() == table_name.strip():
                 return table    
         raise ValueError()
+
+
 
     def get_tablesourceitem_by_alias_from_initial_list(self, table_alias):
         self.print_verbose("Searching for table in initial list by alias:", table_alias)
@@ -561,6 +604,8 @@ class SpeakQlTree:
                 where_expression_node.update_parent(first_qos_node.get_id())
                 self.surround_node_with_parens(expression_id)
 
+
+
     def add_dotted_ids_to_predicates(self, expression_id, table_or_alias, recursive = True):
         predicate_ids = self.find_nodes_by_rule_name("predicate", expression_id)
         for predicate_id in predicate_ids:
@@ -574,6 +619,8 @@ class SpeakQlTree:
             if recursive:
                 for child in self.get_node(predicate_id).get_children():
                     self.add_dotted_ids_to_predicates(child, table_or_alias)
+
+
 
     def replace_simple_id_with_dotted_id(self, node_id, table_or_alias):
         column_name_id = self.find_nodes_by_rule_name("fullColumnName", node_id)[0]
@@ -590,6 +637,8 @@ class SpeakQlTree:
             parent = column_name_id
         )
         
+
+
     def surround_node_with_parens(self, node_id):
         node = self.get_node(node_id)
         parent = self.get_node(node.get_parent())
@@ -615,6 +664,8 @@ class SpeakQlTree:
             else:
                 pass
         parent.update_children(new_children)
+
+
 
     def _aggregate_tables(self, node_id = 0):
         #TODO: add logic to only aggregate a table ID once so you can create multiple expressions sourcing the same table
@@ -653,6 +704,8 @@ class SpeakQlTree:
         # - joins exist, select and table expressions > 1
         #     call to join aggregation method
 
+
+
     def remove_node_from_tree(self, node_id, remove_siblings = False):
         child = self.get_node(node_id)
         parent = self.get_node(child.get_parent())
@@ -665,6 +718,8 @@ class SpeakQlTree:
         else:
             parent.update_children([])
         child.update_parent(-1)
+
+
 
     def get_all_table_names(self, node_id = 0, check_subqueries = False):
         table_names = []
@@ -681,6 +736,8 @@ class SpeakQlTree:
                 table_names = table_names + self.get_all_table_names(child)
             return table_names
 
+
+
     def get_all_table_aliases(self, node_id = 0, check_subqueries = False):
         table_aliases = []
         node = self.get_node(node_id)
@@ -694,12 +751,15 @@ class SpeakQlTree:
                 table_aliases = table_aliases + self.get_all_table_aliases(child)
             return table_aliases
 
+
+
     def get_initial_table_source_items_as_json(self):
         table_source_list = []
         table_source_items = self.get_all_table_source_items()
         for item in table_source_items:
             table_source_list.append(item.as_dict())
         return  json.JSONEncoder().encode(table_source_list)
+
 
 
     # Creates a list of all tables and their aliases within a query
@@ -768,8 +828,12 @@ class SpeakQlTree:
         else:
             return self.remove_duplicates_from_list(table_source_items)
 
+
+
     def remove_duplicates_from_list(self, target_list):
         return list(dict.fromkeys(target_list))
+
+
 
     def get_initial_tables_and_elements_as_json(self):
         table_list = self.get_all_tables_and_elements(self, initial_list = True)
@@ -779,6 +843,8 @@ class SpeakQlTree:
             table_dict["elements"] = table[1]
             tl_for_json.append(table_dict)
         return json.JSONEncoder().encode(tl_for_json)
+
+
 
     def get_all_tables_and_elements(self, node_id = 0, initial_list = False):
         if initial_list:
@@ -825,6 +891,8 @@ class SpeakQlTree:
             table_elements = table_elements + self.get_all_tables_and_elements(child)
         return table_elements
 
+
+
     def find_node_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False):
         node = self.get_node(node_id)
         if not check_subqueries:
@@ -837,6 +905,8 @@ class SpeakQlTree:
                 return self.find_node_by_rule_name(rule_to_find, child)
         else:
             return -1
+
+
 
     def find_nodes_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False, stop_at_rules = []):
         node = self.get_node(node_id)
@@ -854,6 +924,8 @@ class SpeakQlTree:
             node_list = node_list + self.find_nodes_by_rule_name(rule_to_find, child, stop_at_rules=stop_at_rules)
         return node_list
 
+
+
     def rule_exists_in_tree(self, rule_to_find, node_id = 0, check_subqueries = False):
         rule_list = self.find_nodes_by_rule_name(
             rule_to_find,
@@ -861,6 +933,8 @@ class SpeakQlTree:
             check_subqueries
         )
         return len(rule_list) > 0
+
+
 
     def reorder_select_and_table_expressions(self, node_id):
         node = self.get_node(node_id)
@@ -908,14 +982,67 @@ class SpeakQlTree:
         for child in node.get_children():
             self.reorder_select_and_table_expressions(child)
         
+
+
     def get_node(self, node_id):
         return self.tree_nodes[node_id]
+
+
+
+    #Scan the query. If aggregate functions exist, then infer that all non-agg elements should be in group by statement
+    def _infer_group_by(self, node_id = 0):
+        select_elements = self.get_all_tables_and_elements()
+        aggregate_exists = False
+        group_by_id = self.find_nodes_by_rule_name("groupByClause")[0]
+        group_by_node = self.get_node(group_by_id)
+        group_by_items = self.find_nodes_by_rule_name("groupByItem", group_by_id)
+        existing_items = []
+        for item in group_by_items:
+            existing_items.append(self.preorder_serialize_tokens(item).strip().replace(" ", ""))
+        print("Existing group by items:", existing_items)
+
+        for table in select_elements:
+            for element in table[1]:
+                if "(" in element and ")" in element:
+                    aggregate_exists = True
+
+        if len(existing_items) > 0:
+            self._add_node_under_parent(
+                "groupByItemDelimiter ,",
+                True,
+                group_by_node.get_depth() + 1,
+                group_by_id
+            )
+        
+        for table in select_elements:
+            for element in table[1]:
+                print("Checking if", element, " is in existing items.")
+                if not ("(" in element and ")" in element) and element not in existing_items:
+                    self._add_node_under_parent(
+                        "groupByItem " + element,
+                        True,
+                        group_by_node.get_depth() + 1,
+                        group_by_id
+                    )
+                    if not (select_elements.index(table) == len(select_elements) - 1 and table[1].index(element) == len(table[1]) - 1):
+                        self._add_node_under_parent(
+                            "groupByItemDelimiter ,",
+                            True,
+                            group_by_node.get_depth() + 1,
+                            group_by_id
+                        )
+
+
+
+
+
 
     def aggregate_select_and_table_statements(self, node_id = 0):
         if self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0:
             self.print_verbose("Cannot aggregate statements in a query with only one select and table statement.")
             return
         #The order in which these are called matters: select -> where -> join -> tables
+        self._infer_group_by(node_id)
         self._aggregate_select_elements(node_id)
         self._aggregate_where_statements(node_id)
         self._consolidate_join_parts(node_id)
@@ -939,17 +1066,7 @@ class SpeakQlTree:
 
 
 
-class JoinPart:
 
-    def __init__(self):
-        self.from_table = ""
-        self.to_table = ""
-        self.from_on_attr = ""
-        self.to_on_attr = ""
-        self.pred = ""
-
-    def set_from_table(self, table_name):
-        self.from_table = table_name
  
 
 
