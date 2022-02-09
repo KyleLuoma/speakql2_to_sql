@@ -548,9 +548,10 @@ class SpeakQlTree:
         
 
     def _aggregate_where_statements(self, node_id = 0):
-        if (self.properties["num_select_and_table_expression"] <= 1):
+        if (self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0):
             self.print_verbose("Cannot aggregate where statements in a query with only one table expression.")
             return
+        self.print_verbose("AGGREGATING WHERE STATEMENTS!!!")
         query_order_spec_node_ids = self.find_nodes_by_rule_name("multiQueryOrderSpecification", node_id = node_id)
         first_qos_node = self.get_node(query_order_spec_node_ids[0])
         where_expression_ids = []
@@ -571,7 +572,7 @@ class SpeakQlTree:
                 where_expression_table_lookup[expression] = table_source_item.get_alias_if_exists_else_name()
             where_expression_ids = where_expression_ids + new_expressions
             self.print_verbose(where_expression_ids)
-            self.print_verbose(where_expression_table_lookup)
+            self.print_verbose("Where expression table dict:", where_expression_table_lookup)
         
         if len(where_expression_ids) == 0:
             self.print_verbose("No where expressions exist in this query.")
@@ -776,6 +777,8 @@ class SpeakQlTree:
         table_source_items = []
         node = self.get_node(node_id)
         if "selectExpression" in node.get_rule_name():
+            return table_source_items
+        if "multiJoinExpression" in node.get_rule_name():
             return table_source_items
         if "tableSourceItem" in node.get_rule_name():
             table_source_item = TableSourceItem()
