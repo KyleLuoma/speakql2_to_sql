@@ -558,28 +558,34 @@ class SpeakQlTree:
         
 
     def _aggregate_where_statements(self, node_id = 0):
+
         if (self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0):
             self.print_verbose("Cannot aggregate where statements in a query with only one table expression.")
             return
-        self.print_verbose("AGGREGATING WHERE STATEMENTS!!!")
+
         query_order_spec_node_ids = self.find_nodes_by_rule_name("multiQueryOrderSpecification", node_id = node_id)
         first_qos_node = self.get_node(query_order_spec_node_ids[0])
         where_expression_ids = []
         where_expression_table_lookup = {}
+
         #Find the table name or alias associated with the where clauses:
         for qos_node_id in query_order_spec_node_ids:
             new_expressions = self.find_nodes_by_rule_name("whereExpression", qos_node_id)
+
             for expression in new_expressions:
                 if self.rule_exists_in_tree(rule_to_find = "tableName", node_id = qos_node_id):
                     table_name = self.get_all_table_names(qos_node_id)[0]
                     table_source_item = self.get_tablesourceitem_by_name_from_initial_list(table_name)
+
                 else:
                     alias_name = self.preorder_serialize_tokens(
                         self.find_nodes_by_rule_name("tableAlias", node_id = qos_node_id)[0]
                     ).replace("AS ", "")
                     self.print_verbose("ALIAS NAME:", alias_name)
                     table_source_item = self.get_tablesourceitem_by_alias_from_initial_list(alias_name)
+
                 where_expression_table_lookup[expression] = table_source_item.get_alias_if_exists_else_name()
+
             where_expression_ids = where_expression_ids + new_expressions
             self.print_verbose(where_expression_ids)
             self.print_verbose("Where expression table dict:", where_expression_table_lookup)
@@ -620,7 +626,9 @@ class SpeakQlTree:
 
 
     def add_dotted_ids_to_predicates(self, expression_id, table_or_alias, recursive = True):
+
         predicate_ids = self.find_nodes_by_rule_name("predicate", expression_id)
+
         for predicate_id in predicate_ids:
             if (
                 not self.rule_exists_in_tree("dottedId", predicate_id) 
@@ -629,6 +637,7 @@ class SpeakQlTree:
                 self.replace_simple_id_with_dotted_id(
                     predicate_id, table_or_alias
                 )
+
             if recursive:
                 for child in self.get_node(predicate_id).get_children():
                     self.add_dotted_ids_to_predicates(child, table_or_alias)
@@ -636,13 +645,22 @@ class SpeakQlTree:
 
 
     def replace_simple_id_with_dotted_id(self, node_id, table_or_alias):
+
         column_name_id = self.find_nodes_by_rule_name("fullColumnName", node_id)[0]
         uid_id = self.find_nodes_by_rule_name("uid", column_name_id)[0]
         simple_id_id = self.find_nodes_by_rule_name("simpleId", uid_id)[0]
-        old_simple_id_rule = self.get_token_string_from_rule(self.get_node(simple_id_id))
-        self.get_node(simple_id_id).update_rule_name(
+
+        simple_node = self.get_node(simple_id_id)
+
+        while not simple_node.get_is_leaf():
+            simple_node = self.get_node(simple_node.get_children()[0])
+
+        old_simple_id_rule = self.get_token_string_from_rule(simple_node)
+        
+        simple_node.update_rule_name(
             "simpleId " + table_or_alias
         )
+
         self._add_node_under_parent(
             rule_name = "dottedId ." + old_simple_id_rule,
             is_leaf = True,
@@ -1023,7 +1041,6 @@ class SpeakQlTree:
         else:
             return
 
-
         automatic_ids = self.find_nodes_by_rule_name("automaticGroupByKeyword", group_by_id)
         for auto_id in automatic_ids:
             self.remove_node_from_tree(self.get_node(auto_id).get_parent())
@@ -1048,7 +1065,7 @@ class SpeakQlTree:
                 group_by_node.get_depth() + 1,
                 group_by_id
             )
-        
+        last_comma = -1
         for table in select_elements:
             for element in table[1]:
                 print("Checking if", element, " is in existing items.")
@@ -1059,13 +1076,16 @@ class SpeakQlTree:
                         group_by_node.get_depth() + 1,
                         group_by_id
                     )
-                    if not (select_elements.index(table) == len(select_elements) - 1 and table[1].index(element) == len(table[1]) - 1):
-                        self._add_node_under_parent(
-                            "groupByItemDelimiter ,",
-                            True,
-                            group_by_node.get_depth() + 1,
-                            group_by_id
-                        )
+                    
+                    last_comma = self._add_node_under_parent(
+                        "groupByItemDelimiter ,",
+                        True,
+                        group_by_node.get_depth() + 1,
+                        group_by_id
+                    )
+        
+        group_by_node.remove_child(last_comma)
+
 
 
 
