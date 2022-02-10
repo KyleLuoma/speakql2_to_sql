@@ -91,7 +91,10 @@ class SpeakQlTree:
         properties["num_multi_query_order_specification"] = parse_tree.count("multiQueryOrderSpecification")
         properties["num_functioncall"] = parse_tree.count("functionCall")
         properties["num_table_name"] = parse_tree.count("tableName")
-        properties["num_non_right_table_name"] = parse_tree.count("(tableSource (tableSourceItem (tableName")
+        properties["num_non_right_table_name"] = (
+            parse_tree.count("(tableSource (tableSourceItem (tableName") + 
+            parse_tree.count("(tableSourceNoJoin (tableSourceItem (tableName")
+        )
         properties["num_table_alias"] = parse_tree.count("tableAlias")
         properties["num_element_alias"] = parse_tree.count("selectElementAs")
         properties["num_group_by"] = parse_tree.count("groupByClause")
@@ -682,12 +685,19 @@ class SpeakQlTree:
         #     consolidate where statements into first where expression (probably needs a separate method)
         if (self.properties["num_non_right_table_name"] > 1 and self.properties["num_joinpart"] == 0):
             table_sources_node_ids = self.find_nodes_by_rule_name("tableSources", node_id = node_id, stop_at_rules=['whereExpression'])
+            table_sources_node_ids = table_sources_node_ids + self.find_nodes_by_rule_name("tableExpressionNoJoin", node_id = node_id)
             self.print_verbose(table_sources_node_ids)
             first_table_sources_node = self.get_node(table_sources_node_ids[0])
             all_table_source_node_ids = self.find_nodes_by_rule_name("tableSource", node_id = node_id)
             all_table_source_node_ids = all_table_source_node_ids + self.find_nodes_by_rule_name("tableSourceNoJoin", node_id = node_id)
-            self.print_verbose(all_table_source_node_ids)
+            self.print_verbose("Table source node IDs:", all_table_source_node_ids)
             new_table_sources_children = []
+            if self.rule_exists_in_tree("tableSourceNoJoin", table_sources_node_ids[0]):
+                #If this is an unbundled query, add the fromKeyword because it sits in a different spot in the tree
+                from_keyword_id = self._add_node_under_parent(
+                    "fromKeyword FROM", True, first_table_sources_node.get_depth() + 1, first_table_sources_node.get_id()
+                )
+                new_table_sources_children.append(from_keyword_id)
             for node_id in all_table_source_node_ids:
                 table_source_node = self.get_node(node_id)
                 table_source_node.update_parent(first_table_sources_node.get_id())
