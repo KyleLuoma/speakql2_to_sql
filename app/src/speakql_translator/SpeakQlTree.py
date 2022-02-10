@@ -323,6 +323,13 @@ class SpeakQlTree:
         if self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0:
             self.print_verbose("Cannot aggregate select elements in a query with only one select statement.")
             return
+
+        #Rename nothingElement nodes to selectElements
+        nothing_element_ids = self.find_nodes_by_rule_name("nothingElement")
+        for ne_id in nothing_element_ids:
+            ne_node = self.get_node(ne_id)
+            ne_node.update_rule_name("selectElements")
+
         node = self.get_node(node_id)
         elements_by_table = self.get_all_tables_and_elements(node_id = node_id)
         #Find first selectElements rule in query:
