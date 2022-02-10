@@ -154,12 +154,6 @@ class SpeakQlTree:
 
 
 
-    def print_nodes_to_console(self):
-        for i in range(0, len(self.tree_nodes)):
-            print(self.tree_nodes[i].to_string())
-
-
-
     def _get_next_id_and_increment(self):
         id = self.next_id
         self.next_id = self.next_id + 1
@@ -202,15 +196,6 @@ class SpeakQlTree:
             parent
         )
         self.next_id = self.next_id + 1
-
-
-
-    def replace_keywords_for_rule_name(self, rule_name, new_keyword):
-        for i in range(0, len(self.tree_nodes)):
-            if rule_name in self.tree_nodes[i].get_rule_name():
-                self.tree_nodes[i].update_rule_name(
-                    rule_name + " " + new_keyword
-                )       
 
 
 
@@ -319,80 +304,6 @@ class SpeakQlTree:
 
 
 
-    def _aggregate_select_elements(self, node_id = 0):
-        if self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0:
-            self.print_verbose("Cannot aggregate select elements in a query with only one select statement.")
-            return
-
-        #Rename nothingElement nodes to selectElements
-        nothing_element_ids = self.find_nodes_by_rule_name("nothingElement")
-        for ne_id in nothing_element_ids:
-            ne_node = self.get_node(ne_id)
-            ne_node.update_rule_name("selectElements")
-
-        node = self.get_node(node_id)
-        elements_by_table = self.get_all_tables_and_elements(node_id = node_id)
-        #Find first selectElements rule in query:
-        select_elements_node_ids = self.find_nodes_by_rule_name(
-            "selectElements", node_id = node_id, stop_at_rules=["whereExpression"]
-        )
-        first_select_elements_node = self.get_node(select_elements_node_ids[0])
-        self.print_verbose(select_elements_node_ids)
-        self.print_verbose(first_select_elements_node.get_rule_name())
-        #Create a new rule with all elements from the query
-        new_children = []
-        for table in elements_by_table:
-            for element in table[1]:
-                new_id = self._add_node_under_parent(
-                    "selectElement " + element,
-                    is_leaf = True,
-                    depth = first_select_elements_node.get_depth() + 1,
-                    parent = first_select_elements_node.get_id()
-                )
-                new_children.append(new_id)
-                #Avoid adding comma after last element:
-                if not (
-                    elements_by_table.index(table) == len(elements_by_table) - 1
-                    and table[1].index(element) == len(table[1]) - 1
-                ):
-                    delim_id = self._add_node_under_parent(
-                        "selectElementDelimiter ,",
-                        is_leaf = True,
-                        depth = first_select_elements_node.get_depth() + 1,
-                        parent = first_select_elements_node.get_id()
-                    )
-                    new_children.append(delim_id)
-
-        #Find the group by clause (if exists) and append any aggregatedWindowedFunctions to the first select element node
-        has_group_by = self.rule_exists_in_tree("groupByClause")
-        if has_group_by:
-            group_by_id = self.find_nodes_by_rule_name("groupByClause")[0]
-            function_ids = self.find_nodes_by_rule_name("aggregateWindowedFunction", group_by_id)
-            for node_id in function_ids:
-                delim_id = self._add_node_under_parent(
-                            "selectElementDelimiter ,",
-                            is_leaf = True,
-                            depth = first_select_elements_node.get_depth() + 1,
-                            parent = first_select_elements_node.get_id()
-                        )
-                new_children.append(delim_id)
-                node = self.get_node(node_id)
-                new_children.append(node_id)
-                self.remove_node_from_tree(node_id)
-                node.update_parent(first_select_elements_node.get_id())
-                node.update_depth(first_select_elements_node.get_depth() + 1)
-            group_by_select = self.find_nodes_by_rule_name("selectKeyword", group_by_id)
-            if len(group_by_select) > 0:
-                select_node = self.get_node(group_by_select[0])
-                self.remove_node_from_tree(select_node.get_id())
-
-        first_select_elements_node.update_children(new_children)       
-        #Orphan any following selectElements
-        for element in select_elements_node_ids[1:]:
-            self.remove_node_from_tree(element, remove_siblings = True)
-
-
-
     def get_tablesourceitem_by_name_from_initial_list(self, table_name):
         self.print_verbose("Searching for table in initial list by name:", table_name)
         for table in self.initial_table_source_items:
@@ -411,7 +322,632 @@ class SpeakQlTree:
 
 
 
-    def _consolidate_join_parts(self, node_id = 0):
+    def get_all_table_names(self, node_id = 0, check_subqueries = False):
+        table_names = []
+        node = self.get_node(node_id)
+        if "tableName" in node.get_rule_name():
+            table_names.append(self.preorder_serialize_tokens(node_id).strip())
+            return table_names
+        elif "joinPart" in node.get_rule_name():
+            return table_names
+        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
+            return table_names
+        else:
+            for child in node.get_children():
+                table_names = table_names + self.get_all_table_names(child)
+            return table_names
+
+
+
+    def get_all_table_aliases(self, node_id = 0, check_subqueries = False):
+        table_aliases = []
+        node = self.get_node(node_id)
+        if "tableAlias" in node.get_rule_name():
+            table_aliases.append(self.preorder_serialize_tokens(node_id).split()[1])
+            return table_aliases
+        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
+            return table_aliases
+        else:
+            for child in node.get_children():
+                table_aliases = table_aliases + self.get_all_table_aliases(child)
+            return table_aliases
+
+
+
+    def get_initial_table_source_items_as_json(self):
+        table_source_list = []
+        table_source_items = self.get_all_table_source_items()
+        for item in table_source_items:
+            table_source_list.append(item.as_dict())
+        return  json.JSONEncoder().encode(table_source_list)
+
+
+
+    # Creates a list of all tables and their aliases within a query
+    # Examines all possible mentions of tables within the query
+    # If a table is referenced without an alias, but then later an alias is assigned
+    # to the same table, this will update the existing entry to add the alias.
+    # If it finds a subquery, it will label it as SUBQUERY_<ALIAS>
+    # Returns: List of TableSourceItem objects, one for each table in a query
+    def get_all_table_source_items(self, node_id = 0, at_start_node = True, return_initial_list = True):
+        if return_initial_list:
+            return self.initial_table_source_items
+        table_source_items = []
+        node = self.get_node(node_id)
+        if "selectExpression" in node.get_rule_name():
+            return table_source_items
+        if "multiJoinExpression" in node.get_rule_name():
+            return table_source_items
+        if "tableSourceItem" in node.get_rule_name():
+            table_source_item = TableSourceItem()
+            for child in node.get_children():
+                if "tableName" in self.get_node(child).get_rule_name():
+                    table_source_item.set_name(
+                        self.preorder_serialize_tokens(child)
+                    )
+                elif "tableAlias" in self.get_node(child).get_rule_name():
+                    alias_token = self.preorder_serialize_tokens(child)
+                    alias_token = alias_token.replace("AS", "")
+                    table_source_item.set_alias(alias_token)
+            if table_source_item.has_alias() and not table_source_item.has_name():
+                table_source_item.set_name("_SUBQUERY_" + table_source_item.get_alias())
+            table_source_items.append(table_source_item)
+            return table_source_items
+        for child in node.get_children():
+            table_source_items = table_source_items + self.get_all_table_source_items(
+                child, at_start_node = False, return_initial_list = return_initial_list
+            )
+        if at_start_node:
+            table_source_items_final = []
+            table_names = []
+            table_aliases = []
+            table_names_final = []
+            subquery_count = 0
+            for table in table_source_items:
+                table_names.append(table.get_name())
+                table_aliases.append(table.get_alias())
+            for i in range(0, len(table_source_items)):
+                table_one = table_source_items[i]
+                if table_one.get_name() in table_aliases: 
+                    break
+                elif len(table_source_items_final) == 0:
+                    table_source_items_final.append(table_one)
+                    table_names_final.append(table_one.get_name())
+                for j in range(0, len(table_source_items_final)):
+                    table_two = table_source_items_final[j]
+                    if (
+                        table_one.get_name() == table_two.get_name()
+                        and table_one.has_alias()
+                        and not table_two.has_alias()
+                    ):
+                        table_two.set_alias(table_one.get_alias()) 
+                    elif (
+                        table_one.get_name() != table_two.get_name()
+                        and table_one.get_name() not in table_names_final
+                    ):
+                        table_source_items_final.append(table_one)
+                        table_names_final.append(table_one.get_name())
+            return self.remove_duplicates_from_list(table_source_items_final)
+        else:
+            return self.remove_duplicates_from_list(table_source_items)
+
+
+
+    
+
+
+
+    def get_initial_tables_and_elements_as_json(self):
+        table_list = self.get_all_tables_and_elements(self, initial_list = True)
+        tl_for_json = []
+        for table in table_list:
+            table_dict = table[0][0]
+            table_dict["elements"] = table[1]
+            tl_for_json.append(table_dict)
+        return json.JSONEncoder().encode(tl_for_json)
+
+
+
+    def get_all_tables_and_elements(self, node_id = 0, initial_list = False):
+        if initial_list:
+            return self.initial_tables_and_elements
+        node = self.get_node(node_id)
+        table_alias_dict = {}
+        alias_table_dict = {}
+        table_elements = []
+        table_dict_list = []
+        all_table_source_items = self.get_all_table_source_items(return_initial_list=False)
+        for table in all_table_source_items:
+            table_alias_dict[table.get_name()] = table.get_alias()
+            alias_table_dict[table.get_alias()] = table.get_name()
+        for rule in self.table_select_agg_rules:
+            if rule in node.get_rule_name():
+                local_table_source_items = self.get_all_table_source_items(node_id, return_initial_list=False)
+                if len(local_table_source_items) == 0:
+                    break
+                table_source_item = local_table_source_items[0]
+                if (
+                    not table_source_item.has_alias() 
+                    and table_source_item.get_name() not in table_alias_dict.values()
+                ):
+                    table_source_item.set_alias(table_alias_dict[table_source_item.get_name()])
+                elif (
+                    not table_source_item.has_alias()
+                    and table_source_item.get_name() in table_alias_dict.values()
+                ):
+                    table_source_item.set_alias(table_source_item.get_name())
+                    table_source_item.set_name(alias_table_dict[table_source_item.get_alias()])
+                if self.properties["num_select_and_table_expression"] > 1 or self.properties["num_multi_query_order_specification"] > 0:
+                    select_elements = self.get_select_elements(
+                        node_id,
+                        table_name = local_table_source_items[0].get_alias_if_exists_else_name()
+                    )
+                    table_dict_list = [table_source_item.as_dict()]
+                else:
+                    select_elements = self.get_select_elements(node_id)
+                    for table in local_table_source_items:
+                        table_dict_list.append(table.as_dict())
+                table_elements.append([table_dict_list, select_elements])
+                return table_elements
+        for child in node.get_children():
+            table_elements = table_elements + self.get_all_tables_and_elements(child)
+        return table_elements
+
+
+    # -------------------------------------------------------------------------------------------------------
+    # Misc Tree Modifiers
+    # -------------------------------------------------------------------------------------------------------
+
+    def remove_duplicates_from_list(self, target_list):
+        return list(dict.fromkeys(target_list))
+
+
+    def remove_node_from_tree(self, node_id, remove_siblings = False):
+        child = self.get_node(node_id)
+        parent = self.get_node(child.get_parent())
+        children = parent.get_children()
+        self.print_verbose(children)
+        if len(children) > 1 and not remove_siblings:
+            children.remove(node_id)
+            parent.update_children(children)
+            self.print_verbose(children)
+        else:
+            parent.update_children([])
+        child.update_parent(-1)
+
+
+
+    def surround_node_with_parens(self, node_id):
+        node = self.get_node(node_id)
+        parent = self.get_node(node.get_parent())
+        siblings = parent.get_children()
+        left_id = self._add_node_under_parent(
+            rule_name = "leftParen (",
+            is_leaf = True,
+            depth = parent.get_depth() + 1,
+            parent = parent.get_id()
+        )
+        right_id = self._add_node_under_parent(
+            rule_name = "rightParen )",
+            is_leaf = True,
+            depth = parent.get_depth() + 1,
+            parent = parent.get_id()
+        )
+        new_children = []
+        for i in range(0, len(siblings)):
+            if siblings[i] not in [node_id, left_id, right_id]:
+                new_children.append(siblings[i])
+            elif siblings[i] == node_id:
+                new_children = new_children + [left_id, node_id, right_id]
+            else:
+                pass
+        parent.update_children(new_children)
+
+
+
+    #Given a node_id and a table name or alias name, we convert a simple id (or similar rule below simple id)
+    # to a dotted it. Useful when updating predicates during re-bundling processes.
+    def replace_simple_id_with_dotted_id(self, node_id, table_or_alias):
+
+        column_name_id = self.find_nodes_by_rule_name("fullColumnName", node_id)[0]
+        uid_id = self.find_nodes_by_rule_name("uid", column_name_id)[0]
+        simple_id_id = self.find_nodes_by_rule_name("simpleId", uid_id)[0]
+
+        simple_node = self.get_node(simple_id_id)
+
+        while not simple_node.get_is_leaf():
+            simple_node = self.get_node(simple_node.get_children()[0])
+
+        old_simple_id_rule = self.get_token_string_from_rule(simple_node)
+        
+        simple_node.update_rule_name(
+            "simpleId " + table_or_alias
+        )
+
+        self._add_node_under_parent(
+            rule_name = "dottedId ." + old_simple_id_rule,
+            is_leaf = True,
+            depth = self.get_node(column_name_id).get_depth() + 1,
+            parent = column_name_id
+        )
+
+
+
+    def add_dotted_ids_to_predicates(self, expression_id, table_or_alias, recursive = True):
+
+        predicate_ids = self.find_nodes_by_rule_name("predicate", expression_id)
+
+        for predicate_id in predicate_ids:
+            if (
+                not self.rule_exists_in_tree("dottedId", predicate_id) 
+                and self.rule_exists_in_tree("fullColumnName", predicate_id)
+            ):
+                self.replace_simple_id_with_dotted_id(
+                    predicate_id, table_or_alias
+                )
+
+            if recursive:
+                for child in self.get_node(predicate_id).get_children():
+                    self.add_dotted_ids_to_predicates(child, table_or_alias)
+
+
+
+    # -------------------------------------------------------------------------------------------------------
+    # Node Retrieval Methods
+    # -------------------------------------------------------------------------------------------------------
+
+    def get_node(self, node_id):
+        return self.tree_nodes[node_id]
+
+
+
+    def find_first_node_with_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False, stop_at_rules = []):
+        node_list = self.find_nodes_by_rule_name(
+            rule_to_find, node_id, check_subqueries, stop_at_rules
+        )
+        if len(node_list) > 0:
+            return node_list[0]
+        else:
+            return -1
+
+
+
+    def find_nodes_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False, stop_at_rules = []):
+        node = self.get_node(node_id)
+        node_list = []
+        if not check_subqueries:
+            if "subQueryTable" in node.get_rule_name():
+                return node_list
+        for rule in stop_at_rules:
+            if rule in node.get_rule_name():
+                return node_list
+        if rule_to_find == node.get_rule_name().strip().split()[0]:
+            node_list.append(node_id)
+            return node_list
+        for child in node.get_children():
+            node_list = node_list + self.find_nodes_by_rule_name(rule_to_find, child, stop_at_rules=stop_at_rules)
+        return node_list
+
+
+
+    def print_nodes_to_console(self):
+        for i in range(0, len(self.tree_nodes)):
+            print(self.tree_nodes[i].to_string())
+
+
+
+    # -------------------------------------------------------------------------------------------------------
+    # Condition checking methods
+    # -------------------------------------------------------------------------------------------------------
+
+    def rule_exists_in_tree(self, rule_to_find, node_id = 0, check_subqueries = False):
+        rule_list = self.find_nodes_by_rule_name(
+            rule_to_find,
+            node_id,
+            check_subqueries
+        )
+        return len(rule_list) > 0
+
+
+
+    # -------------------------------------------------------------------------------------------------------
+    # Methods below are for performing SpeakQl Feature transformation including synonym replacement
+    # and query element reordering.
+    # -------------------------------------------------------------------------------------------------------
+
+    def replace_keywords_for_rule_name(self, rule_name, new_keyword):
+        for i in range(0, len(self.tree_nodes)):
+            if rule_name in self.tree_nodes[i].get_rule_name():
+                self.tree_nodes[i].update_rule_name(
+                    rule_name + " " + new_keyword
+                )   
+
+    def reorder_select_and_table_expressions(self, node_id):
+        node = self.get_node(node_id)
+        select_expression = -1
+        table_expression = -1
+        where_expression = -1
+        where_keyword = -1
+        select_modifier_expression = -1
+        new_children = []
+        for child in node.get_children():
+            if "selectExpression" in self.get_node(child).get_rule_name():
+                select_expression = child
+            if "tableExpression" in self.get_node(child).get_rule_name():
+                table_expression = child
+            if "selectModifierExpression" in self.get_node(child).get_rule_name():
+                select_modifier_expression = -1
+            if "whereExpression" in self.get_node(child).get_rule_name():
+                where_expression = child
+            if "whereKeyword" in self.get_node(child).get_rule_name():
+                where_keyword = child
+        if select_expression > table_expression: #swap the select and table expression positions in parent children list
+            for child in node.get_children():
+                if child not in [table_expression, select_expression, where_keyword, where_expression]:
+                    new_children.append(child)
+                if child == table_expression:
+                    new_children.append(select_expression)
+                if child == select_expression:
+                    new_children.append(table_expression)
+                    if where_keyword >= 0 and where_expression >= 0:
+                        new_children.append(where_keyword)
+                        new_children.append(where_expression)
+            if select_modifier_expression >= 0:
+                new_children.append(table_expression)
+            self.get_node(node_id).update_children(new_children)
+        elif table_expression > where_expression and (table_expression * where_expression > 0): #The where occurs before tableExpression and so where must be moved to position following table expression
+            self.print_verbose("table expression occurs after where expression.")
+            for child in node.get_children():
+                if child not in [table_expression, where_keyword, where_expression]:
+                    new_children.append(child)
+                if child == table_expression:
+                    new_children.append(table_expression)
+                    new_children.append(where_keyword)
+                    new_children.append(where_expression)
+            self.get_node(node_id).update_children(new_children)
+        for child in node.get_children():
+            self.reorder_select_and_table_expressions(child)
+        
+
+
+    
+
+
+    # -------------------------------------------------------------------------------------------------------
+    # Methods below are for re-bundling unbundled queries. Order matters, and must proceed as indicated
+    # within the rebundle_query method.
+    # -------------------------------------------------------------------------------------------------------
+
+    def rebundle_query(self, node_id = 0):
+        if self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0:
+            self.print_verbose("Cannot aggregate statements in a query with only one select and table statement.")
+            return
+        #The order in which these are called matters: group_by -> select -> where -> join -> tables
+        self._infer_group_by(node_id)
+        self._bundle_select_elements(node_id)
+        self._bundle_where_statements(node_id)
+        self._bundle_join_parts(node_id)
+        self._bundle_tables(node_id)
+
+        #remove empty statements:
+        garbage_nodes = []
+        
+        for expression in self.table_select_agg_rules:
+            garbage_nodes = garbage_nodes + self.find_nodes_by_rule_name(expression)
+        if(len(garbage_nodes) > 1):
+            garbage_nodes = garbage_nodes[1:]
+        garbage_nodes = garbage_nodes + self.find_nodes_by_rule_name("expressionDelimiter")
+
+        garbage_nodes = self.remove_duplicates_from_list(garbage_nodes)
+        garbage_nodes.sort()
+        self.print_verbose("Garbage nodes:", garbage_nodes)
+
+        for node_id in garbage_nodes:
+            self.remove_node_from_tree(node_id)
+    
+
+
+    #Scan the query. If aggregate functions exist, then infer that all non-agg elements should be in group by statement
+    def _infer_group_by(self, node_id = 0):
+        select_elements = self.get_all_tables_and_elements()
+        aggregate_exists = False
+        group_by_ids = self.find_nodes_by_rule_name("groupByClause")
+
+        if len(group_by_ids) > 0:
+            group_by_id = group_by_ids[0]
+        else:
+            return
+
+        automatic_ids = self.find_nodes_by_rule_name("automaticGroupByKeyword", group_by_id)
+        for auto_id in automatic_ids:
+            self.remove_node_from_tree(self.get_node(auto_id).get_parent())
+
+        group_by_node = self.get_node(group_by_id)
+        group_by_items = self.find_nodes_by_rule_name("groupByItem", group_by_id)
+
+        existing_items = []
+        for item in group_by_items:
+            existing_items.append(self.preorder_serialize_tokens(item).strip().replace(" ", ""))
+        print("Existing group by items:", existing_items)
+
+        for table in select_elements:
+            for element in table[1]:
+                if "(" in element and ")" in element:
+                    aggregate_exists = True
+
+        if len(existing_items) > 0:
+            self._add_node_under_parent(
+                "groupByItemDelimiter ,",
+                True,
+                group_by_node.get_depth() + 1,
+                group_by_id
+            )
+        last_comma = -1
+        for table in select_elements:
+            for element in table[1]:
+                print("Checking if", element, " is in existing items.")
+                if not ("(" in element and ")" in element) and element not in existing_items:
+                    self._add_node_under_parent(
+                        "groupByItem " + element,
+                        True,
+                        group_by_node.get_depth() + 1,
+                        group_by_id
+                    )
+                    
+                    last_comma = self._add_node_under_parent(
+                        "groupByItemDelimiter ,",
+                        True,
+                        group_by_node.get_depth() + 1,
+                        group_by_id
+                    )
+        
+        group_by_node.remove_child(last_comma)
+
+
+
+    def _bundle_select_elements(self, node_id = 0):
+            if self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0:
+                self.print_verbose("Cannot aggregate select elements in a query with only one select statement.")
+                return
+
+            #Rename nothingElement nodes to selectElements
+            nothing_element_ids = self.find_nodes_by_rule_name("nothingElement")
+            for ne_id in nothing_element_ids:
+                ne_node = self.get_node(ne_id)
+                ne_node.update_rule_name("selectElements")
+
+            node = self.get_node(node_id)
+            elements_by_table = self.get_all_tables_and_elements(node_id = node_id)
+            #Find first selectElements rule in query:
+            select_elements_node_ids = self.find_nodes_by_rule_name(
+                "selectElements", node_id = node_id, stop_at_rules=["whereExpression"]
+            )
+            first_select_elements_node = self.get_node(select_elements_node_ids[0])
+            self.print_verbose(select_elements_node_ids)
+            self.print_verbose(first_select_elements_node.get_rule_name())
+            #Create a new rule with all elements from the query
+            new_children = []
+            for table in elements_by_table:
+                for element in table[1]:
+                    new_id = self._add_node_under_parent(
+                        "selectElement " + element,
+                        is_leaf = True,
+                        depth = first_select_elements_node.get_depth() + 1,
+                        parent = first_select_elements_node.get_id()
+                    )
+                    new_children.append(new_id)
+                    #Avoid adding comma after last element:
+                    if not (
+                        elements_by_table.index(table) == len(elements_by_table) - 1
+                        and table[1].index(element) == len(table[1]) - 1
+                    ):
+                        delim_id = self._add_node_under_parent(
+                            "selectElementDelimiter ,",
+                            is_leaf = True,
+                            depth = first_select_elements_node.get_depth() + 1,
+                            parent = first_select_elements_node.get_id()
+                        )
+                        new_children.append(delim_id)
+
+            #Find the group by clause (if exists) and append any aggregatedWindowedFunctions to the first select element node
+            has_group_by = self.rule_exists_in_tree("groupByClause")
+            if has_group_by:
+                group_by_id = self.find_nodes_by_rule_name("groupByClause")[0]
+                function_ids = self.find_nodes_by_rule_name("aggregateWindowedFunction", group_by_id)
+                for node_id in function_ids:
+                    delim_id = self._add_node_under_parent(
+                                "selectElementDelimiter ,",
+                                is_leaf = True,
+                                depth = first_select_elements_node.get_depth() + 1,
+                                parent = first_select_elements_node.get_id()
+                            )
+                    new_children.append(delim_id)
+                    node = self.get_node(node_id)
+                    new_children.append(node_id)
+                    self.remove_node_from_tree(node_id)
+                    node.update_parent(first_select_elements_node.get_id())
+                    node.update_depth(first_select_elements_node.get_depth() + 1)
+                group_by_select = self.find_nodes_by_rule_name("selectKeyword", group_by_id)
+                if len(group_by_select) > 0:
+                    select_node = self.get_node(group_by_select[0])
+                    self.remove_node_from_tree(select_node.get_id())
+
+            first_select_elements_node.update_children(new_children)       
+            #Orphan any following selectElements
+            for element in select_elements_node_ids[1:]:
+                self.remove_node_from_tree(element, remove_siblings = True)
+
+
+
+    def _bundle_where_statements(self, node_id = 0):
+
+        if (self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0):
+            self.print_verbose("Cannot aggregate where statements in a query with only one table expression.")
+            return
+
+        query_order_spec_node_ids = self.find_nodes_by_rule_name("multiQueryOrderSpecification", node_id = node_id)
+        first_qos_node = self.get_node(query_order_spec_node_ids[0])
+        where_expression_ids = []
+        where_expression_table_lookup = {}
+
+        #Find the table name or alias associated with the where clauses:
+        for qos_node_id in query_order_spec_node_ids:
+            new_expressions = self.find_nodes_by_rule_name("whereExpression", qos_node_id)
+
+            for expression in new_expressions:
+                if self.rule_exists_in_tree(rule_to_find = "tableName", node_id = qos_node_id):
+                    table_name = self.get_all_table_names(qos_node_id)[0]
+                    table_source_item = self.get_tablesourceitem_by_name_from_initial_list(table_name)
+
+                else:
+                    alias_name = self.preorder_serialize_tokens(
+                        self.find_nodes_by_rule_name("tableAlias", node_id = qos_node_id)[0]
+                    ).replace("AS ", "")
+                    self.print_verbose("ALIAS NAME:", alias_name)
+                    table_source_item = self.get_tablesourceitem_by_alias_from_initial_list(alias_name)
+
+                where_expression_table_lookup[expression] = table_source_item.get_alias_if_exists_else_name()
+
+            where_expression_ids = where_expression_ids + new_expressions
+            self.print_verbose(where_expression_ids)
+            self.print_verbose("Where expression table dict:", where_expression_table_lookup)
+        
+        if len(where_expression_ids) == 0:
+            self.print_verbose("No where expressions exist in this query.")
+            return
+
+        if not self.rule_exists_in_tree("whereKeyword", first_qos_node.get_id()):
+            self._add_node_under_parent(
+                "whereKeyword WHERE", 
+                True, 
+                first_qos_node.get_depth() + 1, 
+                first_qos_node.get_id()
+            )
+
+        for expression_id in where_expression_ids:
+            #Check if predicates in expression have dotted ids and add them if not
+            self.add_dotted_ids_to_predicates(expression_id, where_expression_table_lookup[expression_id])
+
+            where_expression_node = self.get_node(expression_id)
+            if expression_id in first_qos_node.get_children():
+                self.surround_node_with_parens(expression_id)
+            else:
+                if not where_expression_ids.index(expression_id) == 0:
+                    self._add_node_under_parent(
+                        "logicalOperator AND",
+                        True,
+                        first_qos_node.get_depth() + 1,
+                        first_qos_node.get_id()
+                    )        
+                old_parent = self.get_node(where_expression_node.get_parent())
+                old_parent.remove_child(expression_id)
+                first_qos_node.add_child(expression_id)
+                where_expression_node.update_parent(first_qos_node.get_id())
+                self.surround_node_with_parens(expression_id)
+
+
+
+    def _bundle_join_parts(self, node_id = 0):
         
         if(self.properties["num_joinpart"] == 0 and self.properties["num_multijoinpart"] == 0):
             self.print_verbose("Cannot consolidate join parts in a query without join parts")
@@ -555,150 +1091,9 @@ class SpeakQlTree:
             parent = self.get_node(self.get_node(node_id).get_parent())
             parent.remove_child(node_id)
 
-        
-
-    def _aggregate_where_statements(self, node_id = 0):
-
-        if (self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0):
-            self.print_verbose("Cannot aggregate where statements in a query with only one table expression.")
-            return
-
-        query_order_spec_node_ids = self.find_nodes_by_rule_name("multiQueryOrderSpecification", node_id = node_id)
-        first_qos_node = self.get_node(query_order_spec_node_ids[0])
-        where_expression_ids = []
-        where_expression_table_lookup = {}
-
-        #Find the table name or alias associated with the where clauses:
-        for qos_node_id in query_order_spec_node_ids:
-            new_expressions = self.find_nodes_by_rule_name("whereExpression", qos_node_id)
-
-            for expression in new_expressions:
-                if self.rule_exists_in_tree(rule_to_find = "tableName", node_id = qos_node_id):
-                    table_name = self.get_all_table_names(qos_node_id)[0]
-                    table_source_item = self.get_tablesourceitem_by_name_from_initial_list(table_name)
-
-                else:
-                    alias_name = self.preorder_serialize_tokens(
-                        self.find_nodes_by_rule_name("tableAlias", node_id = qos_node_id)[0]
-                    ).replace("AS ", "")
-                    self.print_verbose("ALIAS NAME:", alias_name)
-                    table_source_item = self.get_tablesourceitem_by_alias_from_initial_list(alias_name)
-
-                where_expression_table_lookup[expression] = table_source_item.get_alias_if_exists_else_name()
-
-            where_expression_ids = where_expression_ids + new_expressions
-            self.print_verbose(where_expression_ids)
-            self.print_verbose("Where expression table dict:", where_expression_table_lookup)
-        
-        if len(where_expression_ids) == 0:
-            self.print_verbose("No where expressions exist in this query.")
-            return
-
-        if not self.rule_exists_in_tree("whereKeyword", first_qos_node.get_id()):
-            self._add_node_under_parent(
-                "whereKeyword WHERE", 
-                True, 
-                first_qos_node.get_depth() + 1, 
-                first_qos_node.get_id()
-            )
-
-        for expression_id in where_expression_ids:
-            #Check if predicates in expression have dotted ids and add them if not
-            self.add_dotted_ids_to_predicates(expression_id, where_expression_table_lookup[expression_id])
-
-            where_expression_node = self.get_node(expression_id)
-            if expression_id in first_qos_node.get_children():
-                self.surround_node_with_parens(expression_id)
-            else:
-                if not where_expression_ids.index(expression_id) == 0:
-                    self._add_node_under_parent(
-                        "logicalOperator AND",
-                        True,
-                        first_qos_node.get_depth() + 1,
-                        first_qos_node.get_id()
-                    )        
-                old_parent = self.get_node(where_expression_node.get_parent())
-                old_parent.remove_child(expression_id)
-                first_qos_node.add_child(expression_id)
-                where_expression_node.update_parent(first_qos_node.get_id())
-                self.surround_node_with_parens(expression_id)
 
 
-
-    def add_dotted_ids_to_predicates(self, expression_id, table_or_alias, recursive = True):
-
-        predicate_ids = self.find_nodes_by_rule_name("predicate", expression_id)
-
-        for predicate_id in predicate_ids:
-            if (
-                not self.rule_exists_in_tree("dottedId", predicate_id) 
-                and self.rule_exists_in_tree("fullColumnName", predicate_id)
-            ):
-                self.replace_simple_id_with_dotted_id(
-                    predicate_id, table_or_alias
-                )
-
-            if recursive:
-                for child in self.get_node(predicate_id).get_children():
-                    self.add_dotted_ids_to_predicates(child, table_or_alias)
-
-
-
-    def replace_simple_id_with_dotted_id(self, node_id, table_or_alias):
-
-        column_name_id = self.find_nodes_by_rule_name("fullColumnName", node_id)[0]
-        uid_id = self.find_nodes_by_rule_name("uid", column_name_id)[0]
-        simple_id_id = self.find_nodes_by_rule_name("simpleId", uid_id)[0]
-
-        simple_node = self.get_node(simple_id_id)
-
-        while not simple_node.get_is_leaf():
-            simple_node = self.get_node(simple_node.get_children()[0])
-
-        old_simple_id_rule = self.get_token_string_from_rule(simple_node)
-        
-        simple_node.update_rule_name(
-            "simpleId " + table_or_alias
-        )
-
-        self._add_node_under_parent(
-            rule_name = "dottedId ." + old_simple_id_rule,
-            is_leaf = True,
-            depth = self.get_node(column_name_id).get_depth() + 1,
-            parent = column_name_id
-        )
-        
-
-
-    def surround_node_with_parens(self, node_id):
-        node = self.get_node(node_id)
-        parent = self.get_node(node.get_parent())
-        siblings = parent.get_children()
-        left_id = self._add_node_under_parent(
-            rule_name = "leftParen (",
-            is_leaf = True,
-            depth = parent.get_depth() + 1,
-            parent = parent.get_id()
-        )
-        right_id = self._add_node_under_parent(
-            rule_name = "rightParen )",
-            is_leaf = True,
-            depth = parent.get_depth() + 1,
-            parent = parent.get_id()
-        )
-        new_children = []
-        for i in range(0, len(siblings)):
-            if siblings[i] not in [node_id, left_id, right_id]:
-                new_children.append(siblings[i])
-            elif siblings[i] == node_id:
-                new_children = new_children + [left_id, node_id, right_id]
-            else:
-                pass
-        parent.update_children(new_children)
-
-
-
-    def _aggregate_tables(self, node_id = 0):
+    def _bundle_tables(self, node_id = 0):
         #TODO: add logic to only aggregate a table ID once so you can create multiple expressions sourcing the same table
         #multiple different types of conditions can exist:
         if (self.properties["num_select_and_table_expression"] <= 1 and 
@@ -738,388 +1133,6 @@ class SpeakQlTree:
             first_table_sources_node.update_children(new_table_sources_children)
             for node_id in table_sources_node_ids[1:]:
                 self.remove_node_from_tree(node_id, remove_siblings = False)
-
-
-        # - joins exist, select and table expressions > 1
-        #     call to join aggregation method
-
-
-
-    def remove_node_from_tree(self, node_id, remove_siblings = False):
-        child = self.get_node(node_id)
-        parent = self.get_node(child.get_parent())
-        children = parent.get_children()
-        self.print_verbose(children)
-        if len(children) > 1 and not remove_siblings:
-            children.remove(node_id)
-            parent.update_children(children)
-            self.print_verbose(children)
-        else:
-            parent.update_children([])
-        child.update_parent(-1)
-
-
-
-    def get_all_table_names(self, node_id = 0, check_subqueries = False):
-        table_names = []
-        node = self.get_node(node_id)
-        if "tableName" in node.get_rule_name():
-            table_names.append(self.preorder_serialize_tokens(node_id).strip())
-            return table_names
-        elif "joinPart" in node.get_rule_name():
-            return table_names
-        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
-            return table_names
-        else:
-            for child in node.get_children():
-                table_names = table_names + self.get_all_table_names(child)
-            return table_names
-
-
-
-    def get_all_table_aliases(self, node_id = 0, check_subqueries = False):
-        table_aliases = []
-        node = self.get_node(node_id)
-        if "tableAlias" in node.get_rule_name():
-            table_aliases.append(self.preorder_serialize_tokens(node_id).split()[1])
-            return table_aliases
-        elif "subQueryTable" in node.get_rule_name() and not check_subqueries:
-            return table_aliases
-        else:
-            for child in node.get_children():
-                table_aliases = table_aliases + self.get_all_table_aliases(child)
-            return table_aliases
-
-
-
-    def get_initial_table_source_items_as_json(self):
-        table_source_list = []
-        table_source_items = self.get_all_table_source_items()
-        for item in table_source_items:
-            table_source_list.append(item.as_dict())
-        return  json.JSONEncoder().encode(table_source_list)
-
-
-
-    # Creates a list of all tables and their aliases within a query
-    # Examines all possible mentions of tables within the query
-    # If a table is referenced without an alias, but then later an alias is assigned
-    # to the same table, this will update the existing entry to add the alias.
-    # If it finds a subquery, it will label it as SUBQUERY_<ALIAS>
-    # Returns: List of TableSourceItem objects, one for each table in a query
-    def get_all_table_source_items(self, node_id = 0, at_start_node = True, return_initial_list = True):
-        if return_initial_list:
-            return self.initial_table_source_items
-        table_source_items = []
-        node = self.get_node(node_id)
-        if "selectExpression" in node.get_rule_name():
-            return table_source_items
-        if "multiJoinExpression" in node.get_rule_name():
-            return table_source_items
-        if "tableSourceItem" in node.get_rule_name():
-            table_source_item = TableSourceItem()
-            for child in node.get_children():
-                if "tableName" in self.get_node(child).get_rule_name():
-                    table_source_item.set_name(
-                        self.preorder_serialize_tokens(child)
-                    )
-                elif "tableAlias" in self.get_node(child).get_rule_name():
-                    alias_token = self.preorder_serialize_tokens(child)
-                    alias_token = alias_token.replace("AS", "")
-                    table_source_item.set_alias(alias_token)
-            if table_source_item.has_alias() and not table_source_item.has_name():
-                table_source_item.set_name("_SUBQUERY_" + table_source_item.get_alias())
-            table_source_items.append(table_source_item)
-            return table_source_items
-        for child in node.get_children():
-            table_source_items = table_source_items + self.get_all_table_source_items(
-                child, at_start_node = False, return_initial_list = return_initial_list
-            )
-        if at_start_node:
-            table_source_items_final = []
-            table_names = []
-            table_aliases = []
-            table_names_final = []
-            subquery_count = 0
-            for table in table_source_items:
-                table_names.append(table.get_name())
-                table_aliases.append(table.get_alias())
-            for i in range(0, len(table_source_items)):
-                table_one = table_source_items[i]
-                if table_one.get_name() in table_aliases: 
-                    break
-                elif len(table_source_items_final) == 0:
-                    table_source_items_final.append(table_one)
-                    table_names_final.append(table_one.get_name())
-                for j in range(0, len(table_source_items_final)):
-                    table_two = table_source_items_final[j]
-                    if (
-                        table_one.get_name() == table_two.get_name()
-                        and table_one.has_alias()
-                        and not table_two.has_alias()
-                    ):
-                        table_two.set_alias(table_one.get_alias()) 
-                    elif (
-                        table_one.get_name() != table_two.get_name()
-                        and table_one.get_name() not in table_names_final
-                    ):
-                        table_source_items_final.append(table_one)
-                        table_names_final.append(table_one.get_name())
-            return self.remove_duplicates_from_list(table_source_items_final)
-        else:
-            return self.remove_duplicates_from_list(table_source_items)
-
-
-
-    def remove_duplicates_from_list(self, target_list):
-        return list(dict.fromkeys(target_list))
-
-
-
-    def get_initial_tables_and_elements_as_json(self):
-        table_list = self.get_all_tables_and_elements(self, initial_list = True)
-        tl_for_json = []
-        for table in table_list:
-            table_dict = table[0][0]
-            table_dict["elements"] = table[1]
-            tl_for_json.append(table_dict)
-        return json.JSONEncoder().encode(tl_for_json)
-
-
-
-    def get_all_tables_and_elements(self, node_id = 0, initial_list = False):
-        if initial_list:
-            return self.initial_tables_and_elements
-        node = self.get_node(node_id)
-        table_alias_dict = {}
-        alias_table_dict = {}
-        table_elements = []
-        table_dict_list = []
-        all_table_source_items = self.get_all_table_source_items(return_initial_list=False)
-        for table in all_table_source_items:
-            table_alias_dict[table.get_name()] = table.get_alias()
-            alias_table_dict[table.get_alias()] = table.get_name()
-        for rule in self.table_select_agg_rules:
-            if rule in node.get_rule_name():
-                local_table_source_items = self.get_all_table_source_items(node_id, return_initial_list=False)
-                if len(local_table_source_items) == 0:
-                    break
-                table_source_item = local_table_source_items[0]
-                if (
-                    not table_source_item.has_alias() 
-                    and table_source_item.get_name() not in table_alias_dict.values()
-                ):
-                    table_source_item.set_alias(table_alias_dict[table_source_item.get_name()])
-                elif (
-                    not table_source_item.has_alias()
-                    and table_source_item.get_name() in table_alias_dict.values()
-                ):
-                    table_source_item.set_alias(table_source_item.get_name())
-                    table_source_item.set_name(alias_table_dict[table_source_item.get_alias()])
-                if self.properties["num_select_and_table_expression"] > 1 or self.properties["num_multi_query_order_specification"] > 0:
-                    select_elements = self.get_select_elements(
-                        node_id,
-                        table_name = local_table_source_items[0].get_alias_if_exists_else_name()
-                    )
-                    table_dict_list = [table_source_item.as_dict()]
-                else:
-                    select_elements = self.get_select_elements(node_id)
-                    for table in local_table_source_items:
-                        table_dict_list.append(table.as_dict())
-                table_elements.append([table_dict_list, select_elements])
-                return table_elements
-        for child in node.get_children():
-            table_elements = table_elements + self.get_all_tables_and_elements(child)
-        return table_elements
-
-
-
-    def find_node_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False):
-        node = self.get_node(node_id)
-        if not check_subqueries:
-            if "subQueryTable" in node.get_rule_name():
-                return -1
-        elif rule_to_find in node.get_rule_name():
-            return node_id
-        elif not node.get_is_leaf():
-            for child in node.get_children():
-                return self.find_node_by_rule_name(rule_to_find, child)
-        else:
-            return -1
-
-
-
-    def find_nodes_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False, stop_at_rules = []):
-        node = self.get_node(node_id)
-        node_list = []
-        if not check_subqueries:
-            if "subQueryTable" in node.get_rule_name():
-                return node_list
-        for rule in stop_at_rules:
-            if rule in node.get_rule_name():
-                return node_list
-        if rule_to_find == node.get_rule_name().strip().split()[0]:
-            node_list.append(node_id)
-            return node_list
-        for child in node.get_children():
-            node_list = node_list + self.find_nodes_by_rule_name(rule_to_find, child, stop_at_rules=stop_at_rules)
-        return node_list
-
-
-
-    def rule_exists_in_tree(self, rule_to_find, node_id = 0, check_subqueries = False):
-        rule_list = self.find_nodes_by_rule_name(
-            rule_to_find,
-            node_id,
-            check_subqueries
-        )
-        return len(rule_list) > 0
-
-
-
-    def reorder_select_and_table_expressions(self, node_id):
-        node = self.get_node(node_id)
-        select_expression = -1
-        table_expression = -1
-        where_expression = -1
-        where_keyword = -1
-        select_modifier_expression = -1
-        new_children = []
-        for child in node.get_children():
-            if "selectExpression" in self.get_node(child).get_rule_name():
-                select_expression = child
-            if "tableExpression" in self.get_node(child).get_rule_name():
-                table_expression = child
-            if "selectModifierExpression" in self.get_node(child).get_rule_name():
-                select_modifier_expression = -1
-            if "whereExpression" in self.get_node(child).get_rule_name():
-                where_expression = child
-            if "whereKeyword" in self.get_node(child).get_rule_name():
-                where_keyword = child
-        if select_expression > table_expression: #swap the select and table expression positions in parent children list
-            for child in node.get_children():
-                if child not in [table_expression, select_expression, where_keyword, where_expression]:
-                    new_children.append(child)
-                if child == table_expression:
-                    new_children.append(select_expression)
-                if child == select_expression:
-                    new_children.append(table_expression)
-                    if where_keyword >= 0 and where_expression >= 0:
-                        new_children.append(where_keyword)
-                        new_children.append(where_expression)
-            if select_modifier_expression >= 0:
-                new_children.append(table_expression)
-            self.get_node(node_id).update_children(new_children)
-        elif table_expression > where_expression and (table_expression * where_expression > 0): #The where occurs before tableExpression and so where must be moved to position following table expression
-            self.print_verbose("table expression occurs after where expression.")
-            for child in node.get_children():
-                if child not in [table_expression, where_keyword, where_expression]:
-                    new_children.append(child)
-                if child == table_expression:
-                    new_children.append(table_expression)
-                    new_children.append(where_keyword)
-                    new_children.append(where_expression)
-            self.get_node(node_id).update_children(new_children)
-        for child in node.get_children():
-            self.reorder_select_and_table_expressions(child)
-        
-
-
-    def get_node(self, node_id):
-        return self.tree_nodes[node_id]
-
-
-
-    #Scan the query. If aggregate functions exist, then infer that all non-agg elements should be in group by statement
-    def _infer_group_by(self, node_id = 0):
-        select_elements = self.get_all_tables_and_elements()
-        aggregate_exists = False
-        group_by_ids = self.find_nodes_by_rule_name("groupByClause")
-
-        if len(group_by_ids) > 0:
-            group_by_id = group_by_ids[0]
-        else:
-            return
-
-        automatic_ids = self.find_nodes_by_rule_name("automaticGroupByKeyword", group_by_id)
-        for auto_id in automatic_ids:
-            self.remove_node_from_tree(self.get_node(auto_id).get_parent())
-
-        group_by_node = self.get_node(group_by_id)
-        group_by_items = self.find_nodes_by_rule_name("groupByItem", group_by_id)
-
-        existing_items = []
-        for item in group_by_items:
-            existing_items.append(self.preorder_serialize_tokens(item).strip().replace(" ", ""))
-        print("Existing group by items:", existing_items)
-
-        for table in select_elements:
-            for element in table[1]:
-                if "(" in element and ")" in element:
-                    aggregate_exists = True
-
-        if len(existing_items) > 0:
-            self._add_node_under_parent(
-                "groupByItemDelimiter ,",
-                True,
-                group_by_node.get_depth() + 1,
-                group_by_id
-            )
-        last_comma = -1
-        for table in select_elements:
-            for element in table[1]:
-                print("Checking if", element, " is in existing items.")
-                if not ("(" in element and ")" in element) and element not in existing_items:
-                    self._add_node_under_parent(
-                        "groupByItem " + element,
-                        True,
-                        group_by_node.get_depth() + 1,
-                        group_by_id
-                    )
-                    
-                    last_comma = self._add_node_under_parent(
-                        "groupByItemDelimiter ,",
-                        True,
-                        group_by_node.get_depth() + 1,
-                        group_by_id
-                    )
-        
-        group_by_node.remove_child(last_comma)
-
-
-
-
-
-
-
-    def aggregate_select_and_table_statements(self, node_id = 0):
-        if self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0:
-            self.print_verbose("Cannot aggregate statements in a query with only one select and table statement.")
-            return
-        #The order in which these are called matters: select -> where -> join -> tables
-        self._infer_group_by(node_id)
-        self._aggregate_select_elements(node_id)
-        self._aggregate_where_statements(node_id)
-        self._consolidate_join_parts(node_id)
-        self._aggregate_tables(node_id)
-
-        #remove empty statements:
-        garbage_nodes = []
-        
-        for expression in self.table_select_agg_rules:
-            garbage_nodes = garbage_nodes + self.find_nodes_by_rule_name(expression)
-        if(len(garbage_nodes) > 1):
-            garbage_nodes = garbage_nodes[1:]
-        garbage_nodes = garbage_nodes + self.find_nodes_by_rule_name("expressionDelimiter")
-
-        garbage_nodes = self.remove_duplicates_from_list(garbage_nodes)
-        garbage_nodes.sort()
-        self.print_verbose("Garbage nodes:", garbage_nodes)
-
-        for node_id in garbage_nodes:
-            self.remove_node_from_tree(node_id)
-
-
 
 
  

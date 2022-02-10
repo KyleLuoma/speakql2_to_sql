@@ -34,7 +34,7 @@ def full_query_translation_with_intermediate_steps(query):
     speakql_tree.reorder_select_and_table_expressions(0)
     query_results["reordered_tree"] = speakql_tree.as_json()
     query_results["reordered_query"] = remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
-    speakql_tree.aggregate_select_and_table_statements()
+    speakql_tree.rebundle_query()
     query_results["sql_query_tree"] = speakql_tree.as_json()
     query_results["sql_query"] = remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
     query_results["table_list"] = speakql_tree.get_initial_tables_and_elements_as_json()

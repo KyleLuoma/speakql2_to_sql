@@ -46,13 +46,13 @@ while user_input.upper() != "QUIT":
     elif(user_input.upper() in ["PRINT PROPERTIES", "PRINT PROPS"]):
         print(speakql_tree.get_properties())
     elif(user_input.upper() == "TEST AGGREGATE COLUMNS"):
-        speakql_tree._aggregate_select_elements()
+        speakql_tree._bundle_select_elements()
     elif(user_input.upper() == "TEST AGGREGATE TABLES"):
-        speakql_tree._aggregate_tables()
+        speakql_tree._bundle_tables()
     elif(user_input.upper() == "TEST AGGREGATE WHERE"):
-        speakql_tree._aggregate_where_statements()
+        speakql_tree._bundle_where_statements()
     elif(user_input.upper() == "TEST AGGREGATE ALL"):
-        speakql_tree.aggregate_select_and_table_statements()
+        speakql_tree.rebundle_query()
     elif(user_input.upper() == "PRINT JSON"):
         print(speakql_tree.as_json())
     elif(user_input.upper() in ["PRINT SERIAL TREE", "PRINT SQL"]):
