@@ -2,7 +2,7 @@ from .speakql_translator.SpeakQlParseCaller import *
 from .speakql_translator.SpeakQlTree import *
 from .speakql_translator.speakql_to_sql import *
 
-parse_engine = JavaSpeakQlParseEngine("gen_simple_nothing", simple_speakql=True)
+parse_engine = JavaSpeakQlParseEngine("gen_simple_mandatory_delimiters", simple_speakql=True)
 parse_caller = SpeakQlParseCaller(parse_engine)
 
 def run_test_query_translation(test_query):
@@ -56,10 +56,14 @@ def remove_unwanted_white_space(speakql_tree):
           or " ," in speakql_tree
           or " ( " in speakql_tree
           or " )" in speakql_tree
+          or "< =" in speakql_tree
+          or "> =" in speakql_tree
           ):
         speakql_tree = speakql_tree.replace(" .", ".")
         speakql_tree = speakql_tree.replace(". ", ".")
         speakql_tree = speakql_tree.replace(" ,", ",")
         speakql_tree = speakql_tree.replace(" ( ", "(")
         speakql_tree = speakql_tree.replace(" )", ")")
+        speakql_tree = speakql_tree.replace("< =", "<=")
+        speakql_tree = speakql_tree.replace("> =", ">=")
     return speakql_tree

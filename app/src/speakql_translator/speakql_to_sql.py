@@ -163,12 +163,16 @@ def remove_unwanted_white_space(speakql_tree):
           or " ," in speakql_tree
           or " ( " in speakql_tree
           or " )" in speakql_tree
+          or "> =" in speakql_tree
+          or "< =" in speakql_tree
           ):
         speakql_tree = speakql_tree.replace(" .", ".")
         speakql_tree = speakql_tree.replace(". ", ".")
         speakql_tree = speakql_tree.replace(" ,", ",")
         speakql_tree = speakql_tree.replace(" ( ", "(")
         speakql_tree = speakql_tree.replace(" )", ")")
+        speakql_tree = speakql_tree.replace("> =", ">=")
+        speakql_tree = speakql_tree.replace("< =", "<=")
     return speakql_tree
 
 def translate_speakql_to_sql_with_st(speakql_tree, verbose = False):

@@ -22,7 +22,7 @@ class SpeakQlTree:
             lisp_tree = "(emptyTree)"
         self.parse_tree = lisp_tree
         self._build_tree(self.parse_tree)
-        self.properties = self.get_properties_from_parse_tree(self.parse_tree)
+        self.properties = self._get_properties_from_parse_tree(self.parse_tree)
         self.initial_table_source_items = self.get_all_table_source_items(
             node_id = 0,
             return_initial_list = False
@@ -37,6 +37,10 @@ class SpeakQlTree:
         self.verbose = verbose
 
 
+
+    # -------------------------------------------------------------------------------------------------------
+    # Tree init / generation methods. Should only run once upon tree initialization
+    # -------------------------------------------------------------------------------------------------------
 
     def _gen_table_lookup_by_alias_dict(self, initial_table_source_items):
         table_lookup_by_alias_dict = {}
@@ -56,21 +60,7 @@ class SpeakQlTree:
 
 
 
-    def set_verbose(self, verbose):
-        self.verbose = verbose
-
-
-
-    def print_verbose(self, *args):
-        if self.verbose:
-            print_this = ""
-            for arg in args:
-                print_this = print_this + str(arg) + " "
-            print(print_this)
-
-
-
-    def get_properties_from_parse_tree(self, parse_tree):
+    def _get_properties_from_parse_tree(self, parse_tree):
         properties = {
             "num_joinpart" : 0,
             "num_multijoinpart" : 0,
@@ -99,11 +89,6 @@ class SpeakQlTree:
         properties["num_element_alias"] = parse_tree.count("selectElementAs")
         properties["num_group_by"] = parse_tree.count("groupByClause")
         return properties
-
-
-
-    def get_properties(self):
-        return self.properties
 
 
 
@@ -143,14 +128,6 @@ class SpeakQlTree:
                         break
             else:
                 i = i + 1
-
-
-            
-    def print_tree_to_console(self, node_id = 0):
-        node = self.get_node(node_id)
-        print(node.to_tree_string())
-        for child in node.get_children():
-            self.print_tree_to_console(child)
 
 
 
@@ -199,14 +176,84 @@ class SpeakQlTree:
 
 
 
-    def scan_serialize_leafs(self):
-        output = ""
+    # -------------------------------------------------------------------------------------------------------
+    # Console output methods
+    # -------------------------------------------------------------------------------------------------------
+
+    def print_nodes_to_console(self):
         for i in range(0, len(self.tree_nodes)):
-            if self.tree_nodes[i].get_is_leaf():
-                output = output + self.get_token_string_from_rule(self.get_node(i))
-        return output
+            print(self.tree_nodes[i].to_string())
 
 
+
+    def set_verbose(self, verbose):
+        self.verbose = verbose
+
+
+
+    def print_verbose(self, *args):
+        if self.verbose:
+            print_this = ""
+            for arg in args:
+                print_this = print_this + str(arg) + " "
+            print(print_this)
+
+
+
+    def print_tree_to_console(self, node_id = 0):
+        node = self.get_node(node_id)
+        print(node.to_tree_string())
+        for child in node.get_children():
+            self.print_tree_to_console(child)
+
+
+
+    # -------------------------------------------------------------------------------------------------------
+    # Node Accessor Methods
+    # -------------------------------------------------------------------------------------------------------
+
+    def get_node(self, node_id):
+        return self.tree_nodes[node_id]
+
+
+
+    def get_properties(self):
+        return self.properties
+
+
+
+    def find_first_node_with_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False, stop_at_rules = []):
+        node_list = self.find_nodes_by_rule_name(
+            rule_to_find, node_id, check_subqueries, stop_at_rules
+        )
+        if len(node_list) > 0:
+            return node_list[0]
+        else:
+            return -1
+
+
+
+    def find_nodes_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False, stop_at_rules = []):
+        node = self.get_node(node_id)
+        node_list = []
+        if not check_subqueries:
+            if "subQueryTable" in node.get_rule_name():
+                return node_list
+        for rule in stop_at_rules:
+            if rule in node.get_rule_name():
+                return node_list
+        if rule_to_find == node.get_rule_name().strip().split()[0]:
+            node_list.append(node_id)
+            return node_list
+        for child in node.get_children():
+            node_list = node_list + self.find_nodes_by_rule_name(rule_to_find, child, stop_at_rules=stop_at_rules)
+        return node_list
+
+
+
+    # -------------------------------------------------------------------------------------------------------
+    # Misc Accessor Methods (both simple and complex)
+    # -------------------------------------------------------------------------------------------------------
 
     def get_token_string_from_rule(self, node):
         rule_split = node.get_rule_name().split()
@@ -229,6 +276,17 @@ class SpeakQlTree:
             return json.JSONEncoder().encode(tree_dict)
         else: 
             return tree_dict
+
+
+
+    def get_initial_tables_and_elements_as_json(self):
+        table_list = self.get_all_tables_and_elements(self, initial_list = True)
+        tl_for_json = []
+        for table in table_list:
+            table_dict = table[0][0]
+            table_dict["elements"] = table[1]
+            tl_for_json.append(table_dict)
+        return json.JSONEncoder().encode(tl_for_json)
 
 
 
@@ -266,6 +324,15 @@ class SpeakQlTree:
         for child in node.get_children():
             token = token + self.preorder_serialize_functioncall(child, table_name = table_name)
         return token
+
+
+
+    def scan_serialize_leafs(self):
+        output = ""
+        for i in range(0, len(self.tree_nodes)):
+            if self.tree_nodes[i].get_is_leaf():
+                output = output + self.get_token_string_from_rule(self.get_node(i))
+        return output
 
 
 
@@ -433,21 +500,6 @@ class SpeakQlTree:
 
 
 
-    
-
-
-
-    def get_initial_tables_and_elements_as_json(self):
-        table_list = self.get_all_tables_and_elements(self, initial_list = True)
-        tl_for_json = []
-        for table in table_list:
-            table_dict = table[0][0]
-            table_dict["elements"] = table[1]
-            tl_for_json.append(table_dict)
-        return json.JSONEncoder().encode(tl_for_json)
-
-
-
     def get_all_tables_and_elements(self, node_id = 0, initial_list = False):
         if initial_list:
             return self.initial_tables_and_elements
@@ -492,6 +544,7 @@ class SpeakQlTree:
         for child in node.get_children():
             table_elements = table_elements + self.get_all_tables_and_elements(child)
         return table_elements
+
 
 
     # -------------------------------------------------------------------------------------------------------
@@ -592,50 +645,7 @@ class SpeakQlTree:
 
 
 
-    # -------------------------------------------------------------------------------------------------------
-    # Node Retrieval Methods
-    # -------------------------------------------------------------------------------------------------------
-
-    def get_node(self, node_id):
-        return self.tree_nodes[node_id]
-
-
-
-    def find_first_node_with_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False, stop_at_rules = []):
-        node_list = self.find_nodes_by_rule_name(
-            rule_to_find, node_id, check_subqueries, stop_at_rules
-        )
-        if len(node_list) > 0:
-            return node_list[0]
-        else:
-            return -1
-
-
-
-    def find_nodes_by_rule_name(self, rule_to_find, node_id = 0, check_subqueries = False, stop_at_rules = []):
-        node = self.get_node(node_id)
-        node_list = []
-        if not check_subqueries:
-            if "subQueryTable" in node.get_rule_name():
-                return node_list
-        for rule in stop_at_rules:
-            if rule in node.get_rule_name():
-                return node_list
-        if rule_to_find == node.get_rule_name().strip().split()[0]:
-            node_list.append(node_id)
-            return node_list
-        for child in node.get_children():
-            node_list = node_list + self.find_nodes_by_rule_name(rule_to_find, child, stop_at_rules=stop_at_rules)
-        return node_list
-
-
-
-    def print_nodes_to_console(self):
-        for i in range(0, len(self.tree_nodes)):
-            print(self.tree_nodes[i].to_string())
-
-
-
+    
     # -------------------------------------------------------------------------------------------------------
     # Condition checking methods
     # -------------------------------------------------------------------------------------------------------
