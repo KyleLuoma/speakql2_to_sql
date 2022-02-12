@@ -103,11 +103,6 @@ WHERE WHEELCHAIRSPACES > 0
 
 
 
---Query objective: Find out the total number of credits offered by UCSD since Fall of 2020 (Hint, use the SUM function)
---Demonstrates aggregation with a where predicate on a single table
-
-
-
 --Query objective: Display the average room size and capacity for each building. (Similar to Q4)
 -- with an average room size (area) greater than 1000:
 --Demonstrates: Query partitioned into a speakql join clause and two single-table SFW statements 
@@ -127,6 +122,21 @@ SELECT AVG(ROOM.AREA), AVG(ROOM.CAPACITY), BUILDING.BUILDINGNAME
 FROM ROOM
 JOIN BUILDING ON ROOM.BUILDINGID = BUILDING.ID
 GROUP BY BUILDING.BUILDINGNAME HAVING AVG(AREA) > 1000;
+
+
+
+--Query objective: Find out the total number of courses offered by UCSD in term SPRING2020 (Hint, use the count function)
+--Demonstrates aggregation with a where predicate on a single table (Similar to Q5)
+
+--SpeakQl query:
+what is the count(courseid) 
+in table courseoffering 
+where termid = "SPRI2020"
+
+--Translated SQL:
+SELECT COUNT(COURSEID)
+FROM COURSEOFFERING
+WHERE TERMID = "SPRI2020"
 
 
 
@@ -165,15 +175,15 @@ join course with courseoffering on course.id = courseoffering.courseid
 and then
 join term with courseoffering on term.id = courseoffering.termid
 and then
-from department get departmentname where id = "cse" -- look for doing a where condition on a different table
+from department get departmentname 
 and then
 from courseoffering get count(id)
 and then
-from course get nothing where units >= 2 -- <- NEW FEATURE with reserved word to allow for getting nothing but define a where statement
+from course get nothing where units >= 2
 and then
-from term get year and termperiod where year >= 2020 and termperiod = "Spring"
+from term get year and termperiod where year >= 2021
 and then
-group by automatic
+group by automatic order by year
 
 
 --Translated SQL:
