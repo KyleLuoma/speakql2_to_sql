@@ -729,11 +729,14 @@ class SpeakQlTree:
     # -------------------------------------------------------------------------------------------------------
 
     def rebundle_query(self, node_id = 0):
+
+        self._infer_group_by(node_id)
+
         if self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0:
             self.print_verbose("Cannot aggregate statements in a query with only one select and table statement.")
             return
         #The order in which these are called matters: group_by -> select -> where -> join -> tables
-        self._infer_group_by(node_id)
+        
         self._bundle_select_elements(node_id)
         self._bundle_where_statements(node_id)
         self._bundle_join_parts(node_id)
