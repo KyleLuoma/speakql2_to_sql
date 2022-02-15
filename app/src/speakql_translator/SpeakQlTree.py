@@ -83,7 +83,8 @@ class SpeakQlTree:
         properties["num_table_name"] = parse_tree.count("tableName")
         properties["num_non_right_table_name"] = (
             parse_tree.count("(tableSource (tableSourceItem (tableName") + 
-            parse_tree.count("(tableSourceNoJoin (tableSourceItem (tableName")
+            parse_tree.count("(tableSourceNoJoin (tableSourceItem (tableName") +
+            parse_tree.count("(tableSourceNoJoin (tableSourceItem (theKeyword THE) (tableName")
         )
         properties["num_table_alias"] = parse_tree.count("tableAlias")
         properties["num_element_alias"] = parse_tree.count("selectElementAs")
@@ -672,16 +673,19 @@ class SpeakQlTree:
                     rule_name + " " + new_keyword
                 )
 
-    def remove_syntactic_sugar(self):
-        of_keyword_ids = self.find_nodes_by_rule_name("ofKeyword")
-        for node_id in of_keyword_ids:
-            self.remove_node_from_tree(node_id)
-        the_keyword_ids = self.find_nodes_by_rule_name("theKeyword")
-        for node_id in the_keyword_ids:
-            self.remove_node_from_tree(node_id)
-        table_keyword_ids = self.find_nodes_by_rule_name("tableKeyword")
-        for node_id in table_keyword_ids:
-            self.remove_node_from_tree(node_id)
+
+
+    def remove_syntactic_sugar(
+        self, 
+        sugar_list = ["ofKeyword", "theKeyword", "tableKeyword", "isKeyword"]
+    ):
+        
+        for sugar in sugar_list:
+            keyword_ids = self.find_nodes_by_rule_name(sugar)
+            for node_id in keyword_ids:
+                self.remove_node_from_tree(node_id)
+
+
 
     def reorder_select_and_table_expressions(self, node_id):
         node = self.get_node(node_id)
@@ -740,6 +744,8 @@ class SpeakQlTree:
     # -------------------------------------------------------------------------------------------------------
 
     def rebundle_query(self, node_id = 0):
+
+        print(self.properties)
 
         self._infer_group_by(node_id)
 

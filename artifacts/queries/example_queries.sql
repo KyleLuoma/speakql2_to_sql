@@ -4,12 +4,20 @@
 --NOTE: There are MANY options here because of the number of synonyms.
 
 --SpeakQL Query option 1:
-display building name and buildingnumber
-in table building
+display buildingname and buildingnumber
+in building
 
 --SpeakQl Query option 2:
 get buildingname, building number 
 from table building
+
+--SpeakQl Query option 3:
+get buildingname and building number 
+from the building table
+
+--SpeakQL Query option 4:
+in the building table 
+show me buildingname and buildingnumber
 
 --Translated SQL:
 SELECT BUILDINGNAME, BUILDING NUMBER
@@ -21,7 +29,7 @@ FROM BUILDING
 --Demonstrates: aggregation function access using SpeakQl synonyms
 
 --SpeakQl Query option 1:
-show me avg(area) in table room
+what is the avg (area) in the room table
 
 --SpeakQl Query option :
 in table room get avg(area)
@@ -38,12 +46,17 @@ FROM ROOM
 --SpeakQl Query option 1:
 from table department 
 show me id and departmentname
-where id= 'cse';
+where id = 'cse';
 
 --SpeakQl Query option 2:
 from table department 
-where id= 'cse' 
+where id = 'cse' 
 show me id and departmentname
+
+--SpeakQl query option 3:
+find id and departmentname 
+in the department table 
+where id = 'cse'
 
 --Translated SQL:
 SELECT ID, DEPARTMENTNAME
@@ -56,12 +69,20 @@ WHERE ID = 'CSE'
 --Demonstrates: a simple join combined with a where predicate
 --NOTE: This shows that the speakql unbundling may not always result in a shorter query
 
---SpeakQl Query:
+--SpeakQl Query option 1:
 join courseoffering with term on courseoffering.termid = term.id
 and then
 get courseid from courseoffering
 and then
 get nothing from term where year = 2022
+
+--SpeakQl Query option 2:
+
+join the courseoffering table with the term table on courseoffering.termid = term.id
+and then
+from courseoffering show me courseid
+and then
+get nothing from the term table where year = 2022
 
 --Translated SQL:
 SELECT COURSEOFFERING.COURSEID
@@ -166,7 +187,7 @@ GROUP BY ENDTIME
 --(Similar to Q7)
 --Demonstrates: multiple aggregations on the same table and the group by automatic feature
 
---SpeakQl query:
+--SpeakQl query option 1:
 in table room 
 show me buildingid, floor, 
     the count of (wheelchairspaces), 
@@ -175,11 +196,67 @@ show me buildingid, floor,
 where wheelchairspaces > 0
 group by automatic
 
+--SpeakQl query option 2:
+get buildingid, floor, the count of (wheelchairspaces), the sum of (capacity) and the avg of (area)
+from the room table
+where wheelchairspaces > 0
+group automatically
+
+
 --Translated SQL
 SELECT BUILDINGID, FLOOR, COUNT(WHEELCHAIRSPACES), SUM(CAPACITY), AVG(AREA)
 FROM ROOM
 WHERE WHEELCHAIRSPACES > 0
 GROUP BY BUILDINGID, FLOOR
+
+
+
+
+--Query objective: Fetch the faculty name, course title, course units, and start time for courses taught by either Jdavie Crop
+-- or Anabelle Handman or Cahra Scrammage or Gloriane Betke (Similar to Q8)
+--Demonstrates two table join and an WHERE IN condition
+
+--SpeakQl Query option 1:
+join the course table with the courseoffering table on course.id = courseoffering.courseid
+and then
+from the courseoffering table where facultyname in ("Jdavie Crop", "Anabelle Handman", "Cahra Scrammage", "Gloriane Betke")
+show me facultyname and starttime
+and then
+from the course table get title and units 
+and then
+order by facultyname
+
+--SpeakQl Query option 2:
+get facultyname, title, units and starttime 
+from the course table 
+joined with the courseoffering table on course.id = courseoffering.courseid 
+where facultyname in ("Jdavie Crop", "Anabelle Handman", "Cahra Scrammage", "Gloriane Betke")
+and then
+order by facultyname
+
+--SpeakQl Query option 3:
+in the courseoffering table get facultyname and starttime 
+where facultyname is in ("Jdavie Crop", "Anabelle Handman", "Cahra Scrammage", "Gloriane Betke")
+and then
+get title and units from the course table where course.id = courseoffering.id
+and then
+order by facultyname
+
+
+--Translated SQL:
+SELECT COURSEOFFERING.FACULTYNAME, COURSEOFFERING.STARTTIME, COURSE.TITLE, COURSE.UNITS
+FROM COURSEOFFERING
+JOIN COURSE ON COURSE.ID = COURSEOFFERING.COURSEID
+WHERE(COURSEOFFERING.FACULTYNAME IN("JDAVIE CROP", "ANABELLE HANDMAN", "CAHRA SCRAMMAGE", "GLORIANE BETKE")) 
+ORDER BY FACULTYNAME
+
+--Translated SQL (option 3):
+SELECT COURSEOFFERING.FACULTYNAME, COURSEOFFERING.STARTTIME, COURSE.TITLE, COURSE.UNITS
+FROM COURSEOFFERING, COURSE
+WHERE(COURSEOFFERING.FACULTYNAME IN("JDAVIE CROP", "ANABELLE HANDMAN", "CAHRA SCRAMMAGE", "GLORIANE BETKE")) 
+    AND(COURSE.ID = COURSEOFFERING.COURSEID) 
+ORDER BY FACULTYNAME
+
 
 
 
