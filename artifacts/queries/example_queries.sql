@@ -108,7 +108,7 @@ WHERE WHEELCHAIRSPACES > 0
 --Demonstrates: Query partitioned into a speakql join clause and two single-table SFW statements 
 
 --SpeakQl Query
-from table room get avg(area) and avg(capacity)
+from table room get the avg(area) and avg(capacity)
 and then 
 from building get buildingname
 and then
@@ -121,7 +121,8 @@ having avg(area) > 1000;
 SELECT AVG(ROOM.AREA), AVG(ROOM.CAPACITY), BUILDING.BUILDINGNAME
 FROM ROOM
 JOIN BUILDING ON ROOM.BUILDINGID = BUILDING.ID
-GROUP BY BUILDING.BUILDINGNAME HAVING AVG(AREA) > 1000;
+GROUP BY BUILDING.BUILDINGNAME 
+HAVING AVG(AREA) > 1000;
 
 
 
@@ -129,7 +130,7 @@ GROUP BY BUILDING.BUILDINGNAME HAVING AVG(AREA) > 1000;
 --Demonstrates aggregation with a where predicate on a single table (Similar to Q5)
 
 --SpeakQl query:
-what is the count(courseid) 
+what is the count of (courseid) 
 in table courseoffering 
 where termid = "SPRI2020"
 
@@ -140,7 +141,89 @@ WHERE TERMID = "SPRI2020"
 
 
 
---Query objective: Make a list of buildings and the total number of classrooms in each building. Display the building name, number and count of rooms.
+--Query objective: What is the ending time and number of classes for each ending time of
+--the course offerings? (Similar to Q6)
+--Demonstrates: Singular aggregation and group-by. Can use this to show SQL and SpeakQl options.
+
+--SpeakQl query option 1:
+what is the endtime and count of (courseid) in courseoffering
+group automatically
+
+--SpeakQl query option 2:
+in table courseoffering 
+find endtime and count(courseid) 
+group by endtime
+
+--Translated SQL:
+SELECT ENDTIME, COUNT(COURSEID)
+FROM COURSEOFFERING
+GROUP BY ENDTIME
+
+
+--Query objective: Using the room table, find the total number of wheelchair spaces and the average square feet per classroom for
+--classrooms with at least one wheelchair space.
+--Group by each building and building floor. No need for building name, building ID is sufficient.
+--(Similar to Q7)
+--Demonstrates: multiple aggregations on the same table and the group by automatic feature
+
+--SpeakQl query:
+in table room 
+show me buildingid, floor, 
+    the count of (wheelchairspaces), 
+    the sum of (capacity) 
+    and the avg (area) 
+where wheelchairspaces > 0
+group by automatic
+
+--Translated SQL
+SELECT BUILDINGID, FLOOR, COUNT(WHEELCHAIRSPACES), SUM(CAPACITY), AVG(AREA)
+FROM ROOM
+WHERE WHEELCHAIRSPACES > 0
+GROUP BY BUILDINGID, FLOOR
+
+
+
+--Query objective: Find out how many courses the CSE department is offering in the Spring 2022 term.
+-- (Similar to Q9)
+--Demonstrates: Unbundled querying. Focus on the join relationships first, then go back and 
+-- think about which elements you want from each table and their associated selection where clauses.
+-- Also demonstrates the group by automatic inference feature
+
+-- Courses by each dept for each quarter. use where predicates on different attributes
+-- how many courses offered by each department for each quarter since 2021.
+-- for courses that are more than four units each
+
+--UNBUNDLED SUBQUERY 
+
+join department with course on department.id = course.deptid
+and then
+join course with courseoffering on course.id = courseoffering.courseid
+and then
+join term with courseoffering on term.id = courseoffering.termid
+and then
+from department get departmentname 
+and then
+from courseoffering get count(id)
+and then
+from course get nothing where units > 4
+and then
+from term get year and termperiod where year >= 2021
+and then
+group by automatic order by year
+
+
+--Translated SQL:
+SELECT DEPARTMENT.DEPARTMENTNAME, COUNT(COURSEOFFERING.ID), TERM.YEAR, TERM.TERMPERIOD
+FROM DEPARTMENT
+JOIN COURSE ON DEPARTMENT.ID = COURSE.DEPTID 
+JOIN COURSEOFFERING ON COURSE.ID = COURSEOFFERING.COURSEID 
+JOIN TERM ON TERM.ID = COURSEOFFERING.TERMID
+WHERE(DEPARTMENT.ID = "CSE") AND(TERM.YEAR = 2022 AND TERM.TERMPERIOD = "SPRING")
+GROUP BY DEPARTMENT.DEPARTMENTNAME, TERM.YEAR, TERM.TERMPERIOD
+
+
+--Query objective: Make a list of buildings and the total number of classrooms in each building. 
+--Display the building name, number and count of rooms. (Similar to Q11)
 --Demonstrates: Joining two tables an an aggregate function.
 --Special instructions: Don't use the JOIN keyword for this query.
 
@@ -156,41 +239,3 @@ SELECT BUILDING.BUILDINGNAME, BUILDING.BUILDINGNUMBER, COUNT(ROOM.ID)
 FROM BUILDING, ROOM
 WHERE(ROOM.BUILDINGID = BUILDING.ID)
 GROUP BY BUILDING.BUILDINGNAME, BUILDING.BUILDINGNUMBER
-
-
---Query objective: Find out how many courses the CSE department is offering in the Spring 2022 term.
---Demonstrates: Partitioned querying. Focus on the join relationships first, then go back and 
--- think about which elements you want from each table and their associated selection where clauses.
--- Also demonstrates the group by automatic inference feature
-
--- Courses by each dept for each quarter. use where predicates on different attributes
--- how many courses offered by each department for each quarter since 2020. <--- DO THIS!!!4
--- for courses that are at least two units each
-
---UNBUNDLED SUBQUERY 
-
-join department with course on department.id = course.deptid
-and then
-join course with courseoffering on course.id = courseoffering.courseid
-and then
-join term with courseoffering on term.id = courseoffering.termid
-and then
-from department get departmentname 
-and then
-from courseoffering get count(id)
-and then
-from course get nothing where units >= 2
-and then
-from term get year and termperiod where year >= 2021
-and then
-group by automatic order by year
-
-
---Translated SQL:
-SELECT DEPARTMENT.DEPARTMENTNAME, COUNT(COURSEOFFERING.ID), TERM.YEAR, TERM.TERMPERIOD
-FROM DEPARTMENT
-JOIN COURSE ON DEPARTMENT.ID = COURSE.DEPTID 
-JOIN COURSEOFFERING ON COURSE.ID = COURSEOFFERING.COURSEID 
-JOIN TERM ON TERM.ID = COURSEOFFERING.TERMID
-WHERE(DEPARTMENT.ID = "CSE") AND(TERM.YEAR = 2022 AND TERM.TERMPERIOD = "SPRING")
-GROUP BY DEPARTMENT.DEPARTMENTNAME, TERM.YEAR, TERM.TERMPERIOD

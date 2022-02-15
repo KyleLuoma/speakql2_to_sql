@@ -670,7 +670,18 @@ class SpeakQlTree:
             if rule_name in self.tree_nodes[i].get_rule_name():
                 self.tree_nodes[i].update_rule_name(
                     rule_name + " " + new_keyword
-                )   
+                )
+
+    def remove_syntactic_sugar(self):
+        of_keyword_ids = self.find_nodes_by_rule_name("ofKeyword")
+        for node_id in of_keyword_ids:
+            self.remove_node_from_tree(node_id)
+        the_keyword_ids = self.find_nodes_by_rule_name("theKeyword")
+        for node_id in the_keyword_ids:
+            self.remove_node_from_tree(node_id)
+        table_keyword_ids = self.find_nodes_by_rule_name("tableKeyword")
+        for node_id in table_keyword_ids:
+            self.remove_node_from_tree(node_id)
 
     def reorder_select_and_table_expressions(self, node_id):
         node = self.get_node(node_id)
