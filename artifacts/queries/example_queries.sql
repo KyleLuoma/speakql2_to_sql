@@ -428,13 +428,13 @@ order by title
 --SpeakQl query option 3 (No joins, only where conditions)
 get buildingname and buildingnumber from the building table
 and then
-get roomnumber from the room table where room.buildingid = building.id
+get roomnumber from the room table where buildingid = building.id
 and then
-get ondays and starttime from the courseoffering table where courseoffering.roomid = room.id
+get ondays and starttime from the courseoffering table where roomid = room.id
 and then
-get no columns from the term table where year = 2021 and termperiod = "fall" and term.id = courseoffering.termid
+get no columns from the term table where year = 2021 and termperiod = "fall" and id = courseoffering.termid
 and then
-get title from course where deptid = "cse" and course.id = courseoffering.courseid
+get title from course where deptid = "cse" and id = courseoffering.courseid
 and then
 order by title
 
