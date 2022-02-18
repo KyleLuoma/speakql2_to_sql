@@ -1,11 +1,13 @@
 import pandas
-import db_connector
+import db_connector as db
 import mysql.connector
 import xml.etree.ElementTree as ET
 import random
 
+db_connector = db.DbConnector()
+
 def insert_course_values():
-    courses = pandas.read_csv("./app/src/db_util/courses.csv", sep = "|")
+    courses = pandas.read_csv("./app/src/db_util/data/data/courses.csv", sep = "|")
     print(courses.iloc[0].id, courses.iloc[0].course_names)
 
     courses["units"] = courses.apply(
@@ -65,7 +67,7 @@ def insert_course_values():
 def insert_location_values():
     insert_location_query = """INSERT INTO speakql_university.building (id, buildingNumber, buildingName)
                                                                   VALUES ('{}', '{}', '{}')"""
-    classrooms = pandas.read_excel("./app/src/db_util/classroom data.xlsx")
+    classrooms = pandas.read_excel("./app/src/db_util/data/data/classroom data.xlsx")
     
     building_number_list = []
     for row in classrooms.drop_duplicates(subset = ["Building Name"]).itertuples():
@@ -106,7 +108,7 @@ def insert_room_values():
                             capacity, wheelchairSpaces)
                         VALUES ('{}', '{}', '{}', '{}', {}, {}, {})"""
     
-    classrooms = pandas.read_excel("./app/src/db_util/classroom data.xlsx")
+    classrooms = pandas.read_excel("./app/src/db_util/data/data/classroom data.xlsx")
 
     for row in classrooms.itertuples():
         id = row[3]
@@ -143,7 +145,7 @@ def insert_room_values():
 def insert_term_values():
     insert_term_query = """INSERT INTO speakql_university.term (id, startDate, endDate, termPeriod, year)
                                                                   VALUES ('{}', '{}', '{}', '{}', {})"""
-    terms = pandas.read_csv("./app/src/db_util/university_data - terms.csv")
+    terms = pandas.read_csv("./app/src/db_util/data/data/university_data - terms.csv")
     print(terms.head())
     for row in terms.itertuples():
         command = insert_term_query.format(
@@ -170,7 +172,7 @@ def insert_term_values():
 
 
 def insert_department_values():
-    tree = ET.parse('./app/src/db_util/ucsd_departments.xml')
+    tree = ET.parse('./app/src/db_util/data/data/ucsd_departments.xml')
     root = tree.getroot()
     insert_department_query = "INSERT INTO speakql_university.department (id, departmentName) VALUES('{}', '{}')"
 
@@ -232,7 +234,7 @@ def insert_course_offering_values():
     except mysql.connector.Error as error:
         print("Failed to DO SOMETHING in MySQL: {}".format(error))
 
-    mock_names = pandas.read_csv("./app/src/db_util/MOCK_NAMES.csv")
+    mock_names = pandas.read_csv("./app/src/db_util/data/data/MOCK_NAMES.csv")
 
     try:
         course_offerings = []

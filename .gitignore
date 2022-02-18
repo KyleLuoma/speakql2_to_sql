@@ -5,10 +5,10 @@ antlr_builds/
 app/src/speakql_translator/__pycache__
 */__pycache__/*
 *__pycache__*
-
+bin/
 
 *.pyc
 
 update_react_app.ps1
 
-db_info.json
+*db_info.json

@@ -1,5 +1,6 @@
 
---Query objective: Display a list of all of the buildings on campus including their names and building number
+--Query objective: Display a list of all of the buildings on campus including their 
+--names and building number
 --Demonstrates: Synonym feature in isolation
 --NOTE: There are MANY options here because of the number of synonyms.
 
@@ -8,11 +9,11 @@ display buildingname and buildingnumber
 in building
 
 --SpeakQl Query option 2:
-get buildingname, building number 
+get buildingname, buildingnumber 
 from table building
 
 --SpeakQl Query option 3:
-get buildingname and building number 
+get buildingname and buildingnumber 
 from the building table
 
 --SpeakQL Query option 4:
@@ -25,7 +26,7 @@ FROM BUILDING
 
 
 
---Query objective: Find the average size of all rooms (Similar to Q1)
+--Query objective: Find the average area of all rooms (Similar to Q1)
 --Demonstrates: aggregation function access using SpeakQl synonyms
 
 --SpeakQl Query option 1:
@@ -93,7 +94,8 @@ WHERE(TERM.YEAR = 2022)
 
 
 
---Query objective: Get the days and start time of course offerings for courses in room with id 'CENTR 206' 
+--Query objective: Get the days and start time of course offerings for courses in 
+-- room with id 'CENTR 206' 
 -- and term with id 'FALL2021' (Similar to Q3)
 --Demonstrates the use of a where predicate
 
@@ -109,8 +111,10 @@ WHERE ROOMID = 'CENTR 206' AND TERMID = 'FALL2021'
 
 
 
---Query objective: Display a list of room numbers, their building ids, number of wheelchair spaces, and the floor they are on for rooms with wheel chair spots. 
---Special instructions: Specify in this order: FROM SELECT WHERE and try to use SQL keyword syntax.
+--Query objective: Display a list of room numbers, their building ids, number of 
+--wheelchair spaces, and the floor they are on for rooms with wheel chair spots. 
+--Special instructions: Specify in this order: FROM SELECT WHERE and try to use 
+--SQL keyword syntax.
 --Demonstrates: Reordering feature in isolation (Similar to Q3)
 
 --SpeakQl query:
@@ -125,9 +129,9 @@ WHERE WHEELCHAIRSPACES > 0
 
 
 
---Query objective: Display the average room size and capacity for each building. (Similar to Q4)
--- with an average room size (area) greater than 1000:
---Demonstrates: Query partitioned into a speakql join clause and two single-table SFW statements 
+--Query objective: Display the building name, average room area and average capacity for each building with an average room size (area) greater than 1000:
+--Demonstrates: Query partitioned into a speakql join clause and two single-table
+-- SFW statements 
 
 --SpeakQl Query
 from table room get the avg(area) and avg(capacity)
