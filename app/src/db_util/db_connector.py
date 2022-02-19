@@ -35,11 +35,15 @@ class DbConnector:
         
         if self.db_engine == "mysql":
             cursor = self.connection.cursor()
-            cursor.execute(query)
-            result_df = pd.DataFrame(
-                columns = cursor.column_names,
-                data = cursor.fetchall()
-                )
+            try:
+                cursor.execute(query)
+                result_df = pd.DataFrame(
+                    columns = cursor.column_names,
+                    data = cursor.fetchall()
+                    )
+            except mysql.connector.ProgrammingError as pe:
+                print(pe)
+                return pd.DataFrame()
             cursor.close()
             return result_df
 

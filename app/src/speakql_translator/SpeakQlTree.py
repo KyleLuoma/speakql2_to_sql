@@ -367,7 +367,6 @@ class SpeakQlTree:
             elements = elements + self.get_select_elements(
                 child, table_name = table_name, in_select_element_tree = in_select_element_tree
                 )
-        print(elements)
         return elements
 
 
@@ -745,7 +744,7 @@ class SpeakQlTree:
 
     def rebundle_query(self, node_id = 0):
 
-        print(self.properties)
+        self.print_verbose(self.properties)
 
         self._infer_group_by(node_id)
 
@@ -798,7 +797,7 @@ class SpeakQlTree:
         existing_items = []
         for item in group_by_items:
             existing_items.append(self.preorder_serialize_tokens(item).strip().replace(" ", ""))
-        print("Existing group by items:", existing_items)
+        self.print_verbose("Existing group by items:", existing_items)
 
         for table in select_elements:
             for element in table[1]:
@@ -815,7 +814,7 @@ class SpeakQlTree:
         last_comma = -1
         for table in select_elements:
             for element in table[1]:
-                print("Checking if", element, " is in existing items.")
+                self.print_verbose("Checking if", element, " is in existing items.")
                 if not ("(" in element and ")" in element) and element not in existing_items:
                     self._add_node_under_parent(
                         "groupByItem " + element,

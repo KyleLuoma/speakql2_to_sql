@@ -3,9 +3,12 @@ import speakql_translator.SpeakQlTree as st
 import json
 from speakql_translator.speakql_to_sql import *
 
+from db_util.db_analyzer import *
+from db_util.db_connector import *
+
 verbose = True
 
-parse_engine = spc.JavaSpeakQlParseEngine("gen_simple_multi_join", simple_speakql= True)
+parse_engine = spc.JavaSpeakQlParseEngine("gen_simple_is_in", simple_speakql= True)
 parse_caller = spc.SpeakQlParseCaller(parse_engine)
 
 py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
@@ -17,6 +20,8 @@ speakql_query = ""
 verbose = False
 
 speakql_tree = st.SpeakQlTree(tree)
+
+connection = DbConnector(db_engine = "mysql", db_name="speakql_university")
 
 while user_input.upper() != "QUIT":
     print("SpeakQl2>", end = ' ')
@@ -66,7 +71,9 @@ while user_input.upper() != "QUIT":
         tree = parse_caller.run_select_statement(speakql_query)
         speakql_tree = st.SpeakQlTree(tree, verbose)
         #print("Serial translator:", translate_speakql_to_sql(tree, verbose = verbose))
-        print("Tree translator:", translate_speakql_to_sql_with_st(speakql_tree, verbose = verbose))
+        sql_query = translate_speakql_to_sql_with_st(speakql_tree, verbose = verbose)
+        print("Tree translator:", sql_query)
+        print(connection.do_single_select_query_into_dataframe(sql_query))
 
     
     

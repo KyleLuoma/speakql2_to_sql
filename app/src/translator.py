@@ -44,6 +44,7 @@ def full_query_translation_with_intermediate_steps(query):
 def translate_speakql_to_sql_query(speakql_tree, verbose = False):
     for key in SQL_KEYWORDS_FOR_ST:
         speakql_tree.replace_keywords_for_rule_name(key, SQL_KEYWORDS_FOR_ST[key])
+    speakql_tree.remove_syntactic_sugar()
     speakql_tree.reorder_select_and_table_expressions(0)
     speakql_tree.aggregate_select_and_table_statements()
     if(verbose):

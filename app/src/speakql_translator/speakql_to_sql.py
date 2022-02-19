@@ -178,8 +178,9 @@ def remove_unwanted_white_space(speakql_tree):
 def translate_speakql_to_sql_with_st(speakql_tree, verbose = False):
     for key in SQL_KEYWORDS_FOR_ST:
         speakql_tree.replace_keywords_for_rule_name(key, SQL_KEYWORDS_FOR_ST[key])
+    speakql_tree.remove_syntactic_sugar()
     speakql_tree.reorder_select_and_table_expressions(0)
-    speakql_tree.aggregate_select_and_table_statements()
+    speakql_tree.rebundle_query()
     if(verbose):
         print("---- Tables and table attributes in query ----")
         print(speakql_tree.get_all_tables_and_elements())

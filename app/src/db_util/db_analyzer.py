@@ -1,5 +1,5 @@
 
-from db_connector import *
+from .db_connector import *
 import pandas as pd
 
 class DbAnalyzer:
@@ -9,6 +9,7 @@ class DbAnalyzer:
         self.db_connector = db_connector
         self.table_names = self._get_table_names()
         self.column_names = self._get_column_names()
+        self.distinct_values = self._get_distinct_values()
 
 
 
@@ -17,6 +18,9 @@ class DbAnalyzer:
 
     def get_table_names(self):
         return self.table_names
+
+    def get_distinct_values(self):
+        return self.distinct_values
 
     
 
@@ -79,9 +83,3 @@ class DbAnalyzer:
             query.format(self.db_connector.get_db_name())
         ) 
 
-
-
-analyzer = DbAnalyzer(DbConnector())
-analyzer._get_column_names().to_csv("column_names.csv")
-analyzer._get_table_names().to_csv("table_names.csv")
-analyzer._get_distinct_values().to_csv("distinct_values.csv")
