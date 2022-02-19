@@ -17,6 +17,16 @@ class DbConnector:
 
 
 
+    def get_db_name(self):
+        return self.db_name
+
+
+
+    def get_db_engine(self):
+        return self.db_engine
+
+
+
     def do_single_select_query_into_dataframe(self, query):
 
         print("DBCONNECTOR: Executing query '", query, "' in database", self.db_name)
@@ -26,9 +36,12 @@ class DbConnector:
         if self.db_engine == "mysql":
             cursor = self.connection.cursor()
             cursor.execute(query)
-            print(cursor.fetchall())
+            result_df = pd.DataFrame(
+                columns = cursor.column_names,
+                data = cursor.fetchall()
+                )
             cursor.close()
-
+            return result_df
 
 
     def get_mysql_database_connector(self, db_name):
@@ -68,5 +81,3 @@ class DbConnector:
         return cnx
 
 
-dbc = DbConnector(db_name = "speakql_university")
-dbc.do_single_select_query_into_dataframe("select * from speakql_university.building")
