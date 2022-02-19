@@ -1,10 +1,15 @@
 import speakql_translator.SpeakQlParseCaller as spc
 import speakql_translator.SpeakQlTree as st
 import json
+
 from speakql_translator.speakql_to_sql import *
+
+from speech_recognition.SpeakQlPredictorCaller import *
 
 from db_util.db_analyzer import *
 from db_util.db_connector import *
+
+
 
 verbose = True
 
@@ -17,12 +22,13 @@ py_parse_caller = spc.SpeakQlParseCaller(py_parse_engine)
 tree = ""
 user_input = ""
 speakql_query = ""
+
 verbose = False
+connect = False
+predict = False
 
 speakql_tree = st.SpeakQlTree(tree)
-
-connect = False
-
+predictor = SpeakQlPredictorCaller()
 
 
 while user_input.upper() != "QUIT":
@@ -33,6 +39,10 @@ while user_input.upper() != "QUIT":
     elif(user_input.upper() == "CONNECT"):
         connection = DbConnector(db_engine = "mysql", db_name="speakql_university")
         connect = True
+    elif(user_input.upper() == "PREDICT ON"):
+        predict = True
+    elif(user_input.upper() == "PREDICT OFF"):
+        predict = False
     elif(user_input.upper() == "PRINT PARSE TREE"):
         print(tree)
     elif(user_input.upper() == "VERBOSE ON"):
@@ -80,6 +90,8 @@ while user_input.upper() != "QUIT":
         print("Tree translator:", sql_query)
         if connect:
             print(connection.do_single_select_query_into_dataframe(sql_query))
+        if predict:
+            print("Next valid keywords:", predictor.getNextWordsFromQuery(speakql_query))
 
     
     
