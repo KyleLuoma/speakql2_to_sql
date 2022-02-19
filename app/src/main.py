@@ -21,13 +21,18 @@ verbose = False
 
 speakql_tree = st.SpeakQlTree(tree)
 
-connection = DbConnector(db_engine = "mysql", db_name="speakql_university")
+connect = False
+
+
 
 while user_input.upper() != "QUIT":
     print("SpeakQl2>", end = ' ')
     user_input = input()
     if(user_input.upper() == "QUIT"):
         break
+    elif(user_input.upper() == "CONNECT"):
+        connection = DbConnector(db_engine = "mysql", db_name="speakql_university")
+        connect = True
     elif(user_input.upper() == "PRINT PARSE TREE"):
         print(tree)
     elif(user_input.upper() == "VERBOSE ON"):
@@ -73,7 +78,8 @@ while user_input.upper() != "QUIT":
         #print("Serial translator:", translate_speakql_to_sql(tree, verbose = verbose))
         sql_query = translate_speakql_to_sql_with_st(speakql_tree, verbose = verbose)
         print("Tree translator:", sql_query)
-        print(connection.do_single_select_query_into_dataframe(sql_query))
+        if connect:
+            print(connection.do_single_select_query_into_dataframe(sql_query))
 
     
     
