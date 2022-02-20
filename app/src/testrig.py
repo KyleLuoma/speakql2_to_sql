@@ -11,12 +11,19 @@ from db_util.db_analyzer import *
 from db_util.db_connector import *
 
 def main():
+
+    query = """select building name and building number from table building
+                and then get capacity from table room
+                and then join the building table with the room table on room.building id = building.id
+    """
+
     asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
 
     print(asr.process_asr_string(
-        """select a from one 
-        and then join one with two on one.id = two.id
-        and then select b from two"""
+        query
     ))
+
+    # asrmp = AsrMultiProcessor()
+    # asrmp.scan_query_with_parser(query.replace(",", " ,").upper())
 
 if (__name__ == "__main__"): main()
