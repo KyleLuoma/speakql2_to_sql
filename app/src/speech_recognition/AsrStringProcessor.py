@@ -29,6 +29,8 @@ class AsrMultiProcessor:
 
         query = query.replace(",", " ,")
         query = query.replace(".", " . ")
+        query = query.replace("(", " ( ")
+        query = query.replace(")", " ) ")
         result = self.scan_query_with_parser(query)
 
         return result

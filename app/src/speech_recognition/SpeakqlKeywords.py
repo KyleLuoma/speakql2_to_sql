@@ -44,6 +44,15 @@ class SpeakQlKeywords:
             "BY JOINING WITH TABLE"
         ]
 
+        self.group_kw = [
+            "GROUP",
+            "GROUP BY"
+        ]
+
+        self.order_kw = [
+            "ORDER BY"
+        ]
+
         self.literal_kw = [
             "uid",
             "constant",
@@ -66,7 +75,7 @@ class SpeakQlKeywords:
         return self.join_kw
 
     def get_start_kws(self):
-        return self.select_kw + self.from_kw + self.join_kw
+        return self.select_kw + self.from_kw + self.join_kw + self.order_kw + self.group_kw
 
     def get_literal_kws(self):
         return self.literal_kw

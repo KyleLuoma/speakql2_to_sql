@@ -13,8 +13,7 @@ from db_util.db_connector import *
 def main():
 
     query = """select building name and building number from table building
-                and then get capacity from table room
-                and then join the building table with the room table on room.building id = building.id
+                and then group by automatic
     """
 
     asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
