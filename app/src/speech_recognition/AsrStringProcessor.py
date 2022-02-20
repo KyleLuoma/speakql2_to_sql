@@ -5,6 +5,7 @@ from db_util.db_analyzer import *
 
 import pandas as pd
 import multiprocessing as mp
+import time
 
 #Class used to handle unbundled queries at the sub-query level using multi-processing
 class AsrMultiProcessor:
@@ -16,7 +17,7 @@ class AsrMultiProcessor:
         self.max_lookahead = 4
 
     def process_multi_queries(self, asr_queries):
-
+        
         mp_pool = mp.Pool(mp.cpu_count())
         results = mp_pool.map(self.do_processing_tasks, [query for query in asr_queries])
         mp_pool.close()
@@ -54,6 +55,8 @@ class AsrMultiProcessor:
                     speakql_query = speakql_query + candidate_phrase
                     words = words[i  : ]
                     break
+                elif i == 0:
+                    speakql_query = speakql_query + candidate_phrase
 
         #scan the rest of the query:
         timeout = 30
@@ -131,9 +134,17 @@ class AsrStringProcessor:
         )
 
         asr_string = asr_string.upper()
+        
+        start_time = time.perf_counter()
         asr_queries = self._separate_unbundled_query(asr_string)
+        end_time = time.perf_counter()
+        print("_separate_unbundled_query() time:", str(end_time - start_time), "seconds")
 
+        start_time = time.perf_counter()
         results = amp.process_multi_queries(asr_queries)
+        end_time = time.perf_counter()
+        print("Process_multi_queries() time:", str(end_time - start_time), "seconds")
+
         return results
 
 
