@@ -70,6 +70,12 @@ class SpeakQlKeywords:
         ]
 
 
+
+    def get_group_kws(self):
+        return self.group_kw
+
+    def get_order_kws(self):
+        return self.order_kw
     
     def get_exp_delim_kws(self):
         return self.exp_delim_kw

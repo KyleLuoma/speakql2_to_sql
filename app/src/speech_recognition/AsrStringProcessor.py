@@ -256,7 +256,38 @@ class AsrStringProcessor:
                 i = i + 1
             print(keyword_candidates)
             print(" ".join(string_words))
+            return " ".join(string_words)
 
+
+
+    #Scans a sub query for speakql keywords for level 2 structure determination. 
+    #Simpler than the l1 process, so we should tighten up the dist_threshold to
+    #avoid false positives.
+    def _clarify_l2_keywords(self, asr_string, dist_threshold = 0):
+        #Concatenate the lists of all keywords into one mega list:
+        l2_keywords = (
+            self.keywords.get_select_kws()
+            + self.keywords.get_from_kws()
+            + self.keywords.get_join_kws()
+            + ["WHERE"]
+            + self.keywords.get_group_kws()
+            + self.keywords.get_order_kws()
+        )
+        string_words = asr_string.split()
+        #Covering all different lengths of the keyword synonym phrases:
+        for kw_len in range(5, 0, -1):
+            #Iterating over all of the words in the sub query:
+            for i in range(0, len(string_words) - (kw_len - 1)):
+                fragment = " ".join(string_words[i : i + kw_len])
+                #Iterate over all keywords in the mega list:
+                for kw in l2_keywords:
+                    #Compare the distance, and do replacement if below threshold
+                    if self.metaphone.distance(kw, fragment) <= dist_threshold and len(fragment) > 1:
+                        for j in range(i, i + len(kw.split(" "))):
+                            if j < len(string_words):
+                                string_words[j] = kw.split(" ")[j - i]
+        print(string_words)
+        return " ".join(string_words)
 
 
     def _get_kw_type(self, keyword, dist_threshold = 0):

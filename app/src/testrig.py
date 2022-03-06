@@ -28,11 +28,12 @@ def main():
                 get title and units from the course table
                 and than
                 in course offering show me thin and on days and start time
-                an then
+                end then
                 display nothing from the term table
     """
 
-    test_clarify_l1_keywords(query)
+    #test_clarify_l1_keywords(query)
+    test_clarify_l2_keywords()
 
     global trie
     count_rows = 0
@@ -49,6 +50,12 @@ def test_clarify_l1_keywords(query):
     #query = """select thick and thin from table blah end than from table two show me a and b"""
     asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
     asr._clarify_l1_keywords(query, dist_threshold=1)
+
+
+
+def test_clarify_l2_keywords():
+    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
+    asr._clarify_l2_keywords("show me department name from the department table joined with the customer table ware id = a", dist_threshold=0)
 
 
 
