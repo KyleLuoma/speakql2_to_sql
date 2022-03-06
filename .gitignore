@@ -12,3 +12,6 @@ bin/
 update_react_app.ps1
 
 *db_info.json
+
+select_tokens.txt
+/artifacts/token_permutations

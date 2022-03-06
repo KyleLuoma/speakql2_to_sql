@@ -41,7 +41,16 @@ class SpeakQlKeywords:
             "JOIN WITH",
             "JOINED WITH TABLE",
             "JOIN WITH TABLE",
-            "BY JOINING WITH TABLE"
+            "BY JOINING WITH TABLE",
+            "BY JOINING WITH",
+            "LEFT",
+            "OUTER",
+            "INNER",
+            "CROSS",
+            "RIGHT",
+            "NATURAL",
+            "BY",
+            "JOINED"
         ]
 
         self.group_kw = [

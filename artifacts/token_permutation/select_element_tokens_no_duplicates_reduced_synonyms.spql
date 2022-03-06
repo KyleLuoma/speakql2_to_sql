@@ -1,0 +1,3231 @@
+  uid_x 
+  uid_x  AS uid_x 
+  uid_x  DOT uid_x 
+  uid_x  DOT uid_x  AS uid_x 
+  uid_x  DOT  * 
+   COUNT  ( uid_x  ) 
+   COUNT  ( uid_x  )  AS uid_x 
+   COUNT  ( uid_x  DOT uid_x  ) 
+   COUNT  ( uid_x  DOT uid_x  )  AS uid_x 
+   COUNT  (  DISTINCT uid_x  ) 
+   COUNT  (  DISTINCT uid_x  )  AS uid_x 
+   COUNT  (  DISTINCT uid_x  , uid_x  ) 
+   COUNT  (  DISTINCT uid_x  , uid_x  )  AS uid_x 
+   COUNT  (  DISTINCT uid_x  , uid_x  DOT uid_x  ) 
+   COUNT  (  DISTINCT uid_x  DOT uid_x  ) 
+   COUNT  (  DISTINCT uid_x  DOT uid_x  )  AS uid_x 
+   COUNT  (  DISTINCT uid_x  DOT uid_x  , uid_x  ) 
+   COUNT  (  *  ) 
+   COUNT  (  *  )  AS uid_x 
+   COUNT  (  ALL uid_x  ) 
+   COUNT  (  ALL uid_x  )  AS uid_x 
+   COUNT  (  ALL uid_x  DOT uid_x  ) 
+   COUNT  (  ALL uid_x  DOT uid_x  )  AS uid_x 
+   COUNT  OF  ( uid_x  ) 
+   COUNT  OF  ( uid_x  )  AS uid_x 
+   COUNT  OF  ( uid_x  DOT uid_x  ) 
+   COUNT  OF  ( uid_x  DOT uid_x  )  AS uid_x 
+   COUNT  OF  (  DISTINCT uid_x  ) 
+   COUNT  OF  (  DISTINCT uid_x  )  AS uid_x 
+   COUNT  OF  (  DISTINCT uid_x  , uid_x  ) 
+   COUNT  OF  (  DISTINCT uid_x  , uid_x  DOT uid_x  ) 
+   COUNT  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   COUNT  OF  (  DISTINCT uid_x  DOT uid_x  , uid_x  ) 
+   COUNT  OF  (  *  ) 
+   COUNT  OF  (  *  )  AS uid_x 
+   COUNT  OF  (  ALL uid_x  ) 
+   COUNT  OF  (  ALL uid_x  )  AS uid_x 
+   COUNT  OF  (  ALL uid_x  DOT uid_x  ) 
+   MAX  ( uid_x  ) 
+   MAX  ( uid_x  )  AS uid_x 
+   MAX  ( uid_x  DOT uid_x  ) 
+   MAX  ( uid_x  DOT uid_x  )  AS uid_x 
+   MAX  (  DISTINCT uid_x  ) 
+   MAX  (  DISTINCT uid_x  )  AS uid_x 
+   MAX  (  DISTINCT uid_x  DOT uid_x  ) 
+   MAX  (  DISTINCT uid_x  DOT uid_x  )  AS uid_x 
+   MAX  (  ALL uid_x  ) 
+   MAX  (  ALL uid_x  )  AS uid_x 
+   MAX  (  ALL uid_x  DOT uid_x  ) 
+   MAX  (  ALL uid_x  DOT uid_x  )  AS uid_x 
+   MAX  OF  ( uid_x  ) 
+   MAX  OF  ( uid_x  )  AS uid_x 
+   MAX  OF  ( uid_x  DOT uid_x  ) 
+   MAX  OF  ( uid_x  DOT uid_x  )  AS uid_x 
+   MAX  OF  (  DISTINCT uid_x  ) 
+   MAX  OF  (  DISTINCT uid_x  )  AS uid_x 
+   MAX  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   MAX  OF  (  ALL uid_x  ) 
+   MAX  OF  (  ALL uid_x  )  AS uid_x 
+   MAX  OF  (  ALL uid_x  DOT uid_x  ) 
+   MID  ( uid_x  ) 
+   MID  ( uid_x  )  AS uid_x 
+   MID  ( uid_x  , uid_x  ) 
+   MID  ( uid_x  , uid_x  )  AS uid_x 
+   MID  ( uid_x  , uid_x  DOT uid_x  ) 
+   MID  ( uid_x  DOT uid_x  ) 
+   MID  ( uid_x  DOT uid_x  )  AS uid_x 
+   MID  ( uid_x  DOT uid_x  , uid_x  ) 
+   MID  (  ) 
+   MID  (  )  AS uid_x 
+   MIN  ( uid_x  ) 
+   MIN  ( uid_x  )  AS uid_x 
+   MIN  ( uid_x  DOT uid_x  ) 
+   MIN  ( uid_x  DOT uid_x  )  AS uid_x 
+   MIN  (  DISTINCT uid_x  ) 
+   MIN  (  DISTINCT uid_x  )  AS uid_x 
+   MIN  (  DISTINCT uid_x  DOT uid_x  ) 
+   MIN  (  DISTINCT uid_x  DOT uid_x  )  AS uid_x 
+   MIN  (  ALL uid_x  ) 
+   MIN  (  ALL uid_x  )  AS uid_x 
+   MIN  (  ALL uid_x  DOT uid_x  ) 
+   MIN  (  ALL uid_x  DOT uid_x  )  AS uid_x 
+   MIN  OF  ( uid_x  ) 
+   MIN  OF  ( uid_x  )  AS uid_x 
+   MIN  OF  ( uid_x  DOT uid_x  ) 
+   MIN  OF  ( uid_x  DOT uid_x  )  AS uid_x 
+   MIN  OF  (  DISTINCT uid_x  ) 
+   MIN  OF  (  DISTINCT uid_x  )  AS uid_x 
+   MIN  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   MIN  OF  (  ALL uid_x  ) 
+   MIN  OF  (  ALL uid_x  )  AS uid_x 
+   MIN  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT uid_x 
+   DISTINCT uid_x  AS uid_x 
+   DISTINCT uid_x  DOT uid_x 
+   DISTINCT uid_x  DOT uid_x  AS uid_x 
+   DISTINCT uid_x  DOT  * 
+   DISTINCT  COUNT  ( uid_x  ) 
+   DISTINCT  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCT  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  COUNT  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  COUNT  (  *  ) 
+   DISTINCT  COUNT  (  *  )  AS uid_x 
+   DISTINCT  COUNT  (  ALL uid_x  ) 
+   DISTINCT  COUNT  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  COUNT  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  COUNT  OF  ( uid_x  ) 
+   DISTINCT  COUNT  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  COUNT  OF  (  *  ) 
+   DISTINCT  COUNT  OF  (  *  )  AS uid_x 
+   DISTINCT  COUNT  OF  (  ALL uid_x  ) 
+   DISTINCT  COUNT  OF  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  COUNT  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  MAX  ( uid_x  ) 
+   DISTINCT  MAX  ( uid_x  )  AS uid_x 
+   DISTINCT  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCT  MAX  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  MAX  (  ALL uid_x  ) 
+   DISTINCT  MAX  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  MAX  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  MAX  OF  ( uid_x  ) 
+   DISTINCT  MAX  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  MAX  OF  (  ALL uid_x  ) 
+   DISTINCT  MAX  OF  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  MAX  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  MID  ( uid_x  ) 
+   DISTINCT  MID  ( uid_x  )  AS uid_x 
+   DISTINCT  MID  ( uid_x  , uid_x  ) 
+   DISTINCT  MID  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  MID  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  MID  ( uid_x  DOT uid_x  ) 
+   DISTINCT  MID  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  MID  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  MID  (  ) 
+   DISTINCT  MID  (  )  AS uid_x 
+   DISTINCT  MIN  ( uid_x  ) 
+   DISTINCT  MIN  ( uid_x  )  AS uid_x 
+   DISTINCT  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCT  MIN  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  MIN  (  ALL uid_x  ) 
+   DISTINCT  MIN  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  MIN  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  MIN  OF  ( uid_x  ) 
+   DISTINCT  MIN  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  MIN  OF  (  ALL uid_x  ) 
+   DISTINCT  MIN  OF  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  MIN  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW uid_x 
+   DISTINCT  DISTINCTROW uid_x  AS uid_x 
+   DISTINCT  DISTINCTROW uid_x  DOT uid_x 
+   DISTINCT  DISTINCTROW uid_x  DOT uid_x  AS uid_x 
+   DISTINCT  DISTINCTROW uid_x  DOT  * 
+   DISTINCT  DISTINCTROW  COUNT  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  COUNT  (  *  ) 
+   DISTINCT  DISTINCTROW  COUNT  (  *  )  AS uid_x 
+   DISTINCT  DISTINCTROW  COUNT  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  COUNT  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  COUNT  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  COUNT  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  COUNT  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  COUNT  OF  (  *  ) 
+   DISTINCT  DISTINCTROW  COUNT  OF  (  *  )  AS uid_x 
+   DISTINCT  DISTINCTROW  COUNT  OF  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  COUNT  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  MAX  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  MAX  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  MAX  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  MAX  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  MAX  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  MAX  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  MAX  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  MAX  OF  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  MAX  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  MID  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  MID  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  MID  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  MID  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  MID  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  MID  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  MID  (  ) 
+   DISTINCT  DISTINCTROW  MID  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  MIN  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  MIN  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  MIN  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  MIN  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  MIN  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  MIN  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  MIN  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  MIN  OF  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  MIN  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  * 
+   DISTINCT  DISTINCTROW  SUM  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  SUM  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  SUM  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  SUM  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  SUM  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  SUM  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  SUM  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  SUM  OF  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  SUM  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_DATE  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_DATE  (  ) 
+   DISTINCT  DISTINCTROW  CURRENT_DATE  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  CURRENT_TIME  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIME  (  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIME  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  (  ) 
+   DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  LOCALTIME  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  LOCALTIME  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  LOCALTIME  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  LOCALTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  LOCALTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  LOCALTIME  (  ) 
+   DISTINCT  DISTINCTROW  LOCALTIME  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  REPLACE  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  REPLACE  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  REPLACE  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  REPLACE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  REPLACE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  REPLACE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  REPLACE  (  ) 
+   DISTINCT  DISTINCTROW  REPLACE  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  CURDATE  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  CURDATE  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  CURDATE  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  CURDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  CURDATE  (  ) 
+   DISTINCT  DISTINCTROW  CURDATE  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  CURTIME  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  CURTIME  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  CURTIME  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  CURTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  CURTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  CURTIME  (  ) 
+   DISTINCT  DISTINCTROW  CURTIME  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  DATE_ADD  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  DATE_ADD  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  DATE_ADD  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  DATE_ADD  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  DATE_ADD  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  DATE_ADD  (  ) 
+   DISTINCT  DISTINCTROW  DATE_ADD  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  DATE_SUB  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  DATE_SUB  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  DATE_SUB  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  DATE_SUB  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  DATE_SUB  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  DATE_SUB  (  ) 
+   DISTINCT  DISTINCTROW  DATE_SUB  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  LOCALTIMESTAMP  (  ) 
+   DISTINCT  DISTINCTROW  LOCALTIMESTAMP  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  NOW  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  NOW  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  NOW  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  NOW  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  NOW  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  NOW  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  NOW  (  ) 
+   DISTINCT  DISTINCTROW  NOW  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  SUBSTR  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  SUBSTR  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  SUBSTR  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  SUBSTR  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  SUBSTR  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  SUBSTR  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  SUBSTR  (  ) 
+   DISTINCT  DISTINCTROW  SUBSTR  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  SUBSTRING  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  SUBSTRING  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  SUBSTRING  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  SUBSTRING  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  SUBSTRING  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  SUBSTRING  (  ) 
+   DISTINCT  DISTINCTROW  SUBSTRING  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  SYSDATE  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  SYSDATE  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  SYSDATE  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  SYSDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  SYSDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  SYSDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  SYSDATE  (  ) 
+   DISTINCT  DISTINCTROW  SYSDATE  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  TRIM  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  TRIM  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  TRIM  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  TRIM  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  TRIM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  TRIM  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  TRIM  (  ) 
+   DISTINCT  DISTINCTROW  TRIM  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  UTC_DATE  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_DATE  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  UTC_DATE  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_DATE  (  ) 
+   DISTINCT  DISTINCTROW  UTC_DATE  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  IF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  IF  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  IF  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  IF  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  IF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  IF  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  IF  (  ) 
+   DISTINCT  DISTINCTROW  IF  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  UTC_TIME  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIME  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  UTC_TIME  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIME  (  ) 
+   DISTINCT  DISTINCTROW  UTC_TIME  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  THE  COUNT  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  COUNT  (  *  ) 
+   DISTINCT  DISTINCTROW  THE  COUNT  (  *  )  AS uid_x 
+   DISTINCT  DISTINCTROW  THE  COUNT  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  COUNT  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  COUNT  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  COUNT  OF  (  *  ) 
+   DISTINCT  DISTINCTROW  THE  COUNT  OF  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  SUM  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  SUM  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  THE  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  SUM  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  SUM  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  SUM  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  SUM  OF  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MAX  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MAX  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  THE  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MAX  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MAX  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MAX  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MAX  OF  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MIN  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MIN  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  THE  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MIN  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MIN  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MIN  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  MIN  OF  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  AVG  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  AVG  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  THE  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  AVG  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  AVG  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  AVG  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  THE  AVG  OF  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  UTC_TIMESTAMP  (  ) 
+   DISTINCT  DISTINCTROW  UTC_TIMESTAMP  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL uid_x 
+   DISTINCT  DISTINCTROW  ALL uid_x  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL uid_x  DOT uid_x 
+   DISTINCT  DISTINCTROW  ALL uid_x  DOT uid_x  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL uid_x  DOT  * 
+   DISTINCT  DISTINCTROW  ALL  COUNT  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  COUNT  (  *  ) 
+   DISTINCT  DISTINCTROW  ALL  COUNT  (  *  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  COUNT  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  COUNT  OF  (  *  ) 
+   DISTINCT  DISTINCTROW  ALL  MAX  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  MAX  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  MAX  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  MID  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  MID  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  MID  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  MID  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  MID  (  ) 
+   DISTINCT  DISTINCTROW  ALL  MID  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  MIN  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  MIN  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  MIN  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  * 
+   DISTINCT  DISTINCTROW  ALL  SUM  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SUM  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SUM  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_DATE  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_DATE  (  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_DATE  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIME  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIME  (  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIME  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIMESTAMP  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIMESTAMP  (  ) 
+   DISTINCT  DISTINCTROW  ALL  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIME  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIME  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIME  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIME  (  ) 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIME  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  REPLACE  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  REPLACE  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  REPLACE  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  REPLACE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  REPLACE  (  ) 
+   DISTINCT  DISTINCTROW  ALL  REPLACE  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  CURDATE  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURDATE  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  CURDATE  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURDATE  (  ) 
+   DISTINCT  DISTINCTROW  ALL  CURDATE  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  CURTIME  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURTIME  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  CURTIME  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  CURTIME  (  ) 
+   DISTINCT  DISTINCTROW  ALL  CURTIME  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  DATE_ADD  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  DATE_ADD  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  DATE_ADD  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  DATE_ADD  (  ) 
+   DISTINCT  DISTINCTROW  ALL  DATE_ADD  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  DATE_SUB  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  DATE_SUB  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  DATE_SUB  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  DATE_SUB  (  ) 
+   DISTINCT  DISTINCTROW  ALL  DATE_SUB  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIMESTAMP  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIMESTAMP  (  ) 
+   DISTINCT  DISTINCTROW  ALL  LOCALTIMESTAMP  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  NOW  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  NOW  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  NOW  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  NOW  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  NOW  (  ) 
+   DISTINCT  DISTINCTROW  ALL  NOW  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  SUBSTR  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SUBSTR  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  SUBSTR  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SUBSTR  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SUBSTR  (  ) 
+   DISTINCT  DISTINCTROW  ALL  SUBSTR  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  SUBSTRING  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SUBSTRING  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  SUBSTRING  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SUBSTRING  (  ) 
+   DISTINCT  DISTINCTROW  ALL  SUBSTRING  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  SYSDATE  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SYSDATE  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  SYSDATE  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SYSDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  SYSDATE  (  ) 
+   DISTINCT  DISTINCTROW  ALL  SYSDATE  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  TRIM  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  TRIM  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  TRIM  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  TRIM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  TRIM  (  ) 
+   DISTINCT  DISTINCTROW  ALL  TRIM  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  UTC_DATE  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_DATE  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  UTC_DATE  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_DATE  (  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_DATE  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  IF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  IF  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  IF  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  IF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  IF  (  ) 
+   DISTINCT  DISTINCTROW  ALL  IF  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIME  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIME  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIME  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIME  (  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIME  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  THE  COUNT  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  COUNT  (  *  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  COUNT  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  COUNT  OF  (  *  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  SUM  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  SUM  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  MAX  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  MAX  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  MIN  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  MIN  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  AVG  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  THE  AVG  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIMESTAMP  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIMESTAMP  (  ) 
+   DISTINCT  DISTINCTROW  ALL  UTC_TIMESTAMP  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  INSERT  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  INSERT  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  INSERT  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  INSERT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  INSERT  (  ) 
+   DISTINCT  DISTINCTROW  ALL  INSERT  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  AVG  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  AVG  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  ALL  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  AVG  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  ALL  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  INSERT  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  INSERT  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  INSERT  ( uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  INSERT  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  INSERT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  INSERT  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DISTINCTROW  INSERT  (  ) 
+   DISTINCT  DISTINCTROW  INSERT  (  )  AS uid_x 
+   DISTINCT  DISTINCTROW  AVG  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  AVG  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  AVG  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  AVG  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  AVG  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  AVG  OF  ( uid_x  ) 
+   DISTINCT  DISTINCTROW  AVG  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  DISTINCTROW  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DISTINCTROW  AVG  OF  (  ALL uid_x  ) 
+   DISTINCT  DISTINCTROW  AVG  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  * 
+   DISTINCT  SUM  ( uid_x  ) 
+   DISTINCT  SUM  ( uid_x  )  AS uid_x 
+   DISTINCT  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  SUM  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  SUM  (  ALL uid_x  ) 
+   DISTINCT  SUM  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  SUM  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  SUM  OF  ( uid_x  ) 
+   DISTINCT  SUM  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  SUM  OF  (  ALL uid_x  ) 
+   DISTINCT  SUM  OF  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  SUM  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  CURRENT_DATE  ( uid_x  ) 
+   DISTINCT  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   DISTINCT  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   DISTINCT  CURRENT_DATE  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  CURRENT_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  CURRENT_DATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  CURRENT_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  CURRENT_DATE  (  ) 
+   DISTINCT  CURRENT_DATE  (  )  AS uid_x 
+   DISTINCT  CURRENT_TIME  ( uid_x  ) 
+   DISTINCT  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   DISTINCT  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   DISTINCT  CURRENT_TIME  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  CURRENT_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  CURRENT_TIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  CURRENT_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  CURRENT_TIME  (  ) 
+   DISTINCT  CURRENT_TIME  (  )  AS uid_x 
+   DISTINCT  CURRENT_TIMESTAMP  ( uid_x  ) 
+   DISTINCT  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  CURRENT_TIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  CURRENT_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  CURRENT_TIMESTAMP  (  ) 
+   DISTINCT  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   DISTINCT  LOCALTIME  ( uid_x  ) 
+   DISTINCT  LOCALTIME  ( uid_x  )  AS uid_x 
+   DISTINCT  LOCALTIME  ( uid_x  , uid_x  ) 
+   DISTINCT  LOCALTIME  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  LOCALTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  LOCALTIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  LOCALTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  LOCALTIME  (  ) 
+   DISTINCT  LOCALTIME  (  )  AS uid_x 
+   DISTINCT  REPLACE  ( uid_x  ) 
+   DISTINCT  REPLACE  ( uid_x  )  AS uid_x 
+   DISTINCT  REPLACE  ( uid_x  , uid_x  ) 
+   DISTINCT  REPLACE  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  REPLACE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  REPLACE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  REPLACE  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  REPLACE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  REPLACE  (  ) 
+   DISTINCT  REPLACE  (  )  AS uid_x 
+   DISTINCT  CURDATE  ( uid_x  ) 
+   DISTINCT  CURDATE  ( uid_x  )  AS uid_x 
+   DISTINCT  CURDATE  ( uid_x  , uid_x  ) 
+   DISTINCT  CURDATE  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  CURDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  CURDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  CURDATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  CURDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  CURDATE  (  ) 
+   DISTINCT  CURDATE  (  )  AS uid_x 
+   DISTINCT  CURTIME  ( uid_x  ) 
+   DISTINCT  CURTIME  ( uid_x  )  AS uid_x 
+   DISTINCT  CURTIME  ( uid_x  , uid_x  ) 
+   DISTINCT  CURTIME  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  CURTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  CURTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  CURTIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  CURTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  CURTIME  (  ) 
+   DISTINCT  CURTIME  (  )  AS uid_x 
+   DISTINCT  DATE_ADD  ( uid_x  ) 
+   DISTINCT  DATE_ADD  ( uid_x  )  AS uid_x 
+   DISTINCT  DATE_ADD  ( uid_x  , uid_x  ) 
+   DISTINCT  DATE_ADD  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  DATE_ADD  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DATE_ADD  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  DATE_ADD  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DATE_ADD  (  ) 
+   DISTINCT  DATE_ADD  (  )  AS uid_x 
+   DISTINCT  DATE_SUB  ( uid_x  ) 
+   DISTINCT  DATE_SUB  ( uid_x  )  AS uid_x 
+   DISTINCT  DATE_SUB  ( uid_x  , uid_x  ) 
+   DISTINCT  DATE_SUB  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  DATE_SUB  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   DISTINCT  DATE_SUB  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  DATE_SUB  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  DATE_SUB  (  ) 
+   DISTINCT  DATE_SUB  (  )  AS uid_x 
+   DISTINCT  LOCALTIMESTAMP  ( uid_x  ) 
+   DISTINCT  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  LOCALTIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  LOCALTIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  LOCALTIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  LOCALTIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  LOCALTIMESTAMP  (  ) 
+   DISTINCT  LOCALTIMESTAMP  (  )  AS uid_x 
+   DISTINCT  NOW  ( uid_x  ) 
+   DISTINCT  NOW  ( uid_x  )  AS uid_x 
+   DISTINCT  NOW  ( uid_x  , uid_x  ) 
+   DISTINCT  NOW  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  NOW  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  NOW  ( uid_x  DOT uid_x  ) 
+   DISTINCT  NOW  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  NOW  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  NOW  (  ) 
+   DISTINCT  NOW  (  )  AS uid_x 
+   DISTINCT  SUBSTR  ( uid_x  ) 
+   DISTINCT  SUBSTR  ( uid_x  )  AS uid_x 
+   DISTINCT  SUBSTR  ( uid_x  , uid_x  ) 
+   DISTINCT  SUBSTR  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  SUBSTR  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  SUBSTR  ( uid_x  DOT uid_x  ) 
+   DISTINCT  SUBSTR  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  SUBSTR  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  SUBSTR  (  ) 
+   DISTINCT  SUBSTR  (  )  AS uid_x 
+   DISTINCT  SUBSTRING  ( uid_x  ) 
+   DISTINCT  SUBSTRING  ( uid_x  )  AS uid_x 
+   DISTINCT  SUBSTRING  ( uid_x  , uid_x  ) 
+   DISTINCT  SUBSTRING  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  SUBSTRING  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   DISTINCT  SUBSTRING  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  SUBSTRING  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  SUBSTRING  (  ) 
+   DISTINCT  SUBSTRING  (  )  AS uid_x 
+   DISTINCT  SYSDATE  ( uid_x  ) 
+   DISTINCT  SYSDATE  ( uid_x  )  AS uid_x 
+   DISTINCT  SYSDATE  ( uid_x  , uid_x  ) 
+   DISTINCT  SYSDATE  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  SYSDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  SYSDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  SYSDATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  SYSDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  SYSDATE  (  ) 
+   DISTINCT  SYSDATE  (  )  AS uid_x 
+   DISTINCT  TRIM  ( uid_x  ) 
+   DISTINCT  TRIM  ( uid_x  )  AS uid_x 
+   DISTINCT  TRIM  ( uid_x  , uid_x  ) 
+   DISTINCT  TRIM  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  TRIM  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  TRIM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  TRIM  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  TRIM  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  TRIM  (  ) 
+   DISTINCT  TRIM  (  )  AS uid_x 
+   DISTINCT  UTC_DATE  ( uid_x  ) 
+   DISTINCT  UTC_DATE  ( uid_x  )  AS uid_x 
+   DISTINCT  UTC_DATE  ( uid_x  , uid_x  ) 
+   DISTINCT  UTC_DATE  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  UTC_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  UTC_DATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  UTC_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  UTC_DATE  (  ) 
+   DISTINCT  UTC_DATE  (  )  AS uid_x 
+   DISTINCT  IF  ( uid_x  ) 
+   DISTINCT  IF  ( uid_x  )  AS uid_x 
+   DISTINCT  IF  ( uid_x  , uid_x  ) 
+   DISTINCT  IF  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  IF  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  IF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  IF  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  IF  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  IF  (  ) 
+   DISTINCT  IF  (  )  AS uid_x 
+   DISTINCT  UTC_TIME  ( uid_x  ) 
+   DISTINCT  UTC_TIME  ( uid_x  )  AS uid_x 
+   DISTINCT  UTC_TIME  ( uid_x  , uid_x  ) 
+   DISTINCT  UTC_TIME  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  UTC_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  UTC_TIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  UTC_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  UTC_TIME  (  ) 
+   DISTINCT  UTC_TIME  (  )  AS uid_x 
+   DISTINCT  THE  COUNT  ( uid_x  ) 
+   DISTINCT  THE  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCT  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  THE  COUNT  (  *  ) 
+   DISTINCT  THE  COUNT  (  *  )  AS uid_x 
+   DISTINCT  THE  COUNT  (  ALL uid_x  ) 
+   DISTINCT  THE  COUNT  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  THE  COUNT  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  THE  COUNT  OF  ( uid_x  ) 
+   DISTINCT  THE  COUNT  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  THE  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  THE  COUNT  OF  (  *  ) 
+   DISTINCT  THE  COUNT  OF  (  *  )  AS uid_x 
+   DISTINCT  THE  COUNT  OF  (  ALL uid_x  ) 
+   DISTINCT  THE  COUNT  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  THE  SUM  ( uid_x  ) 
+   DISTINCT  THE  SUM  ( uid_x  )  AS uid_x 
+   DISTINCT  THE  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  THE  SUM  (  ALL uid_x  ) 
+   DISTINCT  THE  SUM  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  THE  SUM  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  THE  SUM  OF  ( uid_x  ) 
+   DISTINCT  THE  SUM  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  THE  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  THE  SUM  OF  (  ALL uid_x  ) 
+   DISTINCT  THE  SUM  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  THE  MAX  ( uid_x  ) 
+   DISTINCT  THE  MAX  ( uid_x  )  AS uid_x 
+   DISTINCT  THE  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCT  THE  MAX  (  ALL uid_x  ) 
+   DISTINCT  THE  MAX  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  THE  MAX  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  THE  MAX  OF  ( uid_x  ) 
+   DISTINCT  THE  MAX  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  THE  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  THE  MAX  OF  (  ALL uid_x  ) 
+   DISTINCT  THE  MAX  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  THE  MIN  ( uid_x  ) 
+   DISTINCT  THE  MIN  ( uid_x  )  AS uid_x 
+   DISTINCT  THE  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCT  THE  MIN  (  ALL uid_x  ) 
+   DISTINCT  THE  MIN  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  THE  MIN  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  THE  MIN  OF  ( uid_x  ) 
+   DISTINCT  THE  MIN  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  THE  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  THE  MIN  OF  (  ALL uid_x  ) 
+   DISTINCT  THE  MIN  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  THE  AVG  ( uid_x  ) 
+   DISTINCT  THE  AVG  ( uid_x  )  AS uid_x 
+   DISTINCT  THE  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCT  THE  AVG  (  ALL uid_x  ) 
+   DISTINCT  THE  AVG  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  THE  AVG  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  THE  AVG  OF  ( uid_x  ) 
+   DISTINCT  THE  AVG  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  THE  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  THE  AVG  OF  (  ALL uid_x  ) 
+   DISTINCT  THE  AVG  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  UTC_TIMESTAMP  ( uid_x  ) 
+   DISTINCT  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  UTC_TIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  UTC_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  UTC_TIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  UTC_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  UTC_TIMESTAMP  (  ) 
+   DISTINCT  UTC_TIMESTAMP  (  )  AS uid_x 
+   DISTINCT  ALL uid_x 
+   DISTINCT  ALL uid_x  AS uid_x 
+   DISTINCT  ALL uid_x  DOT uid_x 
+   DISTINCT  ALL uid_x  DOT uid_x  AS uid_x 
+   DISTINCT  ALL uid_x  DOT  * 
+   DISTINCT  ALL  COUNT  ( uid_x  ) 
+   DISTINCT  ALL  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  COUNT  (  *  ) 
+   DISTINCT  ALL  COUNT  (  *  )  AS uid_x 
+   DISTINCT  ALL  COUNT  OF  ( uid_x  ) 
+   DISTINCT  ALL  COUNT  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  COUNT  OF  (  *  ) 
+   DISTINCT  ALL  COUNT  OF  (  *  )  AS uid_x 
+   DISTINCT  ALL  MAX  ( uid_x  ) 
+   DISTINCT  ALL  MAX  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  MAX  OF  ( uid_x  ) 
+   DISTINCT  ALL  MAX  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  MID  ( uid_x  ) 
+   DISTINCT  ALL  MID  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  MID  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  MID  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  MID  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  MID  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  MID  (  ) 
+   DISTINCT  ALL  MID  (  )  AS uid_x 
+   DISTINCT  ALL  MIN  ( uid_x  ) 
+   DISTINCT  ALL  MIN  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  MIN  OF  ( uid_x  ) 
+   DISTINCT  ALL  MIN  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW uid_x 
+   DISTINCT  ALL  DISTINCTROW uid_x  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW uid_x  DOT uid_x 
+   DISTINCT  ALL  DISTINCTROW uid_x  DOT uid_x  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW uid_x  DOT  * 
+   DISTINCT  ALL  DISTINCTROW  COUNT  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  COUNT  (  *  ) 
+   DISTINCT  ALL  DISTINCTROW  COUNT  (  *  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  COUNT  OF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  COUNT  OF  (  *  ) 
+   DISTINCT  ALL  DISTINCTROW  MAX  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  MAX  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  MAX  OF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  MID  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  MID  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  MID  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  MID  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  MID  (  ) 
+   DISTINCT  ALL  DISTINCTROW  MID  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  MIN  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  MIN  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  MIN  OF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  * 
+   DISTINCT  ALL  DISTINCTROW  SUM  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SUM  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SUM  OF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_DATE  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_DATE  (  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_DATE  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIME  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIME  (  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIME  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIMESTAMP  (  ) 
+   DISTINCT  ALL  DISTINCTROW  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIME  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIME  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIME  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIME  (  ) 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIME  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  REPLACE  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  REPLACE  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  REPLACE  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  REPLACE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  REPLACE  (  ) 
+   DISTINCT  ALL  DISTINCTROW  REPLACE  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  CURDATE  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURDATE  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  CURDATE  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURDATE  (  ) 
+   DISTINCT  ALL  DISTINCTROW  CURDATE  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  CURTIME  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURTIME  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  CURTIME  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  CURTIME  (  ) 
+   DISTINCT  ALL  DISTINCTROW  CURTIME  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  DATE_ADD  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  DATE_ADD  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  DATE_ADD  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  DATE_ADD  (  ) 
+   DISTINCT  ALL  DISTINCTROW  DATE_ADD  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  DATE_SUB  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  DATE_SUB  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  DATE_SUB  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  DATE_SUB  (  ) 
+   DISTINCT  ALL  DISTINCTROW  DATE_SUB  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIMESTAMP  (  ) 
+   DISTINCT  ALL  DISTINCTROW  LOCALTIMESTAMP  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  NOW  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  NOW  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  NOW  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  NOW  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  NOW  (  ) 
+   DISTINCT  ALL  DISTINCTROW  NOW  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  SUBSTR  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SUBSTR  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  SUBSTR  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SUBSTR  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SUBSTR  (  ) 
+   DISTINCT  ALL  DISTINCTROW  SUBSTR  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  SUBSTRING  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SUBSTRING  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  SUBSTRING  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SUBSTRING  (  ) 
+   DISTINCT  ALL  DISTINCTROW  SUBSTRING  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  SYSDATE  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SYSDATE  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  SYSDATE  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SYSDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  SYSDATE  (  ) 
+   DISTINCT  ALL  DISTINCTROW  SYSDATE  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  TRIM  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  TRIM  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  TRIM  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  TRIM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  TRIM  (  ) 
+   DISTINCT  ALL  DISTINCTROW  TRIM  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  UTC_DATE  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_DATE  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  UTC_DATE  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_DATE  (  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_DATE  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  IF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  IF  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  IF  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  IF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  IF  (  ) 
+   DISTINCT  ALL  DISTINCTROW  IF  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIME  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIME  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIME  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIME  (  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIME  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  THE  COUNT  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  COUNT  (  *  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  COUNT  OF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  COUNT  OF  (  *  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  SUM  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  SUM  OF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  MAX  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  MAX  OF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  MIN  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  MIN  OF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  AVG  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  THE  AVG  OF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIMESTAMP  (  ) 
+   DISTINCT  ALL  DISTINCTROW  UTC_TIMESTAMP  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  INSERT  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  INSERT  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  INSERT  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  INSERT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  INSERT  (  ) 
+   DISTINCT  ALL  DISTINCTROW  INSERT  (  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  AVG  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  AVG  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DISTINCTROW  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  AVG  OF  ( uid_x  ) 
+   DISTINCT  ALL  DISTINCTROW  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  * 
+   DISTINCT  ALL  SUM  ( uid_x  ) 
+   DISTINCT  ALL  SUM  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  SUM  OF  ( uid_x  ) 
+   DISTINCT  ALL  SUM  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURRENT_DATE  ( uid_x  ) 
+   DISTINCT  ALL  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  CURRENT_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURRENT_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  CURRENT_DATE  (  ) 
+   DISTINCT  ALL  CURRENT_DATE  (  )  AS uid_x 
+   DISTINCT  ALL  CURRENT_TIME  ( uid_x  ) 
+   DISTINCT  ALL  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  CURRENT_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURRENT_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  CURRENT_TIME  (  ) 
+   DISTINCT  ALL  CURRENT_TIME  (  )  AS uid_x 
+   DISTINCT  ALL  CURRENT_TIMESTAMP  ( uid_x  ) 
+   DISTINCT  ALL  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  CURRENT_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  CURRENT_TIMESTAMP  (  ) 
+   DISTINCT  ALL  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   DISTINCT  ALL  LOCALTIME  ( uid_x  ) 
+   DISTINCT  ALL  LOCALTIME  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  LOCALTIME  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  LOCALTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  LOCALTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  LOCALTIME  (  ) 
+   DISTINCT  ALL  LOCALTIME  (  )  AS uid_x 
+   DISTINCT  ALL  REPLACE  ( uid_x  ) 
+   DISTINCT  ALL  REPLACE  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  REPLACE  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  REPLACE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  REPLACE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  REPLACE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  REPLACE  (  ) 
+   DISTINCT  ALL  REPLACE  (  )  AS uid_x 
+   DISTINCT  ALL  CURDATE  ( uid_x  ) 
+   DISTINCT  ALL  CURDATE  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  CURDATE  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  CURDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  CURDATE  (  ) 
+   DISTINCT  ALL  CURDATE  (  )  AS uid_x 
+   DISTINCT  ALL  CURTIME  ( uid_x  ) 
+   DISTINCT  ALL  CURTIME  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  CURTIME  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  CURTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  CURTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  CURTIME  (  ) 
+   DISTINCT  ALL  CURTIME  (  )  AS uid_x 
+   DISTINCT  ALL  DATE_ADD  ( uid_x  ) 
+   DISTINCT  ALL  DATE_ADD  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DATE_ADD  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DATE_ADD  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DATE_ADD  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  DATE_ADD  (  ) 
+   DISTINCT  ALL  DATE_ADD  (  )  AS uid_x 
+   DISTINCT  ALL  DATE_SUB  ( uid_x  ) 
+   DISTINCT  ALL  DATE_SUB  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  DATE_SUB  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  DATE_SUB  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  DATE_SUB  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  DATE_SUB  (  ) 
+   DISTINCT  ALL  DATE_SUB  (  )  AS uid_x 
+   DISTINCT  ALL  LOCALTIMESTAMP  ( uid_x  ) 
+   DISTINCT  ALL  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  LOCALTIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  LOCALTIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  LOCALTIMESTAMP  (  ) 
+   DISTINCT  ALL  LOCALTIMESTAMP  (  )  AS uid_x 
+   DISTINCT  ALL  NOW  ( uid_x  ) 
+   DISTINCT  ALL  NOW  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  NOW  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  NOW  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  NOW  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  NOW  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  NOW  (  ) 
+   DISTINCT  ALL  NOW  (  )  AS uid_x 
+   DISTINCT  ALL  SUBSTR  ( uid_x  ) 
+   DISTINCT  ALL  SUBSTR  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  SUBSTR  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  SUBSTR  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  SUBSTR  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  SUBSTR  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  SUBSTR  (  ) 
+   DISTINCT  ALL  SUBSTR  (  )  AS uid_x 
+   DISTINCT  ALL  SUBSTRING  ( uid_x  ) 
+   DISTINCT  ALL  SUBSTRING  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  SUBSTRING  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  SUBSTRING  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  SUBSTRING  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  SUBSTRING  (  ) 
+   DISTINCT  ALL  SUBSTRING  (  )  AS uid_x 
+   DISTINCT  ALL  SYSDATE  ( uid_x  ) 
+   DISTINCT  ALL  SYSDATE  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  SYSDATE  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  SYSDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  SYSDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  SYSDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  SYSDATE  (  ) 
+   DISTINCT  ALL  SYSDATE  (  )  AS uid_x 
+   DISTINCT  ALL  TRIM  ( uid_x  ) 
+   DISTINCT  ALL  TRIM  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  TRIM  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  TRIM  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  TRIM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  TRIM  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  TRIM  (  ) 
+   DISTINCT  ALL  TRIM  (  )  AS uid_x 
+   DISTINCT  ALL  UTC_DATE  ( uid_x  ) 
+   DISTINCT  ALL  UTC_DATE  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  UTC_DATE  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  UTC_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  UTC_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  UTC_DATE  (  ) 
+   DISTINCT  ALL  UTC_DATE  (  )  AS uid_x 
+   DISTINCT  ALL  IF  ( uid_x  ) 
+   DISTINCT  ALL  IF  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  IF  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  IF  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  IF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  IF  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  IF  (  ) 
+   DISTINCT  ALL  IF  (  )  AS uid_x 
+   DISTINCT  ALL  UTC_TIME  ( uid_x  ) 
+   DISTINCT  ALL  UTC_TIME  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  UTC_TIME  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  UTC_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  UTC_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  UTC_TIME  (  ) 
+   DISTINCT  ALL  UTC_TIME  (  )  AS uid_x 
+   DISTINCT  ALL  THE  COUNT  ( uid_x  ) 
+   DISTINCT  ALL  THE  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  THE  COUNT  (  *  ) 
+   DISTINCT  ALL  THE  COUNT  (  *  )  AS uid_x 
+   DISTINCT  ALL  THE  COUNT  OF  ( uid_x  ) 
+   DISTINCT  ALL  THE  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  THE  COUNT  OF  (  *  ) 
+   DISTINCT  ALL  THE  SUM  ( uid_x  ) 
+   DISTINCT  ALL  THE  SUM  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  THE  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  THE  SUM  OF  ( uid_x  ) 
+   DISTINCT  ALL  THE  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  THE  MAX  ( uid_x  ) 
+   DISTINCT  ALL  THE  MAX  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  THE  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  THE  MAX  OF  ( uid_x  ) 
+   DISTINCT  ALL  THE  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  THE  MIN  ( uid_x  ) 
+   DISTINCT  ALL  THE  MIN  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  THE  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  THE  MIN  OF  ( uid_x  ) 
+   DISTINCT  ALL  THE  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  THE  AVG  ( uid_x  ) 
+   DISTINCT  ALL  THE  AVG  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  THE  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  THE  AVG  OF  ( uid_x  ) 
+   DISTINCT  ALL  THE  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  UTC_TIMESTAMP  ( uid_x  ) 
+   DISTINCT  ALL  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  UTC_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  UTC_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  UTC_TIMESTAMP  (  ) 
+   DISTINCT  ALL  UTC_TIMESTAMP  (  )  AS uid_x 
+   DISTINCT  ALL  INSERT  ( uid_x  ) 
+   DISTINCT  ALL  INSERT  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  INSERT  ( uid_x  , uid_x  ) 
+   DISTINCT  ALL  INSERT  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  INSERT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  INSERT  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  ALL  INSERT  (  ) 
+   DISTINCT  ALL  INSERT  (  )  AS uid_x 
+   DISTINCT  ALL  AVG  ( uid_x  ) 
+   DISTINCT  ALL  AVG  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCT  ALL  AVG  OF  ( uid_x  ) 
+   DISTINCT  ALL  AVG  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  ALL  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  INSERT  ( uid_x  ) 
+   DISTINCT  INSERT  ( uid_x  )  AS uid_x 
+   DISTINCT  INSERT  ( uid_x  , uid_x  ) 
+   DISTINCT  INSERT  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCT  INSERT  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCT  INSERT  ( uid_x  DOT uid_x  ) 
+   DISTINCT  INSERT  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  INSERT  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCT  INSERT  (  ) 
+   DISTINCT  INSERT  (  )  AS uid_x 
+   DISTINCT  AVG  ( uid_x  ) 
+   DISTINCT  AVG  ( uid_x  )  AS uid_x 
+   DISTINCT  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCT  AVG  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCT  AVG  (  ALL uid_x  ) 
+   DISTINCT  AVG  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  AVG  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCT  AVG  OF  ( uid_x  ) 
+   DISTINCT  AVG  OF  ( uid_x  )  AS uid_x 
+   DISTINCT  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCT  AVG  OF  (  ALL uid_x  ) 
+   DISTINCT  AVG  OF  (  ALL uid_x  )  AS uid_x 
+   DISTINCT  AVG  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW uid_x 
+   DISTINCTROW uid_x  AS uid_x 
+   DISTINCTROW uid_x  DOT uid_x 
+   DISTINCTROW uid_x  DOT uid_x  AS uid_x 
+   DISTINCTROW uid_x  DOT  * 
+   DISTINCTROW  COUNT  ( uid_x  ) 
+   DISTINCTROW  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCTROW  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  COUNT  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  COUNT  (  *  ) 
+   DISTINCTROW  COUNT  (  *  )  AS uid_x 
+   DISTINCTROW  COUNT  (  ALL uid_x  ) 
+   DISTINCTROW  COUNT  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  COUNT  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  COUNT  OF  ( uid_x  ) 
+   DISTINCTROW  COUNT  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  COUNT  OF  (  *  ) 
+   DISTINCTROW  COUNT  OF  (  *  )  AS uid_x 
+   DISTINCTROW  COUNT  OF  (  ALL uid_x  ) 
+   DISTINCTROW  COUNT  OF  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  COUNT  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  MAX  ( uid_x  ) 
+   DISTINCTROW  MAX  ( uid_x  )  AS uid_x 
+   DISTINCTROW  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  MAX  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  MAX  (  ALL uid_x  ) 
+   DISTINCTROW  MAX  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  MAX  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  MAX  OF  ( uid_x  ) 
+   DISTINCTROW  MAX  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  MAX  OF  (  ALL uid_x  ) 
+   DISTINCTROW  MAX  OF  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  MAX  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  MID  ( uid_x  ) 
+   DISTINCTROW  MID  ( uid_x  )  AS uid_x 
+   DISTINCTROW  MID  ( uid_x  , uid_x  ) 
+   DISTINCTROW  MID  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  MID  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  MID  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  MID  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  MID  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  MID  (  ) 
+   DISTINCTROW  MID  (  )  AS uid_x 
+   DISTINCTROW  MIN  ( uid_x  ) 
+   DISTINCTROW  MIN  ( uid_x  )  AS uid_x 
+   DISTINCTROW  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  MIN  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  MIN  (  ALL uid_x  ) 
+   DISTINCTROW  MIN  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  MIN  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  MIN  OF  ( uid_x  ) 
+   DISTINCTROW  MIN  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  MIN  OF  (  ALL uid_x  ) 
+   DISTINCTROW  MIN  OF  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  MIN  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  * 
+   DISTINCTROW  SUM  ( uid_x  ) 
+   DISTINCTROW  SUM  ( uid_x  )  AS uid_x 
+   DISTINCTROW  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  SUM  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  SUM  (  ALL uid_x  ) 
+   DISTINCTROW  SUM  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  SUM  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  SUM  OF  ( uid_x  ) 
+   DISTINCTROW  SUM  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  SUM  OF  (  ALL uid_x  ) 
+   DISTINCTROW  SUM  OF  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  SUM  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURRENT_DATE  ( uid_x  ) 
+   DISTINCTROW  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   DISTINCTROW  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   DISTINCTROW  CURRENT_DATE  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  CURRENT_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURRENT_DATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  CURRENT_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  CURRENT_DATE  (  ) 
+   DISTINCTROW  CURRENT_DATE  (  )  AS uid_x 
+   DISTINCTROW  CURRENT_TIME  ( uid_x  ) 
+   DISTINCTROW  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   DISTINCTROW  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   DISTINCTROW  CURRENT_TIME  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  CURRENT_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURRENT_TIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  CURRENT_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  CURRENT_TIME  (  ) 
+   DISTINCTROW  CURRENT_TIME  (  )  AS uid_x 
+   DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  ) 
+   DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  CURRENT_TIMESTAMP  (  ) 
+   DISTINCTROW  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   DISTINCTROW  LOCALTIME  ( uid_x  ) 
+   DISTINCTROW  LOCALTIME  ( uid_x  )  AS uid_x 
+   DISTINCTROW  LOCALTIME  ( uid_x  , uid_x  ) 
+   DISTINCTROW  LOCALTIME  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  LOCALTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  LOCALTIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  LOCALTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  LOCALTIME  (  ) 
+   DISTINCTROW  LOCALTIME  (  )  AS uid_x 
+   DISTINCTROW  REPLACE  ( uid_x  ) 
+   DISTINCTROW  REPLACE  ( uid_x  )  AS uid_x 
+   DISTINCTROW  REPLACE  ( uid_x  , uid_x  ) 
+   DISTINCTROW  REPLACE  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  REPLACE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  REPLACE  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  REPLACE  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  REPLACE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  REPLACE  (  ) 
+   DISTINCTROW  REPLACE  (  )  AS uid_x 
+   DISTINCTROW  CURDATE  ( uid_x  ) 
+   DISTINCTROW  CURDATE  ( uid_x  )  AS uid_x 
+   DISTINCTROW  CURDATE  ( uid_x  , uid_x  ) 
+   DISTINCTROW  CURDATE  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  CURDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURDATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  CURDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  CURDATE  (  ) 
+   DISTINCTROW  CURDATE  (  )  AS uid_x 
+   DISTINCTROW  CURTIME  ( uid_x  ) 
+   DISTINCTROW  CURTIME  ( uid_x  )  AS uid_x 
+   DISTINCTROW  CURTIME  ( uid_x  , uid_x  ) 
+   DISTINCTROW  CURTIME  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  CURTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  CURTIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  CURTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  CURTIME  (  ) 
+   DISTINCTROW  CURTIME  (  )  AS uid_x 
+   DISTINCTROW  DATE_ADD  ( uid_x  ) 
+   DISTINCTROW  DATE_ADD  ( uid_x  )  AS uid_x 
+   DISTINCTROW  DATE_ADD  ( uid_x  , uid_x  ) 
+   DISTINCTROW  DATE_ADD  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  DATE_ADD  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  DATE_ADD  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  DATE_ADD  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  DATE_ADD  (  ) 
+   DISTINCTROW  DATE_ADD  (  )  AS uid_x 
+   DISTINCTROW  DATE_SUB  ( uid_x  ) 
+   DISTINCTROW  DATE_SUB  ( uid_x  )  AS uid_x 
+   DISTINCTROW  DATE_SUB  ( uid_x  , uid_x  ) 
+   DISTINCTROW  DATE_SUB  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  DATE_SUB  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  DATE_SUB  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  DATE_SUB  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  DATE_SUB  (  ) 
+   DISTINCTROW  DATE_SUB  (  )  AS uid_x 
+   DISTINCTROW  LOCALTIMESTAMP  ( uid_x  ) 
+   DISTINCTROW  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCTROW  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCTROW  LOCALTIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  LOCALTIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  LOCALTIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  LOCALTIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  LOCALTIMESTAMP  (  ) 
+   DISTINCTROW  LOCALTIMESTAMP  (  )  AS uid_x 
+   DISTINCTROW  NOW  ( uid_x  ) 
+   DISTINCTROW  NOW  ( uid_x  )  AS uid_x 
+   DISTINCTROW  NOW  ( uid_x  , uid_x  ) 
+   DISTINCTROW  NOW  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  NOW  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  NOW  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  NOW  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  NOW  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  NOW  (  ) 
+   DISTINCTROW  NOW  (  )  AS uid_x 
+   DISTINCTROW  SUBSTR  ( uid_x  ) 
+   DISTINCTROW  SUBSTR  ( uid_x  )  AS uid_x 
+   DISTINCTROW  SUBSTR  ( uid_x  , uid_x  ) 
+   DISTINCTROW  SUBSTR  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  SUBSTR  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  SUBSTR  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  SUBSTR  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  SUBSTR  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  SUBSTR  (  ) 
+   DISTINCTROW  SUBSTR  (  )  AS uid_x 
+   DISTINCTROW  SUBSTRING  ( uid_x  ) 
+   DISTINCTROW  SUBSTRING  ( uid_x  )  AS uid_x 
+   DISTINCTROW  SUBSTRING  ( uid_x  , uid_x  ) 
+   DISTINCTROW  SUBSTRING  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  SUBSTRING  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  SUBSTRING  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  SUBSTRING  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  SUBSTRING  (  ) 
+   DISTINCTROW  SUBSTRING  (  )  AS uid_x 
+   DISTINCTROW  SYSDATE  ( uid_x  ) 
+   DISTINCTROW  SYSDATE  ( uid_x  )  AS uid_x 
+   DISTINCTROW  SYSDATE  ( uid_x  , uid_x  ) 
+   DISTINCTROW  SYSDATE  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  SYSDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  SYSDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  SYSDATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  SYSDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  SYSDATE  (  ) 
+   DISTINCTROW  SYSDATE  (  )  AS uid_x 
+   DISTINCTROW  TRIM  ( uid_x  ) 
+   DISTINCTROW  TRIM  ( uid_x  )  AS uid_x 
+   DISTINCTROW  TRIM  ( uid_x  , uid_x  ) 
+   DISTINCTROW  TRIM  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  TRIM  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  TRIM  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  TRIM  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  TRIM  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  TRIM  (  ) 
+   DISTINCTROW  TRIM  (  )  AS uid_x 
+   DISTINCTROW  UTC_DATE  ( uid_x  ) 
+   DISTINCTROW  UTC_DATE  ( uid_x  )  AS uid_x 
+   DISTINCTROW  UTC_DATE  ( uid_x  , uid_x  ) 
+   DISTINCTROW  UTC_DATE  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  UTC_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  UTC_DATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  UTC_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  UTC_DATE  (  ) 
+   DISTINCTROW  UTC_DATE  (  )  AS uid_x 
+   DISTINCTROW  IF  ( uid_x  ) 
+   DISTINCTROW  IF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  IF  ( uid_x  , uid_x  ) 
+   DISTINCTROW  IF  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  IF  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  IF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  IF  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  IF  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  IF  (  ) 
+   DISTINCTROW  IF  (  )  AS uid_x 
+   DISTINCTROW  UTC_TIME  ( uid_x  ) 
+   DISTINCTROW  UTC_TIME  ( uid_x  )  AS uid_x 
+   DISTINCTROW  UTC_TIME  ( uid_x  , uid_x  ) 
+   DISTINCTROW  UTC_TIME  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  UTC_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  UTC_TIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  UTC_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  UTC_TIME  (  ) 
+   DISTINCTROW  UTC_TIME  (  )  AS uid_x 
+   DISTINCTROW  THE  COUNT  ( uid_x  ) 
+   DISTINCTROW  THE  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCTROW  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  COUNT  (  *  ) 
+   DISTINCTROW  THE  COUNT  (  *  )  AS uid_x 
+   DISTINCTROW  THE  COUNT  (  ALL uid_x  ) 
+   DISTINCTROW  THE  COUNT  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  THE  COUNT  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  COUNT  OF  ( uid_x  ) 
+   DISTINCTROW  THE  COUNT  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  THE  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  COUNT  OF  (  *  ) 
+   DISTINCTROW  THE  COUNT  OF  (  *  )  AS uid_x 
+   DISTINCTROW  THE  COUNT  OF  (  ALL uid_x  ) 
+   DISTINCTROW  THE  COUNT  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  SUM  ( uid_x  ) 
+   DISTINCTROW  THE  SUM  ( uid_x  )  AS uid_x 
+   DISTINCTROW  THE  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  SUM  (  ALL uid_x  ) 
+   DISTINCTROW  THE  SUM  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  THE  SUM  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  SUM  OF  ( uid_x  ) 
+   DISTINCTROW  THE  SUM  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  THE  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  SUM  OF  (  ALL uid_x  ) 
+   DISTINCTROW  THE  SUM  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  MAX  ( uid_x  ) 
+   DISTINCTROW  THE  MAX  ( uid_x  )  AS uid_x 
+   DISTINCTROW  THE  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  MAX  (  ALL uid_x  ) 
+   DISTINCTROW  THE  MAX  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  THE  MAX  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  MAX  OF  ( uid_x  ) 
+   DISTINCTROW  THE  MAX  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  THE  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  MAX  OF  (  ALL uid_x  ) 
+   DISTINCTROW  THE  MAX  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  MIN  ( uid_x  ) 
+   DISTINCTROW  THE  MIN  ( uid_x  )  AS uid_x 
+   DISTINCTROW  THE  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  MIN  (  ALL uid_x  ) 
+   DISTINCTROW  THE  MIN  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  THE  MIN  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  MIN  OF  ( uid_x  ) 
+   DISTINCTROW  THE  MIN  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  THE  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  MIN  OF  (  ALL uid_x  ) 
+   DISTINCTROW  THE  MIN  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  AVG  ( uid_x  ) 
+   DISTINCTROW  THE  AVG  ( uid_x  )  AS uid_x 
+   DISTINCTROW  THE  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  AVG  (  ALL uid_x  ) 
+   DISTINCTROW  THE  AVG  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  THE  AVG  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  AVG  OF  ( uid_x  ) 
+   DISTINCTROW  THE  AVG  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  THE  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  THE  AVG  OF  (  ALL uid_x  ) 
+   DISTINCTROW  THE  AVG  OF  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  UTC_TIMESTAMP  ( uid_x  ) 
+   DISTINCTROW  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCTROW  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCTROW  UTC_TIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  UTC_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  UTC_TIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  UTC_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  UTC_TIMESTAMP  (  ) 
+   DISTINCTROW  UTC_TIMESTAMP  (  )  AS uid_x 
+   DISTINCTROW  ALL uid_x 
+   DISTINCTROW  ALL uid_x  AS uid_x 
+   DISTINCTROW  ALL uid_x  DOT uid_x 
+   DISTINCTROW  ALL uid_x  DOT uid_x  AS uid_x 
+   DISTINCTROW  ALL uid_x  DOT  * 
+   DISTINCTROW  ALL  COUNT  ( uid_x  ) 
+   DISTINCTROW  ALL  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  COUNT  (  *  ) 
+   DISTINCTROW  ALL  COUNT  (  *  )  AS uid_x 
+   DISTINCTROW  ALL  COUNT  OF  ( uid_x  ) 
+   DISTINCTROW  ALL  COUNT  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  COUNT  OF  (  *  ) 
+   DISTINCTROW  ALL  COUNT  OF  (  *  )  AS uid_x 
+   DISTINCTROW  ALL  MAX  ( uid_x  ) 
+   DISTINCTROW  ALL  MAX  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  MAX  OF  ( uid_x  ) 
+   DISTINCTROW  ALL  MAX  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  MID  ( uid_x  ) 
+   DISTINCTROW  ALL  MID  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  MID  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  MID  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  MID  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  MID  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  MID  (  ) 
+   DISTINCTROW  ALL  MID  (  )  AS uid_x 
+   DISTINCTROW  ALL  MIN  ( uid_x  ) 
+   DISTINCTROW  ALL  MIN  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  MIN  OF  ( uid_x  ) 
+   DISTINCTROW  ALL  MIN  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  * 
+   DISTINCTROW  ALL  SUM  ( uid_x  ) 
+   DISTINCTROW  ALL  SUM  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  SUM  OF  ( uid_x  ) 
+   DISTINCTROW  ALL  SUM  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_DATE  ( uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_DATE  (  ) 
+   DISTINCTROW  ALL  CURRENT_DATE  (  )  AS uid_x 
+   DISTINCTROW  ALL  CURRENT_TIME  ( uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_TIME  (  ) 
+   DISTINCTROW  ALL  CURRENT_TIME  (  )  AS uid_x 
+   DISTINCTROW  ALL  CURRENT_TIMESTAMP  ( uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  CURRENT_TIMESTAMP  (  ) 
+   DISTINCTROW  ALL  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   DISTINCTROW  ALL  LOCALTIME  ( uid_x  ) 
+   DISTINCTROW  ALL  LOCALTIME  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  LOCALTIME  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  LOCALTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  LOCALTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  LOCALTIME  (  ) 
+   DISTINCTROW  ALL  LOCALTIME  (  )  AS uid_x 
+   DISTINCTROW  ALL  REPLACE  ( uid_x  ) 
+   DISTINCTROW  ALL  REPLACE  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  REPLACE  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  REPLACE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  REPLACE  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  REPLACE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  REPLACE  (  ) 
+   DISTINCTROW  ALL  REPLACE  (  )  AS uid_x 
+   DISTINCTROW  ALL  CURDATE  ( uid_x  ) 
+   DISTINCTROW  ALL  CURDATE  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  CURDATE  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  CURDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  CURDATE  (  ) 
+   DISTINCTROW  ALL  CURDATE  (  )  AS uid_x 
+   DISTINCTROW  ALL  CURTIME  ( uid_x  ) 
+   DISTINCTROW  ALL  CURTIME  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  CURTIME  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  CURTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURTIME  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  CURTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  CURTIME  (  ) 
+   DISTINCTROW  ALL  CURTIME  (  )  AS uid_x 
+   DISTINCTROW  ALL  DATE_ADD  ( uid_x  ) 
+   DISTINCTROW  ALL  DATE_ADD  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  DATE_ADD  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  DATE_ADD  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  DATE_ADD  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  DATE_ADD  (  ) 
+   DISTINCTROW  ALL  DATE_ADD  (  )  AS uid_x 
+   DISTINCTROW  ALL  DATE_SUB  ( uid_x  ) 
+   DISTINCTROW  ALL  DATE_SUB  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  DATE_SUB  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  DATE_SUB  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  DATE_SUB  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  DATE_SUB  (  ) 
+   DISTINCTROW  ALL  DATE_SUB  (  )  AS uid_x 
+   DISTINCTROW  ALL  LOCALTIMESTAMP  ( uid_x  ) 
+   DISTINCTROW  ALL  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  LOCALTIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  LOCALTIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  LOCALTIMESTAMP  (  ) 
+   DISTINCTROW  ALL  LOCALTIMESTAMP  (  )  AS uid_x 
+   DISTINCTROW  ALL  NOW  ( uid_x  ) 
+   DISTINCTROW  ALL  NOW  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  NOW  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  NOW  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  NOW  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  NOW  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  NOW  (  ) 
+   DISTINCTROW  ALL  NOW  (  )  AS uid_x 
+   DISTINCTROW  ALL  SUBSTR  ( uid_x  ) 
+   DISTINCTROW  ALL  SUBSTR  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  SUBSTR  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  SUBSTR  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  SUBSTR  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  SUBSTR  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  SUBSTR  (  ) 
+   DISTINCTROW  ALL  SUBSTR  (  )  AS uid_x 
+   DISTINCTROW  ALL  SUBSTRING  ( uid_x  ) 
+   DISTINCTROW  ALL  SUBSTRING  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  SUBSTRING  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  SUBSTRING  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  SUBSTRING  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  SUBSTRING  (  ) 
+   DISTINCTROW  ALL  SUBSTRING  (  )  AS uid_x 
+   DISTINCTROW  ALL  SYSDATE  ( uid_x  ) 
+   DISTINCTROW  ALL  SYSDATE  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  SYSDATE  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  SYSDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  SYSDATE  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  SYSDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  SYSDATE  (  ) 
+   DISTINCTROW  ALL  SYSDATE  (  )  AS uid_x 
+   DISTINCTROW  ALL  TRIM  ( uid_x  ) 
+   DISTINCTROW  ALL  TRIM  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  TRIM  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  TRIM  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  TRIM  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  TRIM  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  TRIM  (  ) 
+   DISTINCTROW  ALL  TRIM  (  )  AS uid_x 
+   DISTINCTROW  ALL  UTC_DATE  ( uid_x  ) 
+   DISTINCTROW  ALL  UTC_DATE  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  UTC_DATE  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  UTC_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  UTC_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  UTC_DATE  (  ) 
+   DISTINCTROW  ALL  UTC_DATE  (  )  AS uid_x 
+   DISTINCTROW  ALL  IF  ( uid_x  ) 
+   DISTINCTROW  ALL  IF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  IF  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  IF  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  IF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  IF  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  IF  (  ) 
+   DISTINCTROW  ALL  IF  (  )  AS uid_x 
+   DISTINCTROW  ALL  UTC_TIME  ( uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIME  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  UTC_TIME  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIME  (  ) 
+   DISTINCTROW  ALL  UTC_TIME  (  )  AS uid_x 
+   DISTINCTROW  ALL  THE  COUNT  ( uid_x  ) 
+   DISTINCTROW  ALL  THE  COUNT  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  THE  COUNT  (  *  ) 
+   DISTINCTROW  ALL  THE  COUNT  (  *  )  AS uid_x 
+   DISTINCTROW  ALL  THE  COUNT  OF  ( uid_x  ) 
+   DISTINCTROW  ALL  THE  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  THE  COUNT  OF  (  *  ) 
+   DISTINCTROW  ALL  THE  SUM  ( uid_x  ) 
+   DISTINCTROW  ALL  THE  SUM  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  THE  SUM  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  THE  SUM  OF  ( uid_x  ) 
+   DISTINCTROW  ALL  THE  SUM  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  THE  MAX  ( uid_x  ) 
+   DISTINCTROW  ALL  THE  MAX  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  THE  MAX  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  THE  MAX  OF  ( uid_x  ) 
+   DISTINCTROW  ALL  THE  MAX  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  THE  MIN  ( uid_x  ) 
+   DISTINCTROW  ALL  THE  MIN  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  THE  MIN  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  THE  MIN  OF  ( uid_x  ) 
+   DISTINCTROW  ALL  THE  MIN  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  THE  AVG  ( uid_x  ) 
+   DISTINCTROW  ALL  THE  AVG  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  THE  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  THE  AVG  OF  ( uid_x  ) 
+   DISTINCTROW  ALL  THE  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIMESTAMP  ( uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  UTC_TIMESTAMP  (  ) 
+   DISTINCTROW  ALL  UTC_TIMESTAMP  (  )  AS uid_x 
+   DISTINCTROW  ALL  INSERT  ( uid_x  ) 
+   DISTINCTROW  ALL  INSERT  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  INSERT  ( uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  INSERT  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  INSERT  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  INSERT  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  ALL  INSERT  (  ) 
+   DISTINCTROW  ALL  INSERT  (  )  AS uid_x 
+   DISTINCTROW  ALL  AVG  ( uid_x  ) 
+   DISTINCTROW  ALL  AVG  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  ALL  AVG  OF  ( uid_x  ) 
+   DISTINCTROW  ALL  AVG  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  ALL  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  INSERT  ( uid_x  ) 
+   DISTINCTROW  INSERT  ( uid_x  )  AS uid_x 
+   DISTINCTROW  INSERT  ( uid_x  , uid_x  ) 
+   DISTINCTROW  INSERT  ( uid_x  , uid_x  )  AS uid_x 
+   DISTINCTROW  INSERT  ( uid_x  , uid_x  DOT uid_x  ) 
+   DISTINCTROW  INSERT  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  INSERT  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  INSERT  ( uid_x  DOT uid_x  , uid_x  ) 
+   DISTINCTROW  INSERT  (  ) 
+   DISTINCTROW  INSERT  (  )  AS uid_x 
+   DISTINCTROW  AVG  ( uid_x  ) 
+   DISTINCTROW  AVG  ( uid_x  )  AS uid_x 
+   DISTINCTROW  AVG  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  AVG  ( uid_x  DOT uid_x  )  AS uid_x 
+   DISTINCTROW  AVG  (  ALL uid_x  ) 
+   DISTINCTROW  AVG  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  AVG  (  ALL uid_x  DOT uid_x  ) 
+   DISTINCTROW  AVG  OF  ( uid_x  ) 
+   DISTINCTROW  AVG  OF  ( uid_x  )  AS uid_x 
+   DISTINCTROW  AVG  OF  ( uid_x  DOT uid_x  ) 
+   DISTINCTROW  AVG  OF  (  ALL uid_x  ) 
+   DISTINCTROW  AVG  OF  (  ALL uid_x  )  AS uid_x 
+   DISTINCTROW  AVG  OF  (  ALL uid_x  DOT uid_x  ) 
+   * 
+   SUM  ( uid_x  ) 
+   SUM  ( uid_x  )  AS uid_x 
+   SUM  ( uid_x  DOT uid_x  ) 
+   SUM  ( uid_x  DOT uid_x  )  AS uid_x 
+   SUM  (  DISTINCT uid_x  ) 
+   SUM  (  DISTINCT uid_x  )  AS uid_x 
+   SUM  (  DISTINCT uid_x  DOT uid_x  ) 
+   SUM  (  DISTINCT uid_x  DOT uid_x  )  AS uid_x 
+   SUM  (  ALL uid_x  ) 
+   SUM  (  ALL uid_x  )  AS uid_x 
+   SUM  (  ALL uid_x  DOT uid_x  ) 
+   SUM  (  ALL uid_x  DOT uid_x  )  AS uid_x 
+   SUM  OF  ( uid_x  ) 
+   SUM  OF  ( uid_x  )  AS uid_x 
+   SUM  OF  ( uid_x  DOT uid_x  ) 
+   SUM  OF  ( uid_x  DOT uid_x  )  AS uid_x 
+   SUM  OF  (  DISTINCT uid_x  ) 
+   SUM  OF  (  DISTINCT uid_x  )  AS uid_x 
+   SUM  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   SUM  OF  (  ALL uid_x  ) 
+   SUM  OF  (  ALL uid_x  )  AS uid_x 
+   SUM  OF  (  ALL uid_x  DOT uid_x  ) 
+   CURRENT_DATE  ( uid_x  ) 
+   CURRENT_DATE  ( uid_x  )  AS uid_x 
+   CURRENT_DATE  ( uid_x  , uid_x  ) 
+   CURRENT_DATE  ( uid_x  , uid_x  )  AS uid_x 
+   CURRENT_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   CURRENT_DATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   CURRENT_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   CURRENT_DATE  (  ) 
+   CURRENT_DATE  (  )  AS uid_x 
+   CURRENT_TIME  ( uid_x  ) 
+   CURRENT_TIME  ( uid_x  )  AS uid_x 
+   CURRENT_TIME  ( uid_x  , uid_x  ) 
+   CURRENT_TIME  ( uid_x  , uid_x  )  AS uid_x 
+   CURRENT_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   CURRENT_TIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   CURRENT_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   CURRENT_TIME  (  ) 
+   CURRENT_TIME  (  )  AS uid_x 
+   CURRENT_TIMESTAMP  ( uid_x  ) 
+   CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   CURRENT_TIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   CURRENT_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   CURRENT_TIMESTAMP  (  ) 
+   CURRENT_TIMESTAMP  (  )  AS uid_x 
+   LOCALTIME  ( uid_x  ) 
+   LOCALTIME  ( uid_x  )  AS uid_x 
+   LOCALTIME  ( uid_x  , uid_x  ) 
+   LOCALTIME  ( uid_x  , uid_x  )  AS uid_x 
+   LOCALTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   LOCALTIME  ( uid_x  DOT uid_x  ) 
+   LOCALTIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   LOCALTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   LOCALTIME  (  ) 
+   LOCALTIME  (  )  AS uid_x 
+   REPLACE  ( uid_x  ) 
+   REPLACE  ( uid_x  )  AS uid_x 
+   REPLACE  ( uid_x  , uid_x  ) 
+   REPLACE  ( uid_x  , uid_x  )  AS uid_x 
+   REPLACE  ( uid_x  , uid_x  DOT uid_x  ) 
+   REPLACE  ( uid_x  DOT uid_x  ) 
+   REPLACE  ( uid_x  DOT uid_x  )  AS uid_x 
+   REPLACE  ( uid_x  DOT uid_x  , uid_x  ) 
+   REPLACE  (  ) 
+   REPLACE  (  )  AS uid_x 
+   CURDATE  ( uid_x  ) 
+   CURDATE  ( uid_x  )  AS uid_x 
+   CURDATE  ( uid_x  , uid_x  ) 
+   CURDATE  ( uid_x  , uid_x  )  AS uid_x 
+   CURDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   CURDATE  ( uid_x  DOT uid_x  ) 
+   CURDATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   CURDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   CURDATE  (  ) 
+   CURDATE  (  )  AS uid_x 
+   CURTIME  ( uid_x  ) 
+   CURTIME  ( uid_x  )  AS uid_x 
+   CURTIME  ( uid_x  , uid_x  ) 
+   CURTIME  ( uid_x  , uid_x  )  AS uid_x 
+   CURTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   CURTIME  ( uid_x  DOT uid_x  ) 
+   CURTIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   CURTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   CURTIME  (  ) 
+   CURTIME  (  )  AS uid_x 
+   DATE_ADD  ( uid_x  ) 
+   DATE_ADD  ( uid_x  )  AS uid_x 
+   DATE_ADD  ( uid_x  , uid_x  ) 
+   DATE_ADD  ( uid_x  , uid_x  )  AS uid_x 
+   DATE_ADD  ( uid_x  , uid_x  DOT uid_x  ) 
+   DATE_ADD  ( uid_x  DOT uid_x  ) 
+   DATE_ADD  ( uid_x  DOT uid_x  )  AS uid_x 
+   DATE_ADD  ( uid_x  DOT uid_x  , uid_x  ) 
+   DATE_ADD  (  ) 
+   DATE_ADD  (  )  AS uid_x 
+   DATE_SUB  ( uid_x  ) 
+   DATE_SUB  ( uid_x  )  AS uid_x 
+   DATE_SUB  ( uid_x  , uid_x  ) 
+   DATE_SUB  ( uid_x  , uid_x  )  AS uid_x 
+   DATE_SUB  ( uid_x  , uid_x  DOT uid_x  ) 
+   DATE_SUB  ( uid_x  DOT uid_x  ) 
+   DATE_SUB  ( uid_x  DOT uid_x  )  AS uid_x 
+   DATE_SUB  ( uid_x  DOT uid_x  , uid_x  ) 
+   DATE_SUB  (  ) 
+   DATE_SUB  (  )  AS uid_x 
+   NOTHING 
+   NO COLUMNS 
+   LOCALTIMESTAMP  ( uid_x  ) 
+   LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   LOCALTIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   LOCALTIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   LOCALTIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   LOCALTIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   LOCALTIMESTAMP  (  ) 
+   LOCALTIMESTAMP  (  )  AS uid_x 
+   NOW  ( uid_x  ) 
+   NOW  ( uid_x  )  AS uid_x 
+   NOW  ( uid_x  , uid_x  ) 
+   NOW  ( uid_x  , uid_x  )  AS uid_x 
+   NOW  ( uid_x  , uid_x  DOT uid_x  ) 
+   NOW  ( uid_x  DOT uid_x  ) 
+   NOW  ( uid_x  DOT uid_x  )  AS uid_x 
+   NOW  ( uid_x  DOT uid_x  , uid_x  ) 
+   NOW  (  ) 
+   NOW  (  )  AS uid_x 
+   SUBSTR  ( uid_x  ) 
+   SUBSTR  ( uid_x  )  AS uid_x 
+   SUBSTR  ( uid_x  , uid_x  ) 
+   SUBSTR  ( uid_x  , uid_x  )  AS uid_x 
+   SUBSTR  ( uid_x  , uid_x  DOT uid_x  ) 
+   SUBSTR  ( uid_x  DOT uid_x  ) 
+   SUBSTR  ( uid_x  DOT uid_x  )  AS uid_x 
+   SUBSTR  ( uid_x  DOT uid_x  , uid_x  ) 
+   SUBSTR  (  ) 
+   SUBSTR  (  )  AS uid_x 
+   SUBSTRING  ( uid_x  ) 
+   SUBSTRING  ( uid_x  )  AS uid_x 
+   SUBSTRING  ( uid_x  , uid_x  ) 
+   SUBSTRING  ( uid_x  , uid_x  )  AS uid_x 
+   SUBSTRING  ( uid_x  , uid_x  DOT uid_x  ) 
+   SUBSTRING  ( uid_x  DOT uid_x  ) 
+   SUBSTRING  ( uid_x  DOT uid_x  )  AS uid_x 
+   SUBSTRING  ( uid_x  DOT uid_x  , uid_x  ) 
+   SUBSTRING  (  ) 
+   SUBSTRING  (  )  AS uid_x 
+   SYSDATE  ( uid_x  ) 
+   SYSDATE  ( uid_x  )  AS uid_x 
+   SYSDATE  ( uid_x  , uid_x  ) 
+   SYSDATE  ( uid_x  , uid_x  )  AS uid_x 
+   SYSDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   SYSDATE  ( uid_x  DOT uid_x  ) 
+   SYSDATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   SYSDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   SYSDATE  (  ) 
+   SYSDATE  (  )  AS uid_x 
+   TRIM  ( uid_x  ) 
+   TRIM  ( uid_x  )  AS uid_x 
+   TRIM  ( uid_x  , uid_x  ) 
+   TRIM  ( uid_x  , uid_x  )  AS uid_x 
+   TRIM  ( uid_x  , uid_x  DOT uid_x  ) 
+   TRIM  ( uid_x  DOT uid_x  ) 
+   TRIM  ( uid_x  DOT uid_x  )  AS uid_x 
+   TRIM  ( uid_x  DOT uid_x  , uid_x  ) 
+   TRIM  (  ) 
+   TRIM  (  )  AS uid_x 
+   UTC_DATE  ( uid_x  ) 
+   UTC_DATE  ( uid_x  )  AS uid_x 
+   UTC_DATE  ( uid_x  , uid_x  ) 
+   UTC_DATE  ( uid_x  , uid_x  )  AS uid_x 
+   UTC_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   UTC_DATE  ( uid_x  DOT uid_x  ) 
+   UTC_DATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   UTC_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   UTC_DATE  (  ) 
+   UTC_DATE  (  )  AS uid_x 
+   IF  ( uid_x  ) 
+   IF  ( uid_x  )  AS uid_x 
+   IF  ( uid_x  , uid_x  ) 
+   IF  ( uid_x  , uid_x  )  AS uid_x 
+   IF  ( uid_x  , uid_x  DOT uid_x  ) 
+   IF  ( uid_x  DOT uid_x  ) 
+   IF  ( uid_x  DOT uid_x  )  AS uid_x 
+   IF  ( uid_x  DOT uid_x  , uid_x  ) 
+   IF  (  ) 
+   IF  (  )  AS uid_x 
+   UTC_TIME  ( uid_x  ) 
+   UTC_TIME  ( uid_x  )  AS uid_x 
+   UTC_TIME  ( uid_x  , uid_x  ) 
+   UTC_TIME  ( uid_x  , uid_x  )  AS uid_x 
+   UTC_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   UTC_TIME  ( uid_x  DOT uid_x  ) 
+   UTC_TIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   UTC_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   UTC_TIME  (  ) 
+   UTC_TIME  (  )  AS uid_x 
+   THE  COUNT  ( uid_x  ) 
+   THE  COUNT  ( uid_x  )  AS uid_x 
+   THE  COUNT  ( uid_x  DOT uid_x  ) 
+   THE  COUNT  ( uid_x  DOT uid_x  )  AS uid_x 
+   THE  COUNT  (  DISTINCT uid_x  ) 
+   THE  COUNT  (  DISTINCT uid_x  )  AS uid_x 
+   THE  COUNT  (  DISTINCT uid_x  , uid_x  ) 
+   THE  COUNT  (  DISTINCT uid_x  , uid_x  DOT uid_x  ) 
+   THE  COUNT  (  DISTINCT uid_x  DOT uid_x  ) 
+   THE  COUNT  (  DISTINCT uid_x  DOT uid_x  , uid_x  ) 
+   THE  COUNT  (  *  ) 
+   THE  COUNT  (  *  )  AS uid_x 
+   THE  COUNT  (  ALL uid_x  ) 
+   THE  COUNT  (  ALL uid_x  )  AS uid_x 
+   THE  COUNT  (  ALL uid_x  DOT uid_x  ) 
+   THE  COUNT  OF  ( uid_x  ) 
+   THE  COUNT  OF  ( uid_x  )  AS uid_x 
+   THE  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   THE  COUNT  OF  (  DISTINCT uid_x  ) 
+   THE  COUNT  OF  (  DISTINCT uid_x  )  AS uid_x 
+   THE  COUNT  OF  (  DISTINCT uid_x  , uid_x  ) 
+   THE  COUNT  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   THE  COUNT  OF  (  *  ) 
+   THE  COUNT  OF  (  *  )  AS uid_x 
+   THE  COUNT  OF  (  ALL uid_x  ) 
+   THE  COUNT  OF  (  ALL uid_x  )  AS uid_x 
+   THE  COUNT  OF  (  ALL uid_x  DOT uid_x  ) 
+   THE  SUM  ( uid_x  ) 
+   THE  SUM  ( uid_x  )  AS uid_x 
+   THE  SUM  ( uid_x  DOT uid_x  ) 
+   THE  SUM  ( uid_x  DOT uid_x  )  AS uid_x 
+   THE  SUM  (  DISTINCT uid_x  ) 
+   THE  SUM  (  DISTINCT uid_x  )  AS uid_x 
+   THE  SUM  (  DISTINCT uid_x  DOT uid_x  ) 
+   THE  SUM  (  ALL uid_x  ) 
+   THE  SUM  (  ALL uid_x  )  AS uid_x 
+   THE  SUM  (  ALL uid_x  DOT uid_x  ) 
+   THE  SUM  OF  ( uid_x  ) 
+   THE  SUM  OF  ( uid_x  )  AS uid_x 
+   THE  SUM  OF  ( uid_x  DOT uid_x  ) 
+   THE  SUM  OF  (  DISTINCT uid_x  ) 
+   THE  SUM  OF  (  DISTINCT uid_x  )  AS uid_x 
+   THE  SUM  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   THE  SUM  OF  (  ALL uid_x  ) 
+   THE  SUM  OF  (  ALL uid_x  )  AS uid_x 
+   THE  SUM  OF  (  ALL uid_x  DOT uid_x  ) 
+   THE  MAX  ( uid_x  ) 
+   THE  MAX  ( uid_x  )  AS uid_x 
+   THE  MAX  ( uid_x  DOT uid_x  ) 
+   THE  MAX  ( uid_x  DOT uid_x  )  AS uid_x 
+   THE  MAX  (  DISTINCT uid_x  ) 
+   THE  MAX  (  DISTINCT uid_x  )  AS uid_x 
+   THE  MAX  (  DISTINCT uid_x  DOT uid_x  ) 
+   THE  MAX  (  ALL uid_x  ) 
+   THE  MAX  (  ALL uid_x  )  AS uid_x 
+   THE  MAX  (  ALL uid_x  DOT uid_x  ) 
+   THE  MAX  OF  ( uid_x  ) 
+   THE  MAX  OF  ( uid_x  )  AS uid_x 
+   THE  MAX  OF  ( uid_x  DOT uid_x  ) 
+   THE  MAX  OF  (  DISTINCT uid_x  ) 
+   THE  MAX  OF  (  DISTINCT uid_x  )  AS uid_x 
+   THE  MAX  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   THE  MAX  OF  (  ALL uid_x  ) 
+   THE  MAX  OF  (  ALL uid_x  )  AS uid_x 
+   THE  MAX  OF  (  ALL uid_x  DOT uid_x  ) 
+   THE  MIN  ( uid_x  ) 
+   THE  MIN  ( uid_x  )  AS uid_x 
+   THE  MIN  ( uid_x  DOT uid_x  ) 
+   THE  MIN  ( uid_x  DOT uid_x  )  AS uid_x 
+   THE  MIN  (  DISTINCT uid_x  ) 
+   THE  MIN  (  DISTINCT uid_x  )  AS uid_x 
+   THE  MIN  (  DISTINCT uid_x  DOT uid_x  ) 
+   THE  MIN  (  ALL uid_x  ) 
+   THE  MIN  (  ALL uid_x  )  AS uid_x 
+   THE  MIN  (  ALL uid_x  DOT uid_x  ) 
+   THE  MIN  OF  ( uid_x  ) 
+   THE  MIN  OF  ( uid_x  )  AS uid_x 
+   THE  MIN  OF  ( uid_x  DOT uid_x  ) 
+   THE  MIN  OF  (  DISTINCT uid_x  ) 
+   THE  MIN  OF  (  DISTINCT uid_x  )  AS uid_x 
+   THE  MIN  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   THE  MIN  OF  (  ALL uid_x  ) 
+   THE  MIN  OF  (  ALL uid_x  )  AS uid_x 
+   THE  MIN  OF  (  ALL uid_x  DOT uid_x  ) 
+   THE  AVG  ( uid_x  ) 
+   THE  AVG  ( uid_x  )  AS uid_x 
+   THE  AVG  ( uid_x  DOT uid_x  ) 
+   THE  AVG  ( uid_x  DOT uid_x  )  AS uid_x 
+   THE  AVG  (  DISTINCT uid_x  ) 
+   THE  AVG  (  DISTINCT uid_x  )  AS uid_x 
+   THE  AVG  (  DISTINCT uid_x  DOT uid_x  ) 
+   THE  AVG  (  ALL uid_x  ) 
+   THE  AVG  (  ALL uid_x  )  AS uid_x 
+   THE  AVG  (  ALL uid_x  DOT uid_x  ) 
+   THE  AVG  OF  ( uid_x  ) 
+   THE  AVG  OF  ( uid_x  )  AS uid_x 
+   THE  AVG  OF  ( uid_x  DOT uid_x  ) 
+   THE  AVG  OF  (  DISTINCT uid_x  ) 
+   THE  AVG  OF  (  DISTINCT uid_x  )  AS uid_x 
+   THE  AVG  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   THE  AVG  OF  (  ALL uid_x  ) 
+   THE  AVG  OF  (  ALL uid_x  )  AS uid_x 
+   THE  AVG  OF  (  ALL uid_x  DOT uid_x  ) 
+   UTC_TIMESTAMP  ( uid_x  ) 
+   UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   UTC_TIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   UTC_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   UTC_TIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   UTC_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   UTC_TIMESTAMP  (  ) 
+   UTC_TIMESTAMP  (  )  AS uid_x 
+   ALL uid_x 
+   ALL uid_x  AS uid_x 
+   ALL uid_x  DOT uid_x 
+   ALL uid_x  DOT uid_x  AS uid_x 
+   ALL uid_x  DOT  * 
+   ALL  COUNT  ( uid_x  ) 
+   ALL  COUNT  ( uid_x  )  AS uid_x 
+   ALL  COUNT  ( uid_x  DOT uid_x  ) 
+   ALL  COUNT  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  COUNT  (  DISTINCT uid_x  ) 
+   ALL  COUNT  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  COUNT  (  DISTINCT uid_x  , uid_x  ) 
+   ALL  COUNT  (  DISTINCT uid_x  , uid_x  DOT uid_x  ) 
+   ALL  COUNT  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  COUNT  (  DISTINCT uid_x  DOT uid_x  , uid_x  ) 
+   ALL  COUNT  (  *  ) 
+   ALL  COUNT  (  *  )  AS uid_x 
+   ALL  COUNT  OF  ( uid_x  ) 
+   ALL  COUNT  OF  ( uid_x  )  AS uid_x 
+   ALL  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   ALL  COUNT  OF  (  DISTINCT uid_x  ) 
+   ALL  COUNT  OF  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  COUNT  OF  (  DISTINCT uid_x  , uid_x  ) 
+   ALL  COUNT  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  COUNT  OF  (  *  ) 
+   ALL  COUNT  OF  (  *  )  AS uid_x 
+   ALL  MAX  ( uid_x  ) 
+   ALL  MAX  ( uid_x  )  AS uid_x 
+   ALL  MAX  ( uid_x  DOT uid_x  ) 
+   ALL  MAX  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  MAX  (  DISTINCT uid_x  ) 
+   ALL  MAX  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  MAX  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  MAX  OF  ( uid_x  ) 
+   ALL  MAX  OF  ( uid_x  )  AS uid_x 
+   ALL  MAX  OF  ( uid_x  DOT uid_x  ) 
+   ALL  MAX  OF  (  DISTINCT uid_x  ) 
+   ALL  MAX  OF  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  MAX  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  MID  ( uid_x  ) 
+   ALL  MID  ( uid_x  )  AS uid_x 
+   ALL  MID  ( uid_x  , uid_x  ) 
+   ALL  MID  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  MID  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  MID  ( uid_x  DOT uid_x  ) 
+   ALL  MID  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  MID  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  MID  (  ) 
+   ALL  MID  (  )  AS uid_x 
+   ALL  MIN  ( uid_x  ) 
+   ALL  MIN  ( uid_x  )  AS uid_x 
+   ALL  MIN  ( uid_x  DOT uid_x  ) 
+   ALL  MIN  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  MIN  (  DISTINCT uid_x  ) 
+   ALL  MIN  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  MIN  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  MIN  OF  ( uid_x  ) 
+   ALL  MIN  OF  ( uid_x  )  AS uid_x 
+   ALL  MIN  OF  ( uid_x  DOT uid_x  ) 
+   ALL  MIN  OF  (  DISTINCT uid_x  ) 
+   ALL  MIN  OF  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  MIN  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  DISTINCT uid_x 
+   ALL  DISTINCT uid_x  AS uid_x 
+   ALL  DISTINCT uid_x  DOT uid_x 
+   ALL  DISTINCT uid_x  DOT uid_x  AS uid_x 
+   ALL  DISTINCT uid_x  DOT  * 
+   ALL  DISTINCT  COUNT  ( uid_x  ) 
+   ALL  DISTINCT  COUNT  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  COUNT  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  COUNT  (  *  ) 
+   ALL  DISTINCT  COUNT  (  *  )  AS uid_x 
+   ALL  DISTINCT  COUNT  OF  ( uid_x  ) 
+   ALL  DISTINCT  COUNT  OF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  COUNT  OF  (  *  ) 
+   ALL  DISTINCT  COUNT  OF  (  *  )  AS uid_x 
+   ALL  DISTINCT  MAX  ( uid_x  ) 
+   ALL  DISTINCT  MAX  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  MAX  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  MAX  OF  ( uid_x  ) 
+   ALL  DISTINCT  MAX  OF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  MAX  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  MID  ( uid_x  ) 
+   ALL  DISTINCT  MID  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  MID  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  MID  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  MID  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  MID  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  MID  (  ) 
+   ALL  DISTINCT  MID  (  )  AS uid_x 
+   ALL  DISTINCT  MIN  ( uid_x  ) 
+   ALL  DISTINCT  MIN  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  MIN  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  MIN  OF  ( uid_x  ) 
+   ALL  DISTINCT  MIN  OF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  MIN  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW uid_x 
+   ALL  DISTINCT  DISTINCTROW uid_x  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW uid_x  DOT uid_x 
+   ALL  DISTINCT  DISTINCTROW uid_x  DOT uid_x  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW uid_x  DOT  * 
+   ALL  DISTINCT  DISTINCTROW  COUNT  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  COUNT  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  COUNT  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  COUNT  (  *  ) 
+   ALL  DISTINCT  DISTINCTROW  COUNT  (  *  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  COUNT  OF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  COUNT  OF  (  *  ) 
+   ALL  DISTINCT  DISTINCTROW  MAX  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  MAX  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  MAX  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  MAX  OF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  MAX  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  MID  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  MID  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  MID  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  MID  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  MID  (  ) 
+   ALL  DISTINCT  DISTINCTROW  MID  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  MIN  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  MIN  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  MIN  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  MIN  OF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  MIN  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  * 
+   ALL  DISTINCT  DISTINCTROW  SUM  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SUM  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  SUM  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SUM  OF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SUM  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_DATE  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_DATE  (  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_DATE  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIME  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIME  (  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIME  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  (  ) 
+   ALL  DISTINCT  DISTINCTROW  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIME  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIME  (  ) 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIME  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  REPLACE  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  REPLACE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  REPLACE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  REPLACE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  REPLACE  (  ) 
+   ALL  DISTINCT  DISTINCTROW  REPLACE  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  CURDATE  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURDATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  CURDATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURDATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURDATE  (  ) 
+   ALL  DISTINCT  DISTINCTROW  CURDATE  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  CURTIME  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURTIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  CURTIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURTIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  CURTIME  (  ) 
+   ALL  DISTINCT  DISTINCTROW  CURTIME  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  DATE_ADD  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  DATE_ADD  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  DATE_ADD  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  DATE_ADD  (  ) 
+   ALL  DISTINCT  DISTINCTROW  DATE_ADD  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  DATE_SUB  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  DATE_SUB  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  DATE_SUB  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  DATE_SUB  (  ) 
+   ALL  DISTINCT  DISTINCTROW  DATE_SUB  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIMESTAMP  (  ) 
+   ALL  DISTINCT  DISTINCTROW  LOCALTIMESTAMP  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  NOW  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  NOW  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  NOW  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  NOW  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  NOW  (  ) 
+   ALL  DISTINCT  DISTINCTROW  NOW  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  SUBSTR  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SUBSTR  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  SUBSTR  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SUBSTR  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SUBSTR  (  ) 
+   ALL  DISTINCT  DISTINCTROW  SUBSTR  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  SUBSTRING  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SUBSTRING  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  SUBSTRING  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SUBSTRING  (  ) 
+   ALL  DISTINCT  DISTINCTROW  SUBSTRING  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  SYSDATE  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SYSDATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  SYSDATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SYSDATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  SYSDATE  (  ) 
+   ALL  DISTINCT  DISTINCTROW  SYSDATE  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  TRIM  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  TRIM  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  TRIM  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  TRIM  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  TRIM  (  ) 
+   ALL  DISTINCT  DISTINCTROW  TRIM  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  UTC_DATE  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_DATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  UTC_DATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_DATE  (  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_DATE  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  IF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  IF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  IF  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  IF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  IF  (  ) 
+   ALL  DISTINCT  DISTINCTROW  IF  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIME  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIME  (  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIME  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  THE  COUNT  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  COUNT  (  *  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  COUNT  OF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  COUNT  OF  (  *  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  SUM  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  SUM  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  SUM  OF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  MAX  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  MAX  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  MAX  OF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  MIN  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  MIN  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  MIN  OF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  AVG  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  AVG  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  THE  AVG  OF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIMESTAMP  (  ) 
+   ALL  DISTINCT  DISTINCTROW  UTC_TIMESTAMP  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  INSERT  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  INSERT  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  INSERT  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  INSERT  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  INSERT  (  ) 
+   ALL  DISTINCT  DISTINCTROW  INSERT  (  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  AVG  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  AVG  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DISTINCTROW  AVG  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  AVG  OF  ( uid_x  ) 
+   ALL  DISTINCT  DISTINCTROW  AVG  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  * 
+   ALL  DISTINCT  SUM  ( uid_x  ) 
+   ALL  DISTINCT  SUM  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  SUM  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  SUM  OF  ( uid_x  ) 
+   ALL  DISTINCT  SUM  OF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  SUM  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURRENT_DATE  ( uid_x  ) 
+   ALL  DISTINCT  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  CURRENT_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURRENT_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  CURRENT_DATE  (  ) 
+   ALL  DISTINCT  CURRENT_DATE  (  )  AS uid_x 
+   ALL  DISTINCT  CURRENT_TIME  ( uid_x  ) 
+   ALL  DISTINCT  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  CURRENT_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURRENT_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  CURRENT_TIME  (  ) 
+   ALL  DISTINCT  CURRENT_TIME  (  )  AS uid_x 
+   ALL  DISTINCT  CURRENT_TIMESTAMP  ( uid_x  ) 
+   ALL  DISTINCT  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  CURRENT_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  CURRENT_TIMESTAMP  (  ) 
+   ALL  DISTINCT  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   ALL  DISTINCT  LOCALTIME  ( uid_x  ) 
+   ALL  DISTINCT  LOCALTIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  LOCALTIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  LOCALTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  LOCALTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  LOCALTIME  (  ) 
+   ALL  DISTINCT  LOCALTIME  (  )  AS uid_x 
+   ALL  DISTINCT  REPLACE  ( uid_x  ) 
+   ALL  DISTINCT  REPLACE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  REPLACE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  REPLACE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  REPLACE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  REPLACE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  REPLACE  (  ) 
+   ALL  DISTINCT  REPLACE  (  )  AS uid_x 
+   ALL  DISTINCT  CURDATE  ( uid_x  ) 
+   ALL  DISTINCT  CURDATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  CURDATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  CURDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURDATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  CURDATE  (  ) 
+   ALL  DISTINCT  CURDATE  (  )  AS uid_x 
+   ALL  DISTINCT  CURTIME  ( uid_x  ) 
+   ALL  DISTINCT  CURTIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  CURTIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  CURTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURTIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  CURTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  CURTIME  (  ) 
+   ALL  DISTINCT  CURTIME  (  )  AS uid_x 
+   ALL  DISTINCT  DATE_ADD  ( uid_x  ) 
+   ALL  DISTINCT  DATE_ADD  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DATE_ADD  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DATE_ADD  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DATE_ADD  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  DATE_ADD  (  ) 
+   ALL  DISTINCT  DATE_ADD  (  )  AS uid_x 
+   ALL  DISTINCT  DATE_SUB  ( uid_x  ) 
+   ALL  DISTINCT  DATE_SUB  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  DATE_SUB  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  DATE_SUB  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  DATE_SUB  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  DATE_SUB  (  ) 
+   ALL  DISTINCT  DATE_SUB  (  )  AS uid_x 
+   ALL  DISTINCT  LOCALTIMESTAMP  ( uid_x  ) 
+   ALL  DISTINCT  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  LOCALTIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  LOCALTIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  LOCALTIMESTAMP  (  ) 
+   ALL  DISTINCT  LOCALTIMESTAMP  (  )  AS uid_x 
+   ALL  DISTINCT  NOW  ( uid_x  ) 
+   ALL  DISTINCT  NOW  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  NOW  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  NOW  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  NOW  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  NOW  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  NOW  (  ) 
+   ALL  DISTINCT  NOW  (  )  AS uid_x 
+   ALL  DISTINCT  SUBSTR  ( uid_x  ) 
+   ALL  DISTINCT  SUBSTR  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  SUBSTR  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  SUBSTR  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  SUBSTR  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  SUBSTR  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  SUBSTR  (  ) 
+   ALL  DISTINCT  SUBSTR  (  )  AS uid_x 
+   ALL  DISTINCT  SUBSTRING  ( uid_x  ) 
+   ALL  DISTINCT  SUBSTRING  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  SUBSTRING  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  SUBSTRING  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  SUBSTRING  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  SUBSTRING  (  ) 
+   ALL  DISTINCT  SUBSTRING  (  )  AS uid_x 
+   ALL  DISTINCT  SYSDATE  ( uid_x  ) 
+   ALL  DISTINCT  SYSDATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  SYSDATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  SYSDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  SYSDATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  SYSDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  SYSDATE  (  ) 
+   ALL  DISTINCT  SYSDATE  (  )  AS uid_x 
+   ALL  DISTINCT  TRIM  ( uid_x  ) 
+   ALL  DISTINCT  TRIM  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  TRIM  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  TRIM  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  TRIM  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  TRIM  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  TRIM  (  ) 
+   ALL  DISTINCT  TRIM  (  )  AS uid_x 
+   ALL  DISTINCT  UTC_DATE  ( uid_x  ) 
+   ALL  DISTINCT  UTC_DATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  UTC_DATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  UTC_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  UTC_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  UTC_DATE  (  ) 
+   ALL  DISTINCT  UTC_DATE  (  )  AS uid_x 
+   ALL  DISTINCT  IF  ( uid_x  ) 
+   ALL  DISTINCT  IF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  IF  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  IF  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  IF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  IF  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  IF  (  ) 
+   ALL  DISTINCT  IF  (  )  AS uid_x 
+   ALL  DISTINCT  UTC_TIME  ( uid_x  ) 
+   ALL  DISTINCT  UTC_TIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  UTC_TIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  UTC_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  UTC_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  UTC_TIME  (  ) 
+   ALL  DISTINCT  UTC_TIME  (  )  AS uid_x 
+   ALL  DISTINCT  THE  COUNT  ( uid_x  ) 
+   ALL  DISTINCT  THE  COUNT  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  THE  COUNT  (  *  ) 
+   ALL  DISTINCT  THE  COUNT  (  *  )  AS uid_x 
+   ALL  DISTINCT  THE  COUNT  OF  ( uid_x  ) 
+   ALL  DISTINCT  THE  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  THE  COUNT  OF  (  *  ) 
+   ALL  DISTINCT  THE  SUM  ( uid_x  ) 
+   ALL  DISTINCT  THE  SUM  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  THE  SUM  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  THE  SUM  OF  ( uid_x  ) 
+   ALL  DISTINCT  THE  SUM  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  THE  MAX  ( uid_x  ) 
+   ALL  DISTINCT  THE  MAX  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  THE  MAX  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  THE  MAX  OF  ( uid_x  ) 
+   ALL  DISTINCT  THE  MAX  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  THE  MIN  ( uid_x  ) 
+   ALL  DISTINCT  THE  MIN  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  THE  MIN  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  THE  MIN  OF  ( uid_x  ) 
+   ALL  DISTINCT  THE  MIN  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  THE  AVG  ( uid_x  ) 
+   ALL  DISTINCT  THE  AVG  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  THE  AVG  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  THE  AVG  OF  ( uid_x  ) 
+   ALL  DISTINCT  THE  AVG  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  UTC_TIMESTAMP  ( uid_x  ) 
+   ALL  DISTINCT  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  UTC_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  UTC_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  UTC_TIMESTAMP  (  ) 
+   ALL  DISTINCT  UTC_TIMESTAMP  (  )  AS uid_x 
+   ALL  DISTINCT  INSERT  ( uid_x  ) 
+   ALL  DISTINCT  INSERT  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  INSERT  ( uid_x  , uid_x  ) 
+   ALL  DISTINCT  INSERT  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  INSERT  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  INSERT  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCT  INSERT  (  ) 
+   ALL  DISTINCT  INSERT  (  )  AS uid_x 
+   ALL  DISTINCT  AVG  ( uid_x  ) 
+   ALL  DISTINCT  AVG  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  AVG  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCT  AVG  OF  ( uid_x  ) 
+   ALL  DISTINCT  AVG  OF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCT  AVG  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW uid_x 
+   ALL  DISTINCTROW uid_x  AS uid_x 
+   ALL  DISTINCTROW uid_x  DOT uid_x 
+   ALL  DISTINCTROW uid_x  DOT uid_x  AS uid_x 
+   ALL  DISTINCTROW uid_x  DOT  * 
+   ALL  DISTINCTROW  COUNT  ( uid_x  ) 
+   ALL  DISTINCTROW  COUNT  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  COUNT  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  COUNT  (  *  ) 
+   ALL  DISTINCTROW  COUNT  (  *  )  AS uid_x 
+   ALL  DISTINCTROW  COUNT  OF  ( uid_x  ) 
+   ALL  DISTINCTROW  COUNT  OF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  COUNT  OF  (  *  ) 
+   ALL  DISTINCTROW  COUNT  OF  (  *  )  AS uid_x 
+   ALL  DISTINCTROW  MAX  ( uid_x  ) 
+   ALL  DISTINCTROW  MAX  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  MAX  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  MAX  OF  ( uid_x  ) 
+   ALL  DISTINCTROW  MAX  OF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  MAX  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  MID  ( uid_x  ) 
+   ALL  DISTINCTROW  MID  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  MID  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  MID  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  MID  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  MID  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  MID  (  ) 
+   ALL  DISTINCTROW  MID  (  )  AS uid_x 
+   ALL  DISTINCTROW  MIN  ( uid_x  ) 
+   ALL  DISTINCTROW  MIN  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  MIN  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  MIN  OF  ( uid_x  ) 
+   ALL  DISTINCTROW  MIN  OF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  MIN  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  * 
+   ALL  DISTINCTROW  SUM  ( uid_x  ) 
+   ALL  DISTINCTROW  SUM  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  SUM  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  SUM  OF  ( uid_x  ) 
+   ALL  DISTINCTROW  SUM  OF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  SUM  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_DATE  ( uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_DATE  (  ) 
+   ALL  DISTINCTROW  CURRENT_DATE  (  )  AS uid_x 
+   ALL  DISTINCTROW  CURRENT_TIME  ( uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_TIME  (  ) 
+   ALL  DISTINCTROW  CURRENT_TIME  (  )  AS uid_x 
+   ALL  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  CURRENT_TIMESTAMP  (  ) 
+   ALL  DISTINCTROW  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   ALL  DISTINCTROW  LOCALTIME  ( uid_x  ) 
+   ALL  DISTINCTROW  LOCALTIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  LOCALTIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  LOCALTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  LOCALTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  LOCALTIME  (  ) 
+   ALL  DISTINCTROW  LOCALTIME  (  )  AS uid_x 
+   ALL  DISTINCTROW  REPLACE  ( uid_x  ) 
+   ALL  DISTINCTROW  REPLACE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  REPLACE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  REPLACE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  REPLACE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  REPLACE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  REPLACE  (  ) 
+   ALL  DISTINCTROW  REPLACE  (  )  AS uid_x 
+   ALL  DISTINCTROW  CURDATE  ( uid_x  ) 
+   ALL  DISTINCTROW  CURDATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  CURDATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  CURDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURDATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  CURDATE  (  ) 
+   ALL  DISTINCTROW  CURDATE  (  )  AS uid_x 
+   ALL  DISTINCTROW  CURTIME  ( uid_x  ) 
+   ALL  DISTINCTROW  CURTIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  CURTIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  CURTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURTIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  CURTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  CURTIME  (  ) 
+   ALL  DISTINCTROW  CURTIME  (  )  AS uid_x 
+   ALL  DISTINCTROW  DATE_ADD  ( uid_x  ) 
+   ALL  DISTINCTROW  DATE_ADD  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  DATE_ADD  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  DATE_ADD  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  DATE_ADD  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  DATE_ADD  (  ) 
+   ALL  DISTINCTROW  DATE_ADD  (  )  AS uid_x 
+   ALL  DISTINCTROW  DATE_SUB  ( uid_x  ) 
+   ALL  DISTINCTROW  DATE_SUB  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  DATE_SUB  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  DATE_SUB  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  DATE_SUB  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  DATE_SUB  (  ) 
+   ALL  DISTINCTROW  DATE_SUB  (  )  AS uid_x 
+   ALL  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  ) 
+   ALL  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  LOCALTIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  LOCALTIMESTAMP  (  ) 
+   ALL  DISTINCTROW  LOCALTIMESTAMP  (  )  AS uid_x 
+   ALL  DISTINCTROW  NOW  ( uid_x  ) 
+   ALL  DISTINCTROW  NOW  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  NOW  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  NOW  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  NOW  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  NOW  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  NOW  (  ) 
+   ALL  DISTINCTROW  NOW  (  )  AS uid_x 
+   ALL  DISTINCTROW  SUBSTR  ( uid_x  ) 
+   ALL  DISTINCTROW  SUBSTR  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  SUBSTR  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  SUBSTR  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  SUBSTR  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  SUBSTR  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  SUBSTR  (  ) 
+   ALL  DISTINCTROW  SUBSTR  (  )  AS uid_x 
+   ALL  DISTINCTROW  SUBSTRING  ( uid_x  ) 
+   ALL  DISTINCTROW  SUBSTRING  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  SUBSTRING  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  SUBSTRING  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  SUBSTRING  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  SUBSTRING  (  ) 
+   ALL  DISTINCTROW  SUBSTRING  (  )  AS uid_x 
+   ALL  DISTINCTROW  SYSDATE  ( uid_x  ) 
+   ALL  DISTINCTROW  SYSDATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  SYSDATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  SYSDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  SYSDATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  SYSDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  SYSDATE  (  ) 
+   ALL  DISTINCTROW  SYSDATE  (  )  AS uid_x 
+   ALL  DISTINCTROW  TRIM  ( uid_x  ) 
+   ALL  DISTINCTROW  TRIM  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  TRIM  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  TRIM  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  TRIM  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  TRIM  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  TRIM  (  ) 
+   ALL  DISTINCTROW  TRIM  (  )  AS uid_x 
+   ALL  DISTINCTROW  UTC_DATE  ( uid_x  ) 
+   ALL  DISTINCTROW  UTC_DATE  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  UTC_DATE  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  UTC_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  UTC_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  UTC_DATE  (  ) 
+   ALL  DISTINCTROW  UTC_DATE  (  )  AS uid_x 
+   ALL  DISTINCTROW  IF  ( uid_x  ) 
+   ALL  DISTINCTROW  IF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  IF  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  IF  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  IF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  IF  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  IF  (  ) 
+   ALL  DISTINCTROW  IF  (  )  AS uid_x 
+   ALL  DISTINCTROW  UTC_TIME  ( uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIME  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  UTC_TIME  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIME  (  ) 
+   ALL  DISTINCTROW  UTC_TIME  (  )  AS uid_x 
+   ALL  DISTINCTROW  THE  COUNT  ( uid_x  ) 
+   ALL  DISTINCTROW  THE  COUNT  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  THE  COUNT  (  *  ) 
+   ALL  DISTINCTROW  THE  COUNT  (  *  )  AS uid_x 
+   ALL  DISTINCTROW  THE  COUNT  OF  ( uid_x  ) 
+   ALL  DISTINCTROW  THE  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  THE  COUNT  OF  (  *  ) 
+   ALL  DISTINCTROW  THE  SUM  ( uid_x  ) 
+   ALL  DISTINCTROW  THE  SUM  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  THE  SUM  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  THE  SUM  OF  ( uid_x  ) 
+   ALL  DISTINCTROW  THE  SUM  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  THE  MAX  ( uid_x  ) 
+   ALL  DISTINCTROW  THE  MAX  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  THE  MAX  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  THE  MAX  OF  ( uid_x  ) 
+   ALL  DISTINCTROW  THE  MAX  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  THE  MIN  ( uid_x  ) 
+   ALL  DISTINCTROW  THE  MIN  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  THE  MIN  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  THE  MIN  OF  ( uid_x  ) 
+   ALL  DISTINCTROW  THE  MIN  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  THE  AVG  ( uid_x  ) 
+   ALL  DISTINCTROW  THE  AVG  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  THE  AVG  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  THE  AVG  OF  ( uid_x  ) 
+   ALL  DISTINCTROW  THE  AVG  OF  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  UTC_TIMESTAMP  (  ) 
+   ALL  DISTINCTROW  UTC_TIMESTAMP  (  )  AS uid_x 
+   ALL  DISTINCTROW  INSERT  ( uid_x  ) 
+   ALL  DISTINCTROW  INSERT  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  INSERT  ( uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  INSERT  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  INSERT  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  INSERT  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DISTINCTROW  INSERT  (  ) 
+   ALL  DISTINCTROW  INSERT  (  )  AS uid_x 
+   ALL  DISTINCTROW  AVG  ( uid_x  ) 
+   ALL  DISTINCTROW  AVG  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  AVG  ( uid_x  DOT uid_x  ) 
+   ALL  DISTINCTROW  AVG  OF  ( uid_x  ) 
+   ALL  DISTINCTROW  AVG  OF  ( uid_x  )  AS uid_x 
+   ALL  DISTINCTROW  AVG  OF  ( uid_x  DOT uid_x  ) 
+   ALL  * 
+   ALL  SUM  ( uid_x  ) 
+   ALL  SUM  ( uid_x  )  AS uid_x 
+   ALL  SUM  ( uid_x  DOT uid_x  ) 
+   ALL  SUM  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  SUM  (  DISTINCT uid_x  ) 
+   ALL  SUM  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  SUM  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  SUM  OF  ( uid_x  ) 
+   ALL  SUM  OF  ( uid_x  )  AS uid_x 
+   ALL  SUM  OF  ( uid_x  DOT uid_x  ) 
+   ALL  SUM  OF  (  DISTINCT uid_x  ) 
+   ALL  SUM  OF  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  SUM  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  CURRENT_DATE  ( uid_x  ) 
+   ALL  CURRENT_DATE  ( uid_x  )  AS uid_x 
+   ALL  CURRENT_DATE  ( uid_x  , uid_x  ) 
+   ALL  CURRENT_DATE  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  CURRENT_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  CURRENT_DATE  ( uid_x  DOT uid_x  ) 
+   ALL  CURRENT_DATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  CURRENT_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  CURRENT_DATE  (  ) 
+   ALL  CURRENT_DATE  (  )  AS uid_x 
+   ALL  CURRENT_TIME  ( uid_x  ) 
+   ALL  CURRENT_TIME  ( uid_x  )  AS uid_x 
+   ALL  CURRENT_TIME  ( uid_x  , uid_x  ) 
+   ALL  CURRENT_TIME  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  CURRENT_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  CURRENT_TIME  ( uid_x  DOT uid_x  ) 
+   ALL  CURRENT_TIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  CURRENT_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  CURRENT_TIME  (  ) 
+   ALL  CURRENT_TIME  (  )  AS uid_x 
+   ALL  CURRENT_TIMESTAMP  ( uid_x  ) 
+   ALL  CURRENT_TIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  CURRENT_TIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  CURRENT_TIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  CURRENT_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  CURRENT_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  CURRENT_TIMESTAMP  (  ) 
+   ALL  CURRENT_TIMESTAMP  (  )  AS uid_x 
+   ALL  LOCALTIME  ( uid_x  ) 
+   ALL  LOCALTIME  ( uid_x  )  AS uid_x 
+   ALL  LOCALTIME  ( uid_x  , uid_x  ) 
+   ALL  LOCALTIME  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  LOCALTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  LOCALTIME  ( uid_x  DOT uid_x  ) 
+   ALL  LOCALTIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  LOCALTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  LOCALTIME  (  ) 
+   ALL  LOCALTIME  (  )  AS uid_x 
+   ALL  REPLACE  ( uid_x  ) 
+   ALL  REPLACE  ( uid_x  )  AS uid_x 
+   ALL  REPLACE  ( uid_x  , uid_x  ) 
+   ALL  REPLACE  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  REPLACE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  REPLACE  ( uid_x  DOT uid_x  ) 
+   ALL  REPLACE  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  REPLACE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  REPLACE  (  ) 
+   ALL  REPLACE  (  )  AS uid_x 
+   ALL  CURDATE  ( uid_x  ) 
+   ALL  CURDATE  ( uid_x  )  AS uid_x 
+   ALL  CURDATE  ( uid_x  , uid_x  ) 
+   ALL  CURDATE  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  CURDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  CURDATE  ( uid_x  DOT uid_x  ) 
+   ALL  CURDATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  CURDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  CURDATE  (  ) 
+   ALL  CURDATE  (  )  AS uid_x 
+   ALL  CURTIME  ( uid_x  ) 
+   ALL  CURTIME  ( uid_x  )  AS uid_x 
+   ALL  CURTIME  ( uid_x  , uid_x  ) 
+   ALL  CURTIME  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  CURTIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  CURTIME  ( uid_x  DOT uid_x  ) 
+   ALL  CURTIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  CURTIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  CURTIME  (  ) 
+   ALL  CURTIME  (  )  AS uid_x 
+   ALL  DATE_ADD  ( uid_x  ) 
+   ALL  DATE_ADD  ( uid_x  )  AS uid_x 
+   ALL  DATE_ADD  ( uid_x  , uid_x  ) 
+   ALL  DATE_ADD  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  DATE_ADD  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DATE_ADD  ( uid_x  DOT uid_x  ) 
+   ALL  DATE_ADD  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  DATE_ADD  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DATE_ADD  (  ) 
+   ALL  DATE_ADD  (  )  AS uid_x 
+   ALL  DATE_SUB  ( uid_x  ) 
+   ALL  DATE_SUB  ( uid_x  )  AS uid_x 
+   ALL  DATE_SUB  ( uid_x  , uid_x  ) 
+   ALL  DATE_SUB  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  DATE_SUB  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  DATE_SUB  ( uid_x  DOT uid_x  ) 
+   ALL  DATE_SUB  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  DATE_SUB  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  DATE_SUB  (  ) 
+   ALL  DATE_SUB  (  )  AS uid_x 
+   ALL  LOCALTIMESTAMP  ( uid_x  ) 
+   ALL  LOCALTIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  LOCALTIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  LOCALTIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  LOCALTIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  LOCALTIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  LOCALTIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  LOCALTIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  LOCALTIMESTAMP  (  ) 
+   ALL  LOCALTIMESTAMP  (  )  AS uid_x 
+   ALL  NOW  ( uid_x  ) 
+   ALL  NOW  ( uid_x  )  AS uid_x 
+   ALL  NOW  ( uid_x  , uid_x  ) 
+   ALL  NOW  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  NOW  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  NOW  ( uid_x  DOT uid_x  ) 
+   ALL  NOW  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  NOW  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  NOW  (  ) 
+   ALL  NOW  (  )  AS uid_x 
+   ALL  SUBSTR  ( uid_x  ) 
+   ALL  SUBSTR  ( uid_x  )  AS uid_x 
+   ALL  SUBSTR  ( uid_x  , uid_x  ) 
+   ALL  SUBSTR  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  SUBSTR  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  SUBSTR  ( uid_x  DOT uid_x  ) 
+   ALL  SUBSTR  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  SUBSTR  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  SUBSTR  (  ) 
+   ALL  SUBSTR  (  )  AS uid_x 
+   ALL  SUBSTRING  ( uid_x  ) 
+   ALL  SUBSTRING  ( uid_x  )  AS uid_x 
+   ALL  SUBSTRING  ( uid_x  , uid_x  ) 
+   ALL  SUBSTRING  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  SUBSTRING  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  SUBSTRING  ( uid_x  DOT uid_x  ) 
+   ALL  SUBSTRING  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  SUBSTRING  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  SUBSTRING  (  ) 
+   ALL  SUBSTRING  (  )  AS uid_x 
+   ALL  SYSDATE  ( uid_x  ) 
+   ALL  SYSDATE  ( uid_x  )  AS uid_x 
+   ALL  SYSDATE  ( uid_x  , uid_x  ) 
+   ALL  SYSDATE  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  SYSDATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  SYSDATE  ( uid_x  DOT uid_x  ) 
+   ALL  SYSDATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  SYSDATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  SYSDATE  (  ) 
+   ALL  SYSDATE  (  )  AS uid_x 
+   ALL  TRIM  ( uid_x  ) 
+   ALL  TRIM  ( uid_x  )  AS uid_x 
+   ALL  TRIM  ( uid_x  , uid_x  ) 
+   ALL  TRIM  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  TRIM  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  TRIM  ( uid_x  DOT uid_x  ) 
+   ALL  TRIM  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  TRIM  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  TRIM  (  ) 
+   ALL  TRIM  (  )  AS uid_x 
+   ALL  UTC_DATE  ( uid_x  ) 
+   ALL  UTC_DATE  ( uid_x  )  AS uid_x 
+   ALL  UTC_DATE  ( uid_x  , uid_x  ) 
+   ALL  UTC_DATE  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  UTC_DATE  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  UTC_DATE  ( uid_x  DOT uid_x  ) 
+   ALL  UTC_DATE  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  UTC_DATE  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  UTC_DATE  (  ) 
+   ALL  UTC_DATE  (  )  AS uid_x 
+   ALL  IF  ( uid_x  ) 
+   ALL  IF  ( uid_x  )  AS uid_x 
+   ALL  IF  ( uid_x  , uid_x  ) 
+   ALL  IF  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  IF  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  IF  ( uid_x  DOT uid_x  ) 
+   ALL  IF  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  IF  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  IF  (  ) 
+   ALL  IF  (  )  AS uid_x 
+   ALL  UTC_TIME  ( uid_x  ) 
+   ALL  UTC_TIME  ( uid_x  )  AS uid_x 
+   ALL  UTC_TIME  ( uid_x  , uid_x  ) 
+   ALL  UTC_TIME  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  UTC_TIME  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  UTC_TIME  ( uid_x  DOT uid_x  ) 
+   ALL  UTC_TIME  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  UTC_TIME  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  UTC_TIME  (  ) 
+   ALL  UTC_TIME  (  )  AS uid_x 
+   ALL  THE  COUNT  ( uid_x  ) 
+   ALL  THE  COUNT  ( uid_x  )  AS uid_x 
+   ALL  THE  COUNT  ( uid_x  DOT uid_x  ) 
+   ALL  THE  COUNT  (  DISTINCT uid_x  ) 
+   ALL  THE  COUNT  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  THE  COUNT  (  DISTINCT uid_x  , uid_x  ) 
+   ALL  THE  COUNT  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  THE  COUNT  (  *  ) 
+   ALL  THE  COUNT  (  *  )  AS uid_x 
+   ALL  THE  COUNT  OF  ( uid_x  ) 
+   ALL  THE  COUNT  OF  ( uid_x  )  AS uid_x 
+   ALL  THE  COUNT  OF  ( uid_x  DOT uid_x  ) 
+   ALL  THE  COUNT  OF  (  DISTINCT uid_x  ) 
+   ALL  THE  COUNT  OF  (  DISTINCT uid_x  , uid_x  ) 
+   ALL  THE  COUNT  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  THE  COUNT  OF  (  *  ) 
+   ALL  THE  COUNT  OF  (  *  )  AS uid_x 
+   ALL  THE  SUM  ( uid_x  ) 
+   ALL  THE  SUM  ( uid_x  )  AS uid_x 
+   ALL  THE  SUM  ( uid_x  DOT uid_x  ) 
+   ALL  THE  SUM  (  DISTINCT uid_x  ) 
+   ALL  THE  SUM  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  THE  SUM  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  THE  SUM  OF  ( uid_x  ) 
+   ALL  THE  SUM  OF  ( uid_x  )  AS uid_x 
+   ALL  THE  SUM  OF  ( uid_x  DOT uid_x  ) 
+   ALL  THE  SUM  OF  (  DISTINCT uid_x  ) 
+   ALL  THE  SUM  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  THE  MAX  ( uid_x  ) 
+   ALL  THE  MAX  ( uid_x  )  AS uid_x 
+   ALL  THE  MAX  ( uid_x  DOT uid_x  ) 
+   ALL  THE  MAX  (  DISTINCT uid_x  ) 
+   ALL  THE  MAX  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  THE  MAX  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  THE  MAX  OF  ( uid_x  ) 
+   ALL  THE  MAX  OF  ( uid_x  )  AS uid_x 
+   ALL  THE  MAX  OF  ( uid_x  DOT uid_x  ) 
+   ALL  THE  MAX  OF  (  DISTINCT uid_x  ) 
+   ALL  THE  MAX  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  THE  MIN  ( uid_x  ) 
+   ALL  THE  MIN  ( uid_x  )  AS uid_x 
+   ALL  THE  MIN  ( uid_x  DOT uid_x  ) 
+   ALL  THE  MIN  (  DISTINCT uid_x  ) 
+   ALL  THE  MIN  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  THE  MIN  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  THE  MIN  OF  ( uid_x  ) 
+   ALL  THE  MIN  OF  ( uid_x  )  AS uid_x 
+   ALL  THE  MIN  OF  ( uid_x  DOT uid_x  ) 
+   ALL  THE  MIN  OF  (  DISTINCT uid_x  ) 
+   ALL  THE  MIN  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  THE  AVG  ( uid_x  ) 
+   ALL  THE  AVG  ( uid_x  )  AS uid_x 
+   ALL  THE  AVG  ( uid_x  DOT uid_x  ) 
+   ALL  THE  AVG  (  DISTINCT uid_x  ) 
+   ALL  THE  AVG  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  THE  AVG  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  THE  AVG  OF  ( uid_x  ) 
+   ALL  THE  AVG  OF  ( uid_x  )  AS uid_x 
+   ALL  THE  AVG  OF  ( uid_x  DOT uid_x  ) 
+   ALL  THE  AVG  OF  (  DISTINCT uid_x  ) 
+   ALL  THE  AVG  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  UTC_TIMESTAMP  ( uid_x  ) 
+   ALL  UTC_TIMESTAMP  ( uid_x  )  AS uid_x 
+   ALL  UTC_TIMESTAMP  ( uid_x  , uid_x  ) 
+   ALL  UTC_TIMESTAMP  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  UTC_TIMESTAMP  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  UTC_TIMESTAMP  ( uid_x  DOT uid_x  ) 
+   ALL  UTC_TIMESTAMP  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  UTC_TIMESTAMP  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  UTC_TIMESTAMP  (  ) 
+   ALL  UTC_TIMESTAMP  (  )  AS uid_x 
+   ALL  INSERT  ( uid_x  ) 
+   ALL  INSERT  ( uid_x  )  AS uid_x 
+   ALL  INSERT  ( uid_x  , uid_x  ) 
+   ALL  INSERT  ( uid_x  , uid_x  )  AS uid_x 
+   ALL  INSERT  ( uid_x  , uid_x  DOT uid_x  ) 
+   ALL  INSERT  ( uid_x  DOT uid_x  ) 
+   ALL  INSERT  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  INSERT  ( uid_x  DOT uid_x  , uid_x  ) 
+   ALL  INSERT  (  ) 
+   ALL  INSERT  (  )  AS uid_x 
+   ALL  AVG  ( uid_x  ) 
+   ALL  AVG  ( uid_x  )  AS uid_x 
+   ALL  AVG  ( uid_x  DOT uid_x  ) 
+   ALL  AVG  ( uid_x  DOT uid_x  )  AS uid_x 
+   ALL  AVG  (  DISTINCT uid_x  ) 
+   ALL  AVG  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  AVG  (  DISTINCT uid_x  DOT uid_x  ) 
+   ALL  AVG  OF  ( uid_x  ) 
+   ALL  AVG  OF  ( uid_x  )  AS uid_x 
+   ALL  AVG  OF  ( uid_x  DOT uid_x  ) 
+   ALL  AVG  OF  (  DISTINCT uid_x  ) 
+   ALL  AVG  OF  (  DISTINCT uid_x  )  AS uid_x 
+   ALL  AVG  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   INSERT  ( uid_x  ) 
+   INSERT  ( uid_x  )  AS uid_x 
+   INSERT  ( uid_x  , uid_x  ) 
+   INSERT  ( uid_x  , uid_x  )  AS uid_x 
+   INSERT  ( uid_x  , uid_x  DOT uid_x  ) 
+   INSERT  ( uid_x  DOT uid_x  ) 
+   INSERT  ( uid_x  DOT uid_x  )  AS uid_x 
+   INSERT  ( uid_x  DOT uid_x  , uid_x  ) 
+   INSERT  (  ) 
+   INSERT  (  )  AS uid_x 
+   AVG  ( uid_x  ) 
+   AVG  ( uid_x  )  AS uid_x 
+   AVG  ( uid_x  DOT uid_x  ) 
+   AVG  ( uid_x  DOT uid_x  )  AS uid_x 
+   AVG  (  DISTINCT uid_x  ) 
+   AVG  (  DISTINCT uid_x  )  AS uid_x 
+   AVG  (  DISTINCT uid_x  DOT uid_x  ) 
+   AVG  (  DISTINCT uid_x  DOT uid_x  )  AS uid_x 
+   AVG  (  ALL uid_x  ) 
+   AVG  (  ALL uid_x  )  AS uid_x 
+   AVG  (  ALL uid_x  DOT uid_x  ) 
+   AVG  (  ALL uid_x  DOT uid_x  )  AS uid_x 
+   AVG  OF  ( uid_x  ) 
+   AVG  OF  ( uid_x  )  AS uid_x 
+   AVG  OF  ( uid_x  DOT uid_x  ) 
+   AVG  OF  ( uid_x  DOT uid_x  )  AS uid_x 
+   AVG  OF  (  DISTINCT uid_x  ) 
+   AVG  OF  (  DISTINCT uid_x  )  AS uid_x 
+   AVG  OF  (  DISTINCT uid_x  DOT uid_x  ) 
+   AVG  OF  (  ALL uid_x  ) 
+   AVG  OF  (  ALL uid_x  )  AS uid_x 
+   AVG  OF  (  ALL uid_x  DOT uid_x  ) 

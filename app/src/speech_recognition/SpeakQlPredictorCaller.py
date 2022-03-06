@@ -8,7 +8,7 @@ import subprocess
 class SpeakQlPredictorCaller:
 
     def __init__(self):
-        self.PREDICTOR_PATH = "java -jar c:/research_projects/speakql2_to_sql/app/bin/speakql_predictor.jar"
+        self.PREDICTOR_PATH = "java -jar c:/research_projects/speakql2_to_sql/app/bin/speakql_predictor_no_exp.jar"
 
     def getNextWordsFromQuery(self, query):
 

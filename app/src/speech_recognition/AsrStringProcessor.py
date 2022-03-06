@@ -2,6 +2,7 @@ from .SpeakQlPredictorCaller import *
 from speakql_translator.SpeakQlTree import *
 from .SpeakqlKeywords import *
 from db_util.db_analyzer import *
+from pyphonetics import Metaphone
 
 import pandas as pd
 import multiprocessing as mp
@@ -32,12 +33,16 @@ class AsrMultiProcessor:
         query = query.replace(".", " . ")
         query = query.replace("(", " ( ")
         query = query.replace(")", " ) ")
+        query = query.replace("\"", " \" ")
+        query = query.replace("'", " ' ")
         result = self.scan_query_with_parser(query)
 
         return result
 
 
-
+    #This is the naive approach, we can use it as a baseline for more optimal methods.
+    #Also, maybe use it as a last resort fallback if other methods fail to extract
+    #a valid speakql query.
     def scan_query_with_parser(self, query):
 
         keywords = SpeakQlKeywords()
@@ -46,6 +51,7 @@ class AsrMultiProcessor:
         #Identify SFW structure within query
         words = query.split()
         speakql_query = ""
+        print(words)
 
         #Start the process by finding the starting keyword at the beginning of the asr text
         for i in range(4, 0, -1):
@@ -60,9 +66,13 @@ class AsrMultiProcessor:
 
         #scan the rest of the query:
         timeout = 30
+        
         while len(words) > 0 and timeout > 0:
-
+            added_word = False
+            start_time = time.perf_counter()
             next_keywords = spc.getNextWordsFromQuery(speakql_query)
+            end_time = time.perf_counter()
+            #print("Time to fetch next words for", speakql_query, "is", str(end_time - start_time))
             
             for literal_kw in keywords.get_literal_kws():
                 if literal_kw in next_keywords:
@@ -78,14 +88,21 @@ class AsrMultiProcessor:
                     if candidate in next_keywords:
                         speakql_query = speakql_query + " " + candidate
                         words = words[i  : ]
+                        added_word = True
                         break
                     elif candidate.replace(" ", "") in next_keywords:
                         speakql_query = speakql_query + " " + candidate.replace(" ", "")
                         words = words[i  : ]
+                        added_word = True
                         break
+            
+            if not added_word:
+                timeout = timeout - 1
 
-            #print(speakql_query)
-            timeout = timeout - 1
+        if timeout == 0:
+            print("WARNING: Query scan timed out!")
+            print("TIMED OUT QUERY:", speakql_query)
+
         #print (next_keywords)
         return speakql_query
 
@@ -144,6 +161,12 @@ class AsrStringProcessor:
         results = amp.process_multi_queries(asr_queries)
         end_time = time.perf_counter()
         print("Process_multi_queries() time:", str(end_time - start_time), "seconds")
+        print(results)
+
+        start_time = time.perf_counter()
+        print(amp.do_processing_tasks(asr_string))
+        end_time = time.perf_counter()
+        print("do_processing_tasks() (single processor) time:", str(end_time - start_time), "seconds")
 
         return results
 
@@ -153,6 +176,12 @@ class AsrStringProcessor:
         print(fragment)
         next_words = "hello" #self.predictor.getNextWordsFromQuery(fragment)
         return next_words
+
+
+
+    #Pass in ASR transcript and make sure "and then" keywords are correct
+    def _clarify_l1_keywords(self, asr_string):
+        pass
 
 
 
