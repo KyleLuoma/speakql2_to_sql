@@ -6,7 +6,7 @@ class SpeakQlKeywords:
 
         self.exp_delim_kw = [
             "AND THEN",
-            "THEN"
+            #"THEN"
         ]
 
         self.select_kw = [
@@ -70,7 +70,7 @@ class SpeakQlKeywords:
         ]
 
 
-
+    
     def get_exp_delim_kws(self):
         return self.exp_delim_kw
 

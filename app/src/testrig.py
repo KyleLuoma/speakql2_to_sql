@@ -18,27 +18,21 @@ def main():
 
     query = """
                join the department table with the course table on department.id = course.deptid
-                and then
+                and than
                 join the course table with the course offering table on course.id = course offering.id
-                and then
+                and than
                 join the term table with the course offering table on term.id = course offering.termid
                 and then
                 show me department name in the department table
                 and then
                 get title and units from the course table
-                and then
-                in course offering find on days and start time
-                and then
+                and than
+                in course offering show me thin and on days and start time
+                an then
                 display nothing from the term table
     """
 
-    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
-
-    start_time = time.perf_counter()
-    asr.process_asr_string(query)
-    end_time = time.perf_counter()
-    #print("Total Time for multi-processor:", str(end_time - start_time), "seconds")
-
+    test_clarify_l1_keywords(query)
 
     global trie
     count_rows = 0
@@ -49,6 +43,21 @@ def main():
     #print(predictor.getNextWordsFromQuery("SELECT xx XOR xx XOR xx NOT RLIKE xx NOT RLIKE xx MEMBER OF ( xx DIV xx"))
     # trie.print_to_console()
 
+
+
+def test_clarify_l1_keywords(query):
+    #query = """select thick and thin from table blah end than from table two show me a and b"""
+    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
+    asr._clarify_l1_keywords(query, dist_threshold=1)
+
+
+
+def test_process_asr_string(query):
+    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
+    start_time = time.perf_counter()
+    asr.process_asr_string(query)
+    end_time = time.perf_counter()
+    #print("Total Time for multi-processor:", str(end_time - start_time), "seconds")
 
 
 

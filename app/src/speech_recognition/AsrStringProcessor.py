@@ -1,3 +1,5 @@
+from inspect import stack
+from ntpath import join
 from .SpeakQlPredictorCaller import *
 from speakql_translator.SpeakQlTree import *
 from .SpeakqlKeywords import *
@@ -134,6 +136,7 @@ class AsrStringProcessor:
         self.db_analyzer = db_analyzer
         self.predictor = SpeakQlPredictorCaller()
         self.keywords = SpeakQlKeywords()
+        self.metaphone = Metaphone()
 
         print("Number of processors: ", mp.cpu_count())
 
@@ -180,8 +183,100 @@ class AsrStringProcessor:
 
 
     #Pass in ASR transcript and make sure "and then" keywords are correct
-    def _clarify_l1_keywords(self, asr_string):
-        pass
+    def _clarify_l1_keywords(self, asr_string, dist_threshold = 1):
+        raw_string_words = asr_string.split(" ")
+        string_words = []
+        for word in raw_string_words:
+            if len(word) > 0 and word != "\n":
+                string_words.append(word)
+
+        #use to keep track of candidate keywords in string_words
+        keyword_candidates = []
+        for i in range(0 , len(string_words)):
+            keyword_candidates.append(False)
+
+
+        #Find Levenstein distance between each keyword / keyword pair and l1 delims then or and then
+        for keyword in self.keywords.get_exp_delim_kws():
+            
+            #Use to confirm that minimum required keywords to constitute a query exist in a fragment
+            #before considering an L1 delim candidate (i.e. need a SELECT and FROM, or JOIN and WITH)
+            select_kw = False
+            from_kw = False
+            join_kw = False
+            with_kw = False
+            fragment_is_query = (select_kw and from_kw) or (join_kw and with_kw)
+            
+            num_keyword_in_phrase = len(keyword.split(" "))
+            i = 0
+            distance = dist_threshold + 1
+            while (i + num_keyword_in_phrase) < len(string_words):
+                asr_phrase = string_words[i]
+
+                #Check if the asr_phrase word is a query keyword
+                kw_type = self._get_kw_type(asr_phrase, dist_threshold=1)
+                if kw_type == "select":
+                    select_kw = True
+                elif kw_type == "from":
+                    from_kw = True
+                elif kw_type == "join":
+                    join_kw = True
+                elif kw_type == "with":
+                    with_kw = True
+
+                fragment_is_query = (select_kw and from_kw) or (join_kw and with_kw)
+
+                if num_keyword_in_phrase > 1:
+                    asr_phrase = asr_phrase + " " + string_words[i + 1]
+                
+                #Finding distance between phrase and keyword
+                if len(asr_phrase) > 0:
+                    distance = self.metaphone.distance(asr_phrase, keyword)
+                #If distance is below threshold, then we want to look ahead in the asr_string
+                # to see if what follows is a starting keyword (or close to it).
+                start_word_is_next = False
+                if distance <= dist_threshold and (i + num_keyword_in_phrase + 1) < len(string_words):
+                    for start_kw in self.keywords.get_start_kws():
+                        if self.metaphone.distance(
+                            string_words[i + num_keyword_in_phrase], start_kw.split(" ")[0]
+                         ) <= dist_threshold:
+                            start_word_is_next = True
+
+                #First round of updates to keyword_candidates. We're not through though, we need to make
+                #sure that between each keyword candidate there exists sufficient keywords to form a
+                #sub query.
+                if start_word_is_next and fragment_is_query:
+                    word_num = 0
+                    for word in asr_phrase.split(" "):
+                        keyword_candidates[i + word_num] = True
+                        string_words[i + word_num] = keyword.split()[word_num]
+                        word_num = word_num + 1
+                    fragment_is_query = False
+                    select_kw = from_kw = join_kw = with_kw = False
+                i = i + 1
+            print(keyword_candidates)
+            print(" ".join(string_words))
+
+
+
+    def _get_kw_type(self, keyword, dist_threshold = 0):
+        keyword_type = "none" #options: "join", "with", "from", "select"
+        if len(keyword) > 0:
+            for kw in self.keywords.get_from_kws():
+                if self.metaphone.distance(kw.split(" ")[0], keyword) <= dist_threshold:
+                    return "from"
+            for kw in self.keywords.get_select_kws():
+                if self.metaphone.distance(kw.split(" ")[0], keyword) <= dist_threshold:
+                    return "select"
+            for kw in self.keywords.get_join_kws():
+                if self.metaphone.distance(kw.split(" ")[0], keyword) <= dist_threshold:
+                    return "join"
+            for kw in ["WITH"]:
+                if self.metaphone.distance(kw.split(" ")[0], keyword) <= dist_threshold:
+                    return "with"
+        return "none"
+
+    
 
 
 
