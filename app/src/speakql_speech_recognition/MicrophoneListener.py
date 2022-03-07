@@ -22,7 +22,7 @@ class MicrophoneListener:
 
 
 
-    def listen(self):
+    def listen(self, preferred_phrases = ["SELECT", "FROM", "WHERE"]):
         stop_listening = False
         self.recognizer.pause_threshold = 1.25
         self.recognizer.energy_threshold = 4000
@@ -33,9 +33,7 @@ class MicrophoneListener:
         try:
             transcript = self.recognizer.recognize_google_cloud(
                     audio_data=speech,
-                    preferred_phrases=[
-                        'party bot', 'send a message', 'host', 'stop program', "social bot"
-                        ], #NOTE: Error in speech_recognition library __init__.py must change ["speechContext"] to ["speechContexts"] on line 924
+                    preferred_phrases=preferred_phrases, #NOTE: Error in speech_recognition library __init__.py must change ["speechContext"] to ["speechContexts"] on line 924
                     credentials_json = JSONEncoder().encode(self.google_credentials)
                 )
             print("Here's what I think you said:", transcript)

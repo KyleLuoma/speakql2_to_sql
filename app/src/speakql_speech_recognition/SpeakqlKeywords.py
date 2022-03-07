@@ -43,13 +43,12 @@ class SpeakQlKeywords:
             "JOIN WITH TABLE",
             "BY JOINING WITH TABLE",
             "BY JOINING WITH",
-            "LEFT",
-            "OUTER",
-            "INNER",
-            "CROSS",
-            "RIGHT",
-            "NATURAL",
-            "BY",
+            "LEFT JOIN",
+            "OUTER JOIN",
+            "INNER JOIN",
+            "CROSS JOIN",
+            "RIGHT JOIN",
+            "NATURAL JOIN",
             "JOINED"
         ]
 

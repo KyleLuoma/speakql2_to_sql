@@ -34,7 +34,12 @@ def main():
     """
 
     microphone = MicrophoneListener()
-    query = microphone.listen()
+    keywords = SpeakQlKeywords()
+    preferred_phrases = keywords.get_start_kws()
+    analyzer = DbAnalyzer(DbConnector())
+    preferred_phrases = preferred_phrases + analyzer.get_column_names()["COLUMN_NAME"].to_list()
+    preferred_phrases = preferred_phrases + analyzer.get_table_names()["TABLE_NAME"].to_list()
+    query = microphone.listen(preferred_phrases)
     print(query)
 
     l1_clarified = test_clarify_l1_keywords(query)
@@ -45,7 +50,7 @@ def main():
     count_rows = 0
     trie = TrieNode()
     predictor = SpeakQlPredictorCaller()
-    keywords = SpeakQlKeywords()
+    
     #build_trie_using_parser("SELECT", predictor, keywords)
     #print(predictor.getNextWordsFromQuery("SELECT xx XOR xx XOR xx NOT RLIKE xx NOT RLIKE xx MEMBER OF ( xx DIV xx"))
     # trie.print_to_console()
