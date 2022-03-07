@@ -300,6 +300,30 @@ class AsrStringProcessor:
 
 
 
+    # Identifies likely delimiters and replaces them with a valid delimiter keyword.
+    # Generalized, so we need to pass in the appropriate delim_kws for the typ of
+    # fragment that we are evaluating.
+    def _clarify_l3_delimiters_in_fragment(self, asr_string, delim_kws, dist_threshold = 0):
+        raw_string_words = asr_string.split(" ")
+        string_words = []
+        for word in raw_string_words:
+            if len(word) > 0:
+                string_words.append(word)
+        ix = 0
+        replaced = False
+        for word in string_words:
+            for delim_kw in delim_kws:
+                if word.upper() not in delim_kws and self.metaphone.distance(word, delim_kw) <= dist_threshold:
+                    string_words[ix] = delim_kw
+                    break
+                elif word.upper() in delim_kws:
+                    string_words[ix] = word.upper()
+                    break
+            ix = ix + 1
+        return " ".join(string_words)
+
+
+
     def _get_kw_type(self, keyword, dist_threshold = 0):
         keyword_type = "none" #options: "join", "with", "from", "select"
         if len(keyword) > 0:
@@ -361,6 +385,10 @@ class AsrStringProcessor:
             type_start_kw_list = self.keywords.get_select_kws(),
             max_kw_len = 3
         )
+        select_fragment = self._clarify_l3_delimiters_in_fragment(
+            select_fragment.strip(),
+            ["AND", "COMMA"]
+        )
         if len(select_fragment) > 0:
             has_select = True
             query_frag_dict["select"] = select_fragment
@@ -370,6 +398,10 @@ class AsrStringProcessor:
             unbundled_query = unbundled_query,  
             type_start_kw_list = self.keywords.get_from_kws(),
             max_kw_len = 2
+        )
+        from_fragment = self._clarify_l3_delimiters_in_fragment(
+            from_fragment.strip(),
+            ["AND", "COMMA"]
         )
         if len(from_fragment) > 0:
             has_from = True
@@ -391,6 +423,11 @@ class AsrStringProcessor:
             type_start_kw_list = ["WHERE"],
             max_kw_len = 1
         )
+        #Logical operators serve as our WHERE delimiter: AND XOR OR
+        where_fragment = self._clarify_l3_delimiters_in_fragment(
+            where_fragment.strip(),
+            ["AND", "OR", "XOR"]
+        )
         if len(where_fragment) > 0:
             query_frag_dict["where"] = where_fragment
 
@@ -407,6 +444,29 @@ class AsrStringProcessor:
             query_frag_dict["multi_join"] = unbundled_query
 
         return query_frag_dict
+
+
+    #This is for L3 separation, pass in the fragment and appropriate delimiters
+    #and it will return a list. The first word of each list should be either
+    #The beginning kw (SELECT, FROM, WHERE...) or the delimiter used in the query
+    def _separate_fragment_by_delimiters(self, fragment, delim_kws):
+        fragment = str(fragment.replace(",", " , "))
+        # for kw in (self.keywords.get_start_kws() + ["WHERE"]):
+        #     fragment = fragment.replace(kw, "")
+        delimited_element_list = []
+        current_fragment = ""
+        ix = 0
+        for word in fragment.split(" "):
+            if word not in delim_kws and ix < len(fragment.split(" ")):
+                current_fragment = current_fragment + " " + word
+            if ix == len(fragment.split(" ")) - 1:
+                delimited_element_list.append(current_fragment.strip())
+            if word in delim_kws:
+                delimited_element_list.append(current_fragment.strip())
+                current_fragment = word
+            
+            ix = ix + 1
+        return delimited_element_list
 
     
 

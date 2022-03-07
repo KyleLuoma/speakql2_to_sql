@@ -37,7 +37,7 @@ def main():
     and then join the courseoffering table with the room table on room. I t equal courseoffering. Room ID 
     and then from the courseoffering tableside start time and on days and then 
     find area and capacity and floor in the room table 
-    and then in the building table shown the building number and building name where buildingnumber Iqbal 23 or buildingnumber equal to 4"""
+    and then in the building table shown the building number , building name where buildingnumber Iqbal 23 and buildingnumber equal to 4"""
 
     microphone = MicrophoneListener()
     keywords = SpeakQlKeywords()
@@ -47,10 +47,10 @@ def main():
     preferred_phrases = preferred_phrases + analyzer.get_column_names()["COLUMN_NAME"].to_list()
     preferred_phrases = preferred_phrases + analyzer.get_table_names()["TABLE_NAME"].to_list()
     
-    # query = microphone.listen(preferred_phrases)
-    # print(query)
+    query = microphone.listen(preferred_phrases)
+    print(query)
 
-    struct_determination_end_to_end_test(asr_response, asr)
+    struct_determination_end_to_end_test(query, asr)
 
     global trie
     count_rows = 0
@@ -71,11 +71,23 @@ def struct_determination_end_to_end_test(query, asr):
         print(query)
     separated_query_fragments = []
     print("\n\n Output from l2 splitting:")
+    l3_separated = []
     for query in separated:
         fragment_dict = test_find_query_fragments(query, asr)
         separated_query_fragments.append(fragment_dict)
         print(fragment_dict)
+        if 'select' in fragment_dict.keys():
+            fragment_dict['select'] = asr._separate_fragment_by_delimiters(fragment_dict['select'], ["AND", ","])
+        if 'where' in fragment_dict.keys():
+            fragment_dict['where'] = asr._separate_fragment_by_delimiters(fragment_dict['where'], ["AND", "OR", "XOR"])
+        if 'from' in fragment_dict.keys():
+            fragment_dict['from'] = asr._separate_fragment_by_delimiters(fragment_dict['from'], ["AND", ","])
+        l3_separated.append(fragment_dict)
+    print("\n\n Output from l3 splitting:")
+    for fragment_dict in l3_separated:
+        print(fragment_dict)
     print("\n\n")
+
     
 
 
