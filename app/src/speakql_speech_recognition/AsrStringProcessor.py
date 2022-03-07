@@ -255,7 +255,7 @@ class AsrStringProcessor:
                     select_kw = from_kw = join_kw = with_kw = False
                 i = i + 1
             #print(keyword_candidates)
-            print(" ".join(string_words))
+            print("\n\n", "Output from L1 Clarification: \n"," ".join(string_words))
             return " ".join(string_words)
 
 
@@ -269,7 +269,7 @@ class AsrStringProcessor:
             self.keywords.get_select_kws()
             + self.keywords.get_from_kws()
             + self.keywords.get_join_kws()
-            + ["WHERE"]
+            + ["WHERE"] + ["ON"] + ["WITH"]
             + self.keywords.get_group_kws()
             + self.keywords.get_order_kws()
         )
@@ -295,8 +295,9 @@ class AsrStringProcessor:
                         for j in range(i, i + len(fragment.split(" "))):
                             if j < len(string_words):
                                 string_words[j] = fragment.split(" ")[j - i].upper()
-        print(string_words)
+        print("\n\n", "Output from L2 Clarification: \n"," ".join(string_words))
         return " ".join(string_words)
+
 
 
     def _get_kw_type(self, keyword, dist_threshold = 0):
@@ -318,8 +319,7 @@ class AsrStringProcessor:
 
     
 
-
-
+    #Perform L1 structure separation (do this after performing L1 clarification)
     def _separate_unbundled_query(self, asr_string):
 
         unbundled_queries = [asr_string]
@@ -338,6 +338,127 @@ class AsrStringProcessor:
             unbundled_queries = new_unbundled_queries
 
         return unbundled_queries
+
+
+
+    #Perform L2 structure separation (Do this after L1 and L2 clarification 
+    # and L1 Structure Separation). Should not be used on queries with
+    # subqueries. We need to pass a query through some sort of sub-query
+    # masker before using this particular method.
+    def _separate_spj_parts(self, unbundled_query):
+        query_frag_dict = {}
+        #Must be (has_select and hasfrom) or has_join_with to be a valid query fragment
+        has_select = False
+        has_from = False
+        has_join_with = False
+
+        string_words = unbundled_query.split(" ")
+        ix = 0
+
+        #Scan to find a select synonym and register the select expression in the dictionary
+        select_fragment = self._find_query_fragments(
+            unbundled_query = unbundled_query,  
+            type_start_kw_list = self.keywords.get_select_kws(),
+            max_kw_len = 3
+        )
+        if len(select_fragment) > 0:
+            has_select = True
+            query_frag_dict["select"] = select_fragment
+
+        #Scan to find a from synonym
+        from_fragment = self._find_query_fragments(
+            unbundled_query = unbundled_query,  
+            type_start_kw_list = self.keywords.get_from_kws(),
+            max_kw_len = 2
+        )
+        if len(from_fragment) > 0:
+            has_from = True
+            query_frag_dict["from"] = from_fragment
+
+        #Scan to find a single join_expression
+        if(has_from and has_select):
+            join_fragment = self._find_query_fragments(
+                unbundled_query = unbundled_query,  
+                type_start_kw_list = self.keywords.get_join_kws(),
+                max_kw_len = 4
+            )
+            if len(join_fragment) > 0:
+                query_frag_dict["join"] = join_fragment
+
+        #Scan to find a where synonym
+        where_fragment = self._find_query_fragments(
+            unbundled_query = unbundled_query,  
+            type_start_kw_list = ["WHERE"],
+            max_kw_len = 1
+        )
+        if len(where_fragment) > 0:
+            query_frag_dict["where"] = where_fragment
+
+        #If there is no valid SPJ query, then we need to find
+        #a valid multi-join expression. At this point, we either have
+        #a good multi-join query or we have an invalid query.
+        has_with = "WITH" in unbundled_query
+        has_join_kw = False
+        for join_keyword in self.keywords.get_join_kws():
+            if join_keyword in unbundled_query:
+                has_join_kw = True
+                break
+        if has_join_kw and has_with and not(has_from or has_select):
+            query_frag_dict["multi_join"] = unbundled_query
+
+        return query_frag_dict
+
+    
+
+    # Find the beginning and end of a query fragment of a given type (i.e. select, 
+    # from, where, join, multijoin). Return the fragment as a string. 
+    # Returns string randing from fragment type start kw to any other start kw or the end of the query
+    # (whichever appears first).
+    def _find_query_fragments(self, unbundled_query, type_start_kw_list, max_kw_len = 3):
+
+        string_words = unbundled_query.split(" ")
+        ix = 0
+
+        query_start = 0
+        query_end = 0
+        kw_in_query = ""
+        has_fragment = False
+        #Find the start index:
+        for word in string_words:
+            kw_phrase = ""
+            for kw_len in range(max_kw_len, 0, -1):
+                kw_phrase = " ".join(string_words[ix : ix + kw_len])
+                if kw_phrase in type_start_kw_list:
+                    has_fragment = True
+                    query_start = ix
+                    kw_in_query = kw_phrase
+                    break
+                kw_phrase = ""
+            if has_fragment:
+                break
+            ix = ix + 1
+        ix = 0
+        #Find the end index:
+        found_end = False
+        if has_fragment:
+            for word in string_words[query_start : ]:
+                for start_kw in (self.keywords.get_start_kws() + ["WHERE"]):
+                    if word == start_kw.split(" ")[0] and word not in kw_in_query.split(" "):
+                        query_end = ix
+                        found_end = True
+                        break
+                if found_end:
+                    break
+                ix = ix + 1
+                #Check if we're at the end of the query:
+                if ix == len(string_words[query_start : ]):
+                    query_end = ix
+            return " ".join(string_words[query_start : query_start + query_end])
+        else:
+            return ""
+            
+
+    
 
 
 

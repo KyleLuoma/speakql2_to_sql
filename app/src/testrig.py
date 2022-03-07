@@ -30,21 +30,27 @@ def main():
                 and than
                 in course offering show me thin and on days and start time
                 end then
-                display nothing from the term table
+                display nothing from the term table where year = '2022'
     """
+
+    asr_response = """join the building table with the room table on room. Building ID equal building. ID 
+    and then join the courseoffering table with the room table on room. I t equal courseoffering. Room ID 
+    and then from the courseoffering tableside start time and on days and then 
+    find area and capacity and floor in the room table 
+    and then in the building table shown the building number and building name where buildingnumber Iqbal 23 or buildingnumber equal to 4"""
 
     microphone = MicrophoneListener()
     keywords = SpeakQlKeywords()
     preferred_phrases = keywords.get_start_kws()
+    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
     analyzer = DbAnalyzer(DbConnector())
     preferred_phrases = preferred_phrases + analyzer.get_column_names()["COLUMN_NAME"].to_list()
     preferred_phrases = preferred_phrases + analyzer.get_table_names()["TABLE_NAME"].to_list()
-    query = microphone.listen(preferred_phrases)
-    print(query)
+    
+    # query = microphone.listen(preferred_phrases)
+    # print(query)
 
-    l1_clarified = test_clarify_l1_keywords(query)
-    l2_clarified = test_clarify_l2_keywords(l1_clarified)
-    test_process_asr_string(l2_clarified)
+    struct_determination_end_to_end_test(asr_response, asr)
 
     global trie
     count_rows = 0
@@ -56,22 +62,43 @@ def main():
     # trie.print_to_console()
 
 
+def struct_determination_end_to_end_test(query, asr):
+    l1_clarified = test_clarify_l1_keywords(query, asr)
+    l2_clarified = test_clarify_l2_keywords(l1_clarified, asr)
+    separated = test_separate_unbundled_queries(l2_clarified, asr)
+    print("\n\n Output from l1 splitting:")
+    for query in separated:
+        print(query)
+    separated_query_fragments = []
+    print("\n\n Output from l2 splitting:")
+    for query in separated:
+        fragment_dict = test_find_query_fragments(query, asr)
+        separated_query_fragments.append(fragment_dict)
+        print(fragment_dict)
+    print("\n\n")
+    
 
-def test_clarify_l1_keywords(query):
+
+def test_find_query_fragments(query, asr):
+    return asr._separate_spj_parts(query)
+
+
+def test_separate_unbundled_queries(query, asr):
+    return asr._separate_unbundled_query(query)
+
+
+def test_clarify_l1_keywords(query, asr):
     #query = """select thick and thin from table blah end than from table two show me a and b"""
-    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
     return asr._clarify_l1_keywords(query, dist_threshold=1)
 
 
 
-def test_clarify_l2_keywords(query):
-    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
+def test_clarify_l2_keywords(query, asr):
     return asr._clarify_l2_keywords(query, dist_threshold=0)
 
 
 
-def test_process_asr_string(query):
-    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
+def test_process_asr_string(query, asr):
     start_time = time.perf_counter()
     asr.process_asr_string(query)
     end_time = time.perf_counter()

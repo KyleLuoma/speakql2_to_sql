@@ -48,8 +48,7 @@ class SpeakQlKeywords:
             "INNER JOIN",
             "CROSS JOIN",
             "RIGHT JOIN",
-            "NATURAL JOIN",
-            "JOINED"
+            "NATURAL JOIN"
         ]
 
         self.group_kw = [

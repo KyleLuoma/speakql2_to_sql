@@ -24,7 +24,7 @@ class MicrophoneListener:
 
     def listen(self, preferred_phrases = ["SELECT", "FROM", "WHERE"]):
         stop_listening = False
-        self.recognizer.pause_threshold = 1.25
+        self.recognizer.pause_threshold = 3
         self.recognizer.energy_threshold = 4000
         with self.microphone as source:
             print("Listening...")
