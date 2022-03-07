@@ -4,10 +4,11 @@ import pandas as pd
 
 class DbConnector:
 
-    def __init__(self, db_engine = "mysql", db_name = "speakql_university", config_dir = ""):
+    def __init__(self, db_engine = "mysql", db_name = "speakql_university", config_dir = "", verbose = False):
         
         print("Initializing DbConnector class for a", db_engine, " connection to", db_name)
 
+        self.verbose = verbose
         self.db_name = db_name
         self.db_engine = db_engine
         self.config_dir = config_dir
@@ -29,7 +30,8 @@ class DbConnector:
 
     def do_single_select_query_into_dataframe(self, query):
 
-        print("DBCONNECTOR: Executing query '", query, "' in database", self.db_name)
+        if self.verbose:
+            print("DBCONNECTOR: Executing query '", query, "' in database", self.db_name)
 
         query.replace(";", "")
         

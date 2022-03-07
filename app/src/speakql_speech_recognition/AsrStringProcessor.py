@@ -254,7 +254,7 @@ class AsrStringProcessor:
                     fragment_is_query = False
                     select_kw = from_kw = join_kw = with_kw = False
                 i = i + 1
-            print(keyword_candidates)
+            #print(keyword_candidates)
             print(" ".join(string_words))
             return " ".join(string_words)
 
@@ -275,17 +275,26 @@ class AsrStringProcessor:
         )
         string_words = asr_string.split()
         #Covering all different lengths of the keyword synonym phrases:
+
         for kw_len in range(5, 0, -1):
+            
             #Iterating over all of the words in the sub query:
             for i in range(0, len(string_words) - (kw_len - 1)):
                 fragment = " ".join(string_words[i : i + kw_len])
                 #Iterate over all keywords in the mega list:
                 for kw in l2_keywords:
                     #Compare the distance, and do replacement if below threshold
-                    if self.metaphone.distance(kw, fragment) <= dist_threshold and len(fragment) > 1:
+                    if (self.metaphone.distance(kw, fragment) <= dist_threshold 
+                            and len(fragment) > 1
+                            and fragment.upper() not in l2_keywords
+                            ):
                         for j in range(i, i + len(kw.split(" "))):
                             if j < len(string_words):
                                 string_words[j] = kw.split(" ")[j - i]
+                    elif fragment.upper() in l2_keywords:
+                        for j in range(i, i + len(fragment.split(" "))):
+                            if j < len(string_words):
+                                string_words[j] = fragment.split(" ")[j - i].upper()
         print(string_words)
         return " ".join(string_words)
 

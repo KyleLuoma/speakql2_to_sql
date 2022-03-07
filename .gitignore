@@ -3,6 +3,7 @@ antlr_builds/
 /src/speakql_translator/antlr_builds/
 /app/src/speakql_translator/antlr_builds/
 app/src/speakql_translator/__pycache__
+app/src/speakql_speech_recognition/local/
 */__pycache__/*
 *__pycache__*
 bin/

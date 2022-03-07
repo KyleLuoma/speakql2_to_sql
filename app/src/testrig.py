@@ -7,8 +7,9 @@ import pandas as pd
 
 from speakql_translator.speakql_to_sql import *
 
-from speech_recognition.SpeakQlPredictorCaller import *
-from speech_recognition.AsrStringProcessor import *
+from speakql_speech_recognition.SpeakQlPredictorCaller import *
+from speakql_speech_recognition.AsrStringProcessor import *
+from speakql_speech_recognition.MicrophoneListener import *
 
 from db_util.db_analyzer import *
 from db_util.db_connector import *
@@ -32,8 +33,13 @@ def main():
                 display nothing from the term table
     """
 
-    #test_clarify_l1_keywords(query)
-    test_clarify_l2_keywords()
+    microphone = MicrophoneListener()
+    query = microphone.listen()
+    print(query)
+
+    l1_clarified = test_clarify_l1_keywords(query)
+    l2_clarified = test_clarify_l2_keywords(l1_clarified)
+    test_process_asr_string(l2_clarified)
 
     global trie
     count_rows = 0
@@ -49,13 +55,13 @@ def main():
 def test_clarify_l1_keywords(query):
     #query = """select thick and thin from table blah end than from table two show me a and b"""
     asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
-    asr._clarify_l1_keywords(query, dist_threshold=1)
+    return asr._clarify_l1_keywords(query, dist_threshold=1)
 
 
 
-def test_clarify_l2_keywords():
+def test_clarify_l2_keywords(query):
     asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
-    asr._clarify_l2_keywords("show me department name from the department table joined with the customer table ware id = a", dist_threshold=0)
+    return asr._clarify_l2_keywords(query, dist_threshold=0)
 
 
 

@@ -4,7 +4,7 @@ import json
 
 from speakql_translator.speakql_to_sql import *
 
-from speech_recognition.SpeakQlPredictorCaller import *
+from speakql_speech_recognition.SpeakQlPredictorCaller import *
 
 from db_util.db_analyzer import *
 from db_util.db_connector import *

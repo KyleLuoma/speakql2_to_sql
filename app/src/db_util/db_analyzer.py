@@ -34,7 +34,6 @@ class DbAnalyzer:
 
         for column in self.column_names.itertuples():
             if column.DATA_TYPE == "varchar":
-                print(column.COLUMN_NAME)
                 new_values = self.db_connector.do_single_select_query_into_dataframe(
                     query.format(
                         column.TABLE_NAME, 
