@@ -205,7 +205,9 @@ class AsrStringProcessor:
             from_kw = False
             join_kw = False
             with_kw = False
-            fragment_is_query = (select_kw and from_kw) or (join_kw and with_kw)
+            select_modifiers = False
+
+            fragment_is_query = (select_kw and from_kw) or (join_kw and with_kw) or select_modifiers
             
             num_keyword_in_phrase = len(keyword.split(" "))
             i = 0
@@ -223,8 +225,10 @@ class AsrStringProcessor:
                     join_kw = True
                 elif kw_type == "with":
                     with_kw = True
+                elif kw_type == "select_modifier":
+                    select_modifiers = True
 
-                fragment_is_query = (select_kw and from_kw) or (join_kw and with_kw)
+                fragment_is_query = (select_kw and from_kw) or (join_kw and with_kw) or select_modifiers
 
                 if num_keyword_in_phrase > 1:
                     asr_phrase = asr_phrase + " " + string_words[i + 1]
@@ -272,6 +276,8 @@ class AsrStringProcessor:
             + ["WHERE"] + ["ON"] + ["WITH"]
             + self.keywords.get_group_kws()
             + self.keywords.get_order_kws()
+            + self.keywords.get_having_kws()
+            + self.keywords.get_limit_kws()
         )
         string_words = asr_string.split()
         #Covering all different lengths of the keyword synonym phrases:
@@ -287,6 +293,7 @@ class AsrStringProcessor:
                     if (self.metaphone.distance(kw, fragment) <= dist_threshold 
                             and len(fragment) > 1
                             and fragment.upper() not in l2_keywords
+                            and not fragment[0].isdigit()
                             ):
                         for j in range(i, i + len(kw.split(" "))):
                             if j < len(string_words):
@@ -325,7 +332,15 @@ class AsrStringProcessor:
 
 
     def _get_kw_type(self, keyword, dist_threshold = 0):
-        keyword_type = "none" #options: "join", "with", "from", "select"
+        keyword_type = "none" #options: "join", "with", "from", "select", "select_modifier"
+
+        select_modifier_kws = (
+                self.keywords.get_group_kws() 
+                + self.keywords.get_limit_kws()
+                + self.keywords.get_having_kws()
+                + self.keywords.get_order_kws()
+            )
+
         if len(keyword) > 0:
             for kw in self.keywords.get_from_kws():
                 if self.metaphone.distance(kw.split(" ")[0], keyword) <= dist_threshold:
@@ -339,6 +354,9 @@ class AsrStringProcessor:
             for kw in ["WITH"]:
                 if self.metaphone.distance(kw.split(" ")[0], keyword) <= dist_threshold:
                     return "with"
+            for kw in select_modifier_kws:
+                if self.metaphone.distance(kw.split(" ")[0], keyword) <= dist_threshold:
+                    return "select_modifier"
         return "none"
 
     
@@ -417,6 +435,42 @@ class AsrStringProcessor:
             if len(join_fragment) > 0:
                 query_frag_dict["join"] = join_fragment
 
+        #Scan to find a group by expression
+        group_by_fragment = self._find_query_fragments(
+            unbundled_query = unbundled_query,
+            type_start_kw_list = self.keywords.get_group_kws(),
+            max_kw_len = 2
+        )
+        if len(group_by_fragment) > 0:
+            query_frag_dict["group_by"] = group_by_fragment
+
+        #Scan to find a having expression
+        having_fragment = self._find_query_fragments(
+            unbundled_query = unbundled_query,
+            type_start_kw_list = self.keywords.get_having_kws(),
+            max_kw_len = 1
+        )
+        if len(having_fragment) > 0:
+            query_frag_dict["having"] = having_fragment
+
+        #Scan to find an order by expression
+        order_fragment = self._find_query_fragments(
+            unbundled_query = unbundled_query,
+            type_start_kw_list = self.keywords.get_order_kws(),
+            max_kw_len = 2
+        )
+        if len(order_fragment) > 0:
+            query_frag_dict["order_by"] = order_fragment
+
+        #Scan to find a limit expression
+        limit_fragment = self._find_query_fragments(
+            unbundled_query = unbundled_query,
+            type_start_kw_list = ["LIMIT"],
+            max_kw_len = 1
+        )
+        if len(order_fragment) > 0:
+            query_frag_dict["limit"] = limit_fragment
+
         #Scan to find a where synonym
         where_fragment = self._find_query_fragments(
             unbundled_query = unbundled_query,  
@@ -442,6 +496,11 @@ class AsrStringProcessor:
                 break
         if has_join_kw and has_with and not(has_from or has_select):
             query_frag_dict["multi_join"] = unbundled_query
+
+        #Now, if were get here and we still don't have a valid query, we 
+        #need to return this in the dict as an "error" entry.
+        if len(query_frag_dict) == 0:
+            query_frag_dict["error"] = unbundled_query
 
         return query_frag_dict
 

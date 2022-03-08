@@ -60,6 +60,14 @@ class SpeakQlKeywords:
             "ORDER BY"
         ]
 
+        self.having_kw = [
+            "HAVING"
+        ]
+
+        self.limit_kw = [
+            "LIMIT"
+        ]
+
         self.literal_kw = [
             "uid",
             "constant",
@@ -68,6 +76,12 @@ class SpeakQlKeywords:
         ]
 
 
+
+    def get_limit_kws(self):
+        return self.limit_kw
+
+    def get_having_kws(self):
+        return self.having_kw
 
     def get_group_kws(self):
         return self.group_kw
@@ -88,7 +102,15 @@ class SpeakQlKeywords:
         return self.join_kw
 
     def get_start_kws(self):
-        return self.select_kw + self.from_kw + self.join_kw + self.order_kw + self.group_kw
+        return (
+            self.select_kw 
+            + self.from_kw 
+            + self.join_kw 
+            + self.order_kw 
+            + self.group_kw 
+            + self.having_kw
+            + self.limit_kw
+        )
 
     def get_literal_kws(self):
         return self.literal_kw

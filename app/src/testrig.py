@@ -33,11 +33,12 @@ def main():
                 display nothing from the term table where year = '2022'
     """
 
-    asr_response = """join the building table with the room table on room. Building ID equal building. ID 
-    and then join the courseoffering table with the room table on room. I t equal courseoffering. Room ID 
-    and then from the courseoffering tableside start time and on days and then 
-    find area and capacity and floor in the room table 
-    and then in the building table shown the building number , building name where buildingnumber Iqbal 23 and buildingnumber equal to 4"""
+    asr_response = """join the room table with the building people on room. Building ID equal building that ID 
+    and then from the building table guests buildingname 
+    and then from the room table and get average capacity 
+    and then group by automaticall order by buildingname limit 10 having average capacity > 20 
+    and then join is here for error checking feature validation
+    """
 
     microphone = MicrophoneListener()
     keywords = SpeakQlKeywords()
@@ -47,10 +48,10 @@ def main():
     preferred_phrases = preferred_phrases + analyzer.get_column_names()["COLUMN_NAME"].to_list()
     preferred_phrases = preferred_phrases + analyzer.get_table_names()["TABLE_NAME"].to_list()
     
-    query = microphone.listen(preferred_phrases)
-    print(query)
+    # query = microphone.listen(preferred_phrases)
+    # print(query)
 
-    struct_determination_end_to_end_test(query, asr)
+    struct_determination_end_to_end_test(asr_response, asr)
 
     global trie
     count_rows = 0
