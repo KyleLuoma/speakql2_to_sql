@@ -33,25 +33,26 @@ def main():
                 display nothing from the term table where year = '2022'
     """
 
-    asr_response = """join the room table with the building people on room. Building ID equal building that ID 
-    and then from the building table guests buildingname 
-    and then from the room table and get average capacity 
-    and then group by automaticall order by buildingname limit 10 having average capacity > 20 
-    and then join is here for error checking feature validation
+    asr_response = """select the average open parenthesis area close parenthesis 
+    from the room table where capacity is greater than or equal to 5
     """
 
     microphone = MicrophoneListener()
     keywords = SpeakQlKeywords()
-    preferred_phrases = keywords.get_start_kws()
+    preferred_phrases = (
+        keywords.get_start_kws() 
+        + keywords.get_symbol_text_list()
+        + keywords.get_exp_delim_kws()
+        )
     asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
     analyzer = DbAnalyzer(DbConnector())
     preferred_phrases = preferred_phrases + analyzer.get_column_names()["COLUMN_NAME"].to_list()
     preferred_phrases = preferred_phrases + analyzer.get_table_names()["TABLE_NAME"].to_list()
     
-    # query = microphone.listen(preferred_phrases)
-    # print(query)
+    query = microphone.listen(preferred_phrases)
+    print(query)
 
-    struct_determination_end_to_end_test(asr_response, asr)
+    struct_determination_end_to_end_test(query, asr)
 
     global trie
     count_rows = 0
@@ -74,6 +75,7 @@ def struct_determination_end_to_end_test(query, asr):
     print("\n\n Output from l2 splitting:")
     l3_separated = []
     for query in separated:
+        query = asr.replace_words_with_symbols(query)
         fragment_dict = test_find_query_fragments(query, asr)
         separated_query_fragments.append(fragment_dict)
         print(fragment_dict)

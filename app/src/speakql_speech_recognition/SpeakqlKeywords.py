@@ -75,7 +75,39 @@ class SpeakQlKeywords:
             "tableAlias"
         ]
 
+        self.symbols_dict = {
+            "plus" : "+",
+            "minus" : "-",
+            "is less than or equal to" : "<=",
+            "less than or equal to" : "<=",
+            "is less than" : "<",
+            "less than" : "<",
+            "is greater than or equal to" : ">=",
+            "greater than or equal to" : ">=",
+            "is greater than" : ">",
+            "greater than" : ">",
+            "not equal to" : "<>",
+            "equals" : "=",
+            "equal to" : "=",
+            "equal" : "=",
+            "times" : "*",
+            " X " : " * ",
+            "divided by" : "/",
+            "open parenthesis" : "(",
+            "close parenthesis" : ")",
+            "end quote" : "'",
+            "quote" : "'"
+        }
 
+
+    def get_symbols_dict(self):
+        return self.symbols_dict
+
+    def get_symbol_text_list(self):
+        key_list = []
+        for key in self.symbols_dict.keys():
+            key_list.append(key)
+        return key_list
 
     def get_limit_kws(self):
         return self.limit_kw

@@ -575,6 +575,18 @@ class AsrStringProcessor:
             return " ".join(string_words[query_start : query_start + query_end])
         else:
             return ""
+
+
+
+    # Simple find / replace using the symbols dict from SpeakqlKeywords
+    # Use this in fragments that allow operations
+    def replace_words_with_symbols(self, query):
+        symbol_dict = self.keywords.get_symbols_dict()
+        for text in self.keywords.get_symbol_text_list():
+            if text in query:
+                query = query.replace(text, symbol_dict[text])
+        return query
+        
             
 
     
