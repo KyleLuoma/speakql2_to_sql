@@ -33,8 +33,9 @@ def main():
                 display nothing from the term table where year = '2022'
     """
 
-    asr_response = """select the average open parenthesis area close parenthesis 
-    from the room table where capacity is greater than or equal to 5
+    asr_response = """show me building number in building name in the building table 
+    and then show me area and the count of open parenthesis capacity close parenthesis 
+    in the room table and then join the building table with the room table on building. I d equal room. Building ID
     """
 
     microphone = MicrophoneListener()
@@ -49,10 +50,10 @@ def main():
     preferred_phrases = preferred_phrases + analyzer.get_column_names()["COLUMN_NAME"].to_list()
     preferred_phrases = preferred_phrases + analyzer.get_table_names()["TABLE_NAME"].to_list()
     
-    query = microphone.listen(preferred_phrases)
-    print(query)
+    # query = microphone.listen(preferred_phrases)
+    # print(query)
 
-    struct_determination_end_to_end_test(query, asr)
+    struct_determination_end_to_end_test(asr_response, asr)
 
     global trie
     count_rows = 0
@@ -104,7 +105,7 @@ def test_separate_unbundled_queries(query, asr):
 
 def test_clarify_l1_keywords(query, asr):
     #query = """select thick and thin from table blah end than from table two show me a and b"""
-    return asr._clarify_l1_keywords(query, dist_threshold=1)
+    return asr._clarify_l1_keywords(query, dist_threshold=0)
 
 
 

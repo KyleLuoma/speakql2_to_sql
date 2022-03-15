@@ -142,6 +142,8 @@ class AsrStringProcessor:
 
         self.exp_delims = ["THEN"]
 
+        self.word_similarity_method = "phonetic_distance"
+        self.phonetic_distance_threshold = 1
     
 
     #Current entry point to initiate string processing
@@ -180,6 +182,19 @@ class AsrStringProcessor:
         next_words = "hello" #self.predictor.getNextWordsFromQuery(fragment)
         return next_words
 
+
+
+    #General method to compare word similarity. We can run experiments with different types of comparisons
+    #using this method as the one location where we can make adjustments.
+    def _check_word_similarity(self, word_one, word_two):
+        words_are_similar = False
+        if self.word_similarity_method == "phonetic_distance":
+            words_are_similar = self.metaphone.distance(
+                self.metaphone.phonetics(word_one),
+                self.metaphone.phonetics(word_two)
+            ) <= self.phonetic_distance_threshold
+        return words_are_similar
+            
 
 
     #Pass in ASR transcript and make sure "and then" keywords are correct
@@ -228,6 +243,8 @@ class AsrStringProcessor:
                 elif kw_type == "select_modifier":
                     select_modifiers = True
 
+                words_are_similar = False
+
                 fragment_is_query = (select_kw and from_kw) or (join_kw and with_kw) or select_modifiers
 
                 if num_keyword_in_phrase > 1:
@@ -235,15 +252,13 @@ class AsrStringProcessor:
                 
                 #Finding distance between phrase and keyword
                 if len(asr_phrase) > 0:
-                    distance = self.metaphone.distance(asr_phrase, keyword)
+                    words_are_similar = self._check_word_similarity(asr_phrase, keyword)  
                 #If distance is below threshold, then we want to look ahead in the asr_string
                 # to see if what follows is a starting keyword (or close to it).
                 start_word_is_next = False
-                if distance <= dist_threshold and (i + num_keyword_in_phrase + 1) < len(string_words):
+                if words_are_similar and (i + num_keyword_in_phrase + 1) < len(string_words):
                     for start_kw in self.keywords.get_start_kws():
-                        if self.metaphone.distance(
-                            string_words[i + num_keyword_in_phrase], start_kw.split(" ")[0]
-                         ) <= dist_threshold:
+                        if self._check_word_similarity(string_words[i + num_keyword_in_phrase], start_kw.split(" ")[0]):
                             start_word_is_next = True
 
                 #First round of updates to keyword_candidates. We're not through though, we need to make
@@ -256,7 +271,7 @@ class AsrStringProcessor:
                         string_words[i + word_num] = keyword.split()[word_num]
                         word_num = word_num + 1
                     fragment_is_query = False
-                    select_kw = from_kw = join_kw = with_kw = False
+                    select_kw = from_kw = join_kw = with_kw = select_modifiers = False
                 i = i + 1
             #print(keyword_candidates)
             print("\n\n", "Output from L1 Clarification: \n"," ".join(string_words))
