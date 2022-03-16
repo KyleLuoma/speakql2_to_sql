@@ -27,3 +27,35 @@ class SpeakQlPredictorCaller:
         word_list = array_string.replace("[", "").replace("]", "").replace("'", "").split(", ")
         return word_list
 
+    
+
+    def getLexerTokensFromQuery(self, query):
+
+        ignore_tokens = ["\\\\n", ""]
+
+        query = query.upper().replace("\n", "")
+
+        raw_result = subprocess.run(
+            self.PREDICTOR_PATH + " -tokenize \"" + query + "\"",
+            capture_output=True
+        )
+        array_string = self.get_array_from_result(raw_result)
+        raw_token_list = array_string.replace("[", "").replace("]", "").replace("\"", "").split(", ")
+
+        token_list = []
+
+        for token in raw_token_list:
+            if token.strip() not in ignore_tokens:
+                token_list.append(token.strip())
+
+        return token_list
+
+
+    def get_array_from_result(self, raw_result):
+        result = str(raw_result)
+        array_start = result.find("stdout=b") + len("stdout=b*")
+        array_end = result.find("\\r\\n")
+        array_string = result[array_start : array_end]
+        return array_string
+
+

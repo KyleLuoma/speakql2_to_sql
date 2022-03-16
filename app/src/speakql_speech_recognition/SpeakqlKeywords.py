@@ -68,6 +68,17 @@ class SpeakQlKeywords:
             "LIMIT"
         ]
 
+        #Each entry in this set represents the minimum kws that must be present
+        #in an unbundled query for the query to be considered valid.
+        self.min_kws_for_unbundled = [
+            [self.select_kw, self.from_kw],
+            [[self.join_kw], ['WITH']],
+            [self.group_kw],
+            [self.order_kw],
+            [self.having_kw],
+            [self.limit_kw]
+        ]
+
         self.literal_kw = [
             "uid",
             "constant",
@@ -99,6 +110,10 @@ class SpeakQlKeywords:
             "quote" : "'"
         }
 
+
+
+    def get_min_kws_for_unbundled(self):
+        return self.min_kws_for_unbundled
 
     def get_symbols_dict(self):
         return self.symbols_dict
