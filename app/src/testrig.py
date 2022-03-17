@@ -59,7 +59,7 @@ def main():
     #get_tokenized_string_from_asr_processor(asr_response)
 
     validator = QueryValidator()
-    validator_result = validator.check_l1_segment_has_required_kws("JOIN ONE WITH TWO ON ")
+    validator_result = validator.check_l1_segment_has_required_kws("JOINED WITH ONE WITH")
     print(validator_result)
 
     

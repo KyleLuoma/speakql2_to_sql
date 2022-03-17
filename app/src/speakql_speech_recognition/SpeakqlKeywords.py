@@ -68,6 +68,24 @@ class SpeakQlKeywords:
             "LIMIT"
         ]
 
+        #Lookup SQL keyword by its SpeakQL synonyms
+        self.synonym_to_keyword_dict = {}
+
+        for kw in self.select_kw:
+            self.synonym_to_keyword_dict[kw] = "SELECT"
+        for kw in self.from_kw:
+            self.synonym_to_keyword_dict[kw] = "FROM"
+        for kw in self.join_kw:
+            self.synonym_to_keyword_dict[kw] = "JOIN"
+        for kw in self.group_kw:
+            self.synonym_to_keyword_dict[kw] = "GROUP BY"
+        for kw in self.order_kw:
+            self.synonym_to_keyword_dict[kw] = "ORDER BY"
+        for kw in self.having_kw:
+            self.synonym_to_keyword_dict[kw] = "HAVING"
+        for kw in self.limit_kw:
+            self.synonym_to_keyword_dict[kw] = "LIMIT"
+
         #Each entry in this set represents the minimum kws that must be present
         #in an unbundled query for the query to be considered valid.
         self.min_kws_for_unbundled = [
