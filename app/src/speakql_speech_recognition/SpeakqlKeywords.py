@@ -51,6 +51,11 @@ class SpeakQlKeywords:
             "NATURAL JOIN"
         ]
 
+        self.with_kw = [
+            "WITH",
+            "WITH TABLE"
+        ]
+
         self.group_kw = [
             "GROUP",
             "GROUP BY"
@@ -85,12 +90,14 @@ class SpeakQlKeywords:
             self.synonym_to_keyword_dict[kw] = "HAVING"
         for kw in self.limit_kw:
             self.synonym_to_keyword_dict[kw] = "LIMIT"
+        for kw in self.with_kw:
+            self.synonym_to_keyword_dict[kw] = "WITH"
 
         #Each entry in this set represents the minimum kws that must be present
         #in an unbundled query for the query to be considered valid.
         self.min_kws_for_unbundled = [
             [self.select_kw, self.from_kw],
-            [self.join_kw, ['WITH']],
+            [self.join_kw, self.with_kw],
             [self.group_kw],
             [self.order_kw],
             [self.having_kw],
@@ -129,6 +136,11 @@ class SpeakQlKeywords:
         }
 
 
+    def lookup_kw_synonym(self, kw):
+        try:
+            return self.synonym_to_keyword_dict[kw]
+        except:
+            return "NONE"
 
     def get_min_kws_for_unbundled(self):
         return self.min_kws_for_unbundled

@@ -46,7 +46,8 @@ def main():
         + keywords.get_symbol_text_list()
         + keywords.get_exp_delim_kws()
         )
-    # asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
+    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
+    predictor = SpeakQlPredictorCaller()
     # analyzer = DbAnalyzer(DbConnector())
     # preferred_phrases = preferred_phrases + analyzer.get_column_names()["COLUMN_NAME"].to_list()
     # preferred_phrases = preferred_phrases + analyzer.get_table_names()["TABLE_NAME"].to_list()
@@ -57,10 +58,11 @@ def main():
     #struct_determination_end_to_end_test(asr_response, asr)
 
     #get_tokenized_string_from_asr_processor(asr_response)
+    
 
     validator = QueryValidator()
-    validator_result = validator.check_l1_segment_has_required_kws("JOINED WITH ONE WITH")
-    print(validator_result)
+    tokens = predictor.getLexerTokensFromQuery("JOIN TABLE TWO WITH TABLE THREE")
+    validator.check_l1_segment_kws(tokens)
 
     
 def get_tokenized_string_from_asr_processor(asr_query):
