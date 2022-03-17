@@ -10,6 +10,7 @@ from speakql_translator.speakql_to_sql import *
 from speakql_speech_recognition.SpeakQlPredictorCaller import *
 from speakql_speech_recognition.AsrStringProcessor import *
 from speakql_speech_recognition.MicrophoneListener import *
+from speakql_speech_recognition.QueryValidator import *
 
 from db_util.db_analyzer import *
 from db_util.db_connector import *
@@ -45,24 +46,27 @@ def main():
         + keywords.get_symbol_text_list()
         + keywords.get_exp_delim_kws()
         )
-    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
-    analyzer = DbAnalyzer(DbConnector())
-    preferred_phrases = preferred_phrases + analyzer.get_column_names()["COLUMN_NAME"].to_list()
-    preferred_phrases = preferred_phrases + analyzer.get_table_names()["TABLE_NAME"].to_list()
+    # asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
+    # analyzer = DbAnalyzer(DbConnector())
+    # preferred_phrases = preferred_phrases + analyzer.get_column_names()["COLUMN_NAME"].to_list()
+    # preferred_phrases = preferred_phrases + analyzer.get_table_names()["TABLE_NAME"].to_list()
     
     # query = microphone.listen(preferred_phrases)
     # print(query)
 
-    struct_determination_end_to_end_test(asr_response, asr)
+    #struct_determination_end_to_end_test(asr_response, asr)
 
-    global trie
-    count_rows = 0
-    trie = TrieNode()
-    predictor = SpeakQlPredictorCaller()
+    #get_tokenized_string_from_asr_processor(asr_response)
+
+    validator = QueryValidator()
+    validator_result = validator.check_l1_segment_has_required_kws("JOIN ONE WITH TWO ON ")
+    print(validator_result)
+
     
-    #build_trie_using_parser("SELECT", predictor, keywords)
-    #print(predictor.getNextWordsFromQuery("SELECT xx XOR xx XOR xx NOT RLIKE xx NOT RLIKE xx MEMBER OF ( xx DIV xx"))
-    # trie.print_to_console()
+def get_tokenized_string_from_asr_processor(asr_query):
+    asr = AsrStringProcessor(DbAnalyzer(DbConnector()))    
+    print(asr.get_tokenized_query_string_using_lexer(asr_query))
+
 
 
 def struct_determination_end_to_end_test(query, asr):

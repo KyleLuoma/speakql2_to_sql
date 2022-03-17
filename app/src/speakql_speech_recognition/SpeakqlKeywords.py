@@ -72,7 +72,7 @@ class SpeakQlKeywords:
         #in an unbundled query for the query to be considered valid.
         self.min_kws_for_unbundled = [
             [self.select_kw, self.from_kw],
-            [[self.join_kw], ['WITH']],
+            [self.join_kw, ['WITH']],
             [self.group_kw],
             [self.order_kw],
             [self.having_kw],

@@ -602,7 +602,16 @@ class AsrStringProcessor:
             if text in query:
                 query = query.replace(text, symbol_dict[text])
         return query
-        
+
+
+
+    # Use the lexer to separate out all tokens and then join them back together
+    # into a string. This helps us separate symbols from words, because ASR
+    # tends to like to do things like add periods to the end of words and such.
+    def get_tokenized_query_string_using_lexer(self, query):
+        token_list = self.predictor.getLexerTokensFromQuery(query)
+        return " ".join(token_list)
+
             
 
     
