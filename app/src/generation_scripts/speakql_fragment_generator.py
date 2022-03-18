@@ -3,7 +3,7 @@ import random
 query_patterns = [
     "select _SE_ and _SE_ and _SE_ from table _TE_",
     "what is the _SE_ in _TE_",
-    "join _TE_ with _TE_ on _TE_ . _SE_ equals _TE_ . _SE_",
+    "join _TE_ with _TE_ on _TE_ dot _SE_ equals _TE_ dot _SE_",
     "group by _CN_ and _CN_",
     "group by automatic",
     "group by _CN_",

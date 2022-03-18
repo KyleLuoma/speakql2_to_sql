@@ -7,6 +7,7 @@ app/src/speakql_speech_recognition/local/
 */__pycache__/*
 *__pycache__*
 bin/
+.aws/
 
 *.pyc
 

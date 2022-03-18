@@ -1,4 +1,5 @@
 from itertools import count
+from speakql_speech_recognition.QuerySegment import QuerySegment
 import speakql_translator.SpeakQlParseCaller as spc
 import speakql_translator.SpeakQlTree as st
 import json
@@ -55,15 +56,15 @@ def main():
     # query = microphone.listen(preferred_phrases)
     # print(query)
 
-    #struct_determination_end_to_end_test(asr_response, asr)
+    struct_determination_end_to_end_test(asr_response, asr)
 
     #get_tokenized_string_from_asr_processor(asr_response)
     
 
-    validator = QueryValidator()
-    tokens = predictor.getLexerTokensFromQuery("JOIN TABLE TWO WITH TABLE THREE")
-    validator.check_l1_segment_kws(tokens)
-
+    # validator = QueryValidator()
+    # segment = QuerySegment("SELECT A FROM ONE AND THE FROM TWO GET B AND C")
+    # segment = validator.check_l1_segment_kws(segment)
+    # segment.summary()
     
 def get_tokenized_string_from_asr_processor(asr_query):
     asr = AsrStringProcessor(DbAnalyzer(DbConnector()))    
@@ -77,7 +78,10 @@ def struct_determination_end_to_end_test(query, asr):
     separated = test_separate_unbundled_queries(l2_clarified, asr)
     print("\n\n Output from l1 splitting:")
     for query in separated:
-        print(query)
+        segment = QuerySegment(query)
+        segment = QueryValidator().check_l1_segment_kws(segment)
+        segment.summary()
+        print("")
     separated_query_fragments = []
     print("\n\n Output from l2 splitting:")
     l3_separated = []

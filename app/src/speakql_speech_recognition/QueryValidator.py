@@ -65,9 +65,15 @@ class QueryValidator:
 
         is_valid = is_complete and not has_illegal_combination
 
-        print(tokens)
-        print(kw_count_dict)
-        print("Valid query: ", is_valid)
+        query_segment.l1_errors["PARTIAL"] = not is_complete
+        query_segment.l1_errors["ILLEGAL COMBINATION"] = has_illegal_combination
+
+        query_segment.is_sfw = is_sfw_segment
+        query_segment.is_join = is_join_segment
+        query_segment.is_modifier = is_modifier_segment
+        query_segment.is_valid = is_valid
+
+        return query_segment
 
 
 
