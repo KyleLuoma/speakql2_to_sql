@@ -82,7 +82,7 @@ class PollyVoice:
             })
 
         with open("query_audio/query_log.json", "w") as jsonFile:
-            json.dump(data, jsonFile)
+            json.dump(data, jsonFile, indent=4)
 
 
     def create_query_audio_and_log(self, query_text):

@@ -10,6 +10,7 @@ bin/
 .aws/
 
 *.pyc
+*.mp3
 
 update_react_app.ps1
 
