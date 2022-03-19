@@ -5,7 +5,8 @@ from speakql_translator.SpeakQlTree import *
 from .SpeakqlKeywords import *
 from db_util.db_analyzer import *
 from pyphonetics import Metaphone
-
+from .QuerySegment import *
+from .SegmentFragment import *
 import pandas as pd
 import multiprocessing as mp
 import time
@@ -126,8 +127,6 @@ class AsrMultiProcessor:
 
 
 
-
-
 # Class used to convert an asr string into a valid speakql query
 # Will contain several different methods for performing processing actions
 class AsrStringProcessor:
@@ -144,10 +143,70 @@ class AsrStringProcessor:
 
         self.word_similarity_method = "phonetic_distance"
         self.phonetic_distance_threshold = 1
+
+
+
+    # This is the process driver. We'll start by doing everything in this method 
+    # and may want to refactor to break it up later.
+    def process_asr_string(self, asr_string):
+
+        # ---- LEVEL 1: Break into segments using expression delimiter and validate, handle errors ----
+
+        # Delimiter keyword clarification. Here we're 'clarifying' keywords by scanning the query
+        # and raising any delimiter (i.e. AND THEN) keywords to uppercase. At this point, we want
+        # to avoid introducing new errors, so we keep the edit distance threshold at 0.
+        asr_string = self._clarify_l1_keywords(asr_string, dist_threshold=0)
+
+        # Generate segments based on delimiter. Assume keywords are correct. We'll handle
+        # resulting errors after this.
+        query_segment_strings = self._separate_unbundled_query(asr_string)
+        query_segments = []
+        for segment_string in query_segment_strings:
+            segment = QuerySegment(segment_string)
+            segment.summary()
+            query_segments.append(segment)
+        
+        # Analyze segments for error patterns:
+
+        # ---- LEVEL 2: Break into fragments using keywords and validate, handle errors ----
+        for query_segment in query_segments:
+
+            # L2 level keyword clarification. Again using 0 edit dist threshold to avoid introducing
+            # new errors.
+            query_segment.segment = self._clarify_l2_keywords(query_segment.segment, dist_threshold=0)
+
+            # L2 level fragment generator
+            fragment_list = self._separate_spj_parts(query_segment.segment)
+            query_segment.append_fragments(fragment_list)
+            for fragment in fragment_list:
+                print(fragment.to_string())
+
+            # Analyze fragments for error patterns:
+
+
+        # ---- LEVEL 3: Break into elements using delimiters and validate, handle errors ----
+
+            for query_segment in query_segments:
+                for segment_fragment in query_segment.get_fragments():
+                    # L3 keyword clarification. Using 0 edit dist threshold
+                    fragment_string = self._clarify_l3_delimiters_in_fragment(segment_fragment.get_fragment_string(), ["AND", ","])
+
+                    # Split into element strings TODO: Need to check fragment type and supply the appropriate delimiters
+                    element_strings = self._separate_fragment_by_delimiters(fragment_string, ["AND", ","])
+                    for element in element_strings:
+                        print(element)
+
+
+        
+
+        # ---- RETURN: A list of segments containing fragments and elements ----
+
+
     
 
-    #Current entry point to initiate string processing
-    def process_asr_string(self, asr_string):
+    #Calls ASR multi-process parallel processing method and the serial processing method
+    # and prints a time comparison to the console.
+    def parser_predictor_multi_vs_single_compare(self, asr_string):
 
         amp = AsrMultiProcessor(
             self.db_analyzer.get_column_names(),
@@ -186,13 +245,13 @@ class AsrStringProcessor:
 
     #General method to compare word similarity. We can run experiments with different types of comparisons
     #using this method as the one location where we can make adjustments.
-    def _check_word_similarity(self, word_one, word_two):
+    def _check_word_similarity(self, word_one, word_two, phonetic_distance_threshold = 0):
         words_are_similar = False
         if self.word_similarity_method == "phonetic_distance":
             words_are_similar = self.metaphone.distance(
                 self.metaphone.phonetics(word_one),
                 self.metaphone.phonetics(word_two)
-            ) <= self.phonetic_distance_threshold
+            ) <= phonetic_distance_threshold
         return words_are_similar
             
 
@@ -259,7 +318,11 @@ class AsrStringProcessor:
                 start_word_is_next = False
                 if words_are_similar and (i + num_keyword_in_phrase + 1) < len(string_words):
                     for start_kw in self.keywords.get_start_kws():
-                        if self._check_word_similarity(string_words[i + num_keyword_in_phrase], start_kw.split(" ")[0]):
+                        if self._check_word_similarity(
+                            string_words[i + num_keyword_in_phrase], 
+                            start_kw.split(" ")[0],
+                            dist_threshold
+                            ):
                             start_word_is_next = True
 
                 #First round of updates to keyword_candidates. We're not through though, we need to make
@@ -404,7 +467,7 @@ class AsrStringProcessor:
     # subqueries. We need to pass a query through some sort of sub-query
     # masker before using this particular method.
     def _separate_spj_parts(self, unbundled_query):
-        query_frag_dict = {}
+        query_frag_list = []
         #Must be (has_select and hasfrom) or has_join_with to be a valid query fragment
         has_select = False
         has_from = False
@@ -425,7 +488,8 @@ class AsrStringProcessor:
         )
         if len(select_fragment) > 0:
             has_select = True
-            query_frag_dict["select"] = select_fragment
+            fragment = SegmentFragment("select", select_fragment)
+            query_frag_list.append(fragment)
 
         #Scan to find a from synonym
         from_fragment = self._find_query_fragments(
@@ -439,7 +503,8 @@ class AsrStringProcessor:
         )
         if len(from_fragment) > 0:
             has_from = True
-            query_frag_dict["from"] = from_fragment
+            fragment = SegmentFragment("from", from_fragment)
+            query_frag_list.append(fragment)
 
         #Scan to find a single join_expression
         if(has_from and has_select):
@@ -449,7 +514,8 @@ class AsrStringProcessor:
                 max_kw_len = 4
             )
             if len(join_fragment) > 0:
-                query_frag_dict["join"] = join_fragment
+                fragment = SegmentFragment("join", join_fragment)
+                query_frag_list.append(fragment)
 
         #Scan to find a group by expression
         group_by_fragment = self._find_query_fragments(
@@ -458,7 +524,8 @@ class AsrStringProcessor:
             max_kw_len = 2
         )
         if len(group_by_fragment) > 0:
-            query_frag_dict["group_by"] = group_by_fragment
+            fragment = SegmentFragment("group_by", group_by_fragment)
+            query_frag_list.append(fragment)
 
         #Scan to find a having expression
         having_fragment = self._find_query_fragments(
@@ -467,7 +534,8 @@ class AsrStringProcessor:
             max_kw_len = 1
         )
         if len(having_fragment) > 0:
-            query_frag_dict["having"] = having_fragment
+            fragment = SegmentFragment("having", having_fragment)
+            query_frag_list.append(fragment)
 
         #Scan to find an order by expression
         order_fragment = self._find_query_fragments(
@@ -476,7 +544,8 @@ class AsrStringProcessor:
             max_kw_len = 2
         )
         if len(order_fragment) > 0:
-            query_frag_dict["order_by"] = order_fragment
+            fragment = SegmentFragment("order_by", order_fragment)
+            query_frag_list.append(fragment)
 
         #Scan to find a limit expression
         limit_fragment = self._find_query_fragments(
@@ -485,7 +554,8 @@ class AsrStringProcessor:
             max_kw_len = 1
         )
         if len(order_fragment) > 0:
-            query_frag_dict["limit"] = limit_fragment
+            fragment = SegmentFragment("limit", limit_fragment)
+            query_frag_list.append(fragment)
 
         #Scan to find a where synonym
         where_fragment = self._find_query_fragments(
@@ -499,7 +569,8 @@ class AsrStringProcessor:
             ["AND", "OR", "XOR"]
         )
         if len(where_fragment) > 0:
-            query_frag_dict["where"] = where_fragment
+            fragment = SegmentFragment("where", where_fragment)
+            query_frag_list.append(fragment)
 
         #If there is no valid SPJ query, then we need to find
         #a valid multi-join expression. At this point, we either have
@@ -511,14 +582,17 @@ class AsrStringProcessor:
                 has_join_kw = True
                 break
         if has_join_kw and has_with and not(has_from or has_select):
-            query_frag_dict["multi_join"] = unbundled_query
+            fragment = SegmentFragment("multi_join", unbundled_query)
+            query_frag_list.append(fragment)
 
         #Now, if were get here and we still don't have a valid query, we 
         #need to return this in the dict as an "error" entry.
-        if len(query_frag_dict) == 0:
-            query_frag_dict["error"] = unbundled_query
+        if len(query_frag_list) == 0:
+            fragment = SegmentFragment("error", unbundled_query)
+            query_frag_list.append(fragment)
+            
 
-        return query_frag_dict
+        return query_frag_list
 
 
     #This is for L3 separation, pass in the fragment and appropriate delimiters

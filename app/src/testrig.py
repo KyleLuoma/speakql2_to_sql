@@ -1,5 +1,4 @@
 from itertools import count
-from speakql_speech_recognition.QuerySegment import QuerySegment
 import speakql_translator.SpeakQlParseCaller as spc
 import speakql_translator.SpeakQlTree as st
 import json
@@ -11,7 +10,7 @@ from speakql_translator.speakql_to_sql import *
 from speakql_speech_recognition.SpeakQlPredictorCaller import *
 from speakql_speech_recognition.AsrStringProcessor import *
 from speakql_speech_recognition.MicrophoneListener import *
-from speakql_speech_recognition.QueryValidator import *
+from speakql_speech_recognition.QuerySegment import *
 
 from db_util.db_analyzer import *
 from db_util.db_connector import *
@@ -56,10 +55,11 @@ def main():
     # query = microphone.listen(preferred_phrases)
     # print(query)
 
-    struct_determination_end_to_end_test(asr_response, asr)
+    #struct_determination_end_to_end_test(asr_response, asr)
 
     #get_tokenized_string_from_asr_processor(asr_response)
     
+    asr.process_asr_string(asr_response)
 
     # validator = QueryValidator()
     # segment = QuerySegment("SELECT A FROM ONE AND THE FROM TWO GET B AND C")
@@ -79,7 +79,6 @@ def struct_determination_end_to_end_test(query, asr):
     print("\n\n Output from l1 splitting:")
     for query in separated:
         segment = QuerySegment(query)
-        segment = QueryValidator().check_l1_segment_kws(segment)
         segment.summary()
         print("")
     separated_query_fragments = []
