@@ -36,6 +36,18 @@ class QuerySegment:
         self._l1_error_check()
 
 
+    def has_errors(self):
+        return (self.l1_errors["PARTIAL"] or self.l1_errors["ILLEGAL COMBINATION"])
+
+
+    def has_partial_error(self):
+        return self.l1_errors["PARTIAL"]
+
+
+    def has_illegal_combination_error(self):
+        return self.l1_errors["ILLEGAL COMBINATION"]
+
+
     def append_fragments(self, fragment_list):
         self.fragments = self.fragments + fragment_list
 

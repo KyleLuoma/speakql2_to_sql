@@ -19,11 +19,11 @@ from db_util.db_connector import *
 def main():
 
     query = """
-               join the department table with the course table on department.id = course.deptid
+               join the department table with the course table on department.id equal course.deptid
                 and than
-                join the course table with the course offering table on course.id = course offering.id
+                join the course table with the course offering table on course.id equals course offering.id
                 and than
-                join the term table with the course offering table on term.id = course offering.termid
+                join the term table with the course offering table on term.id equal to course offering.termid
                 and then
                 show me department name in the department table
                 and then
@@ -31,7 +31,7 @@ def main():
                 and than
                 in course offering show me thin and on days and start time
                 end then
-                display nothing from the term table where year = '2022'
+                display nothing from the term table where year equals 2022
     """
 
     asr_response = """show me building number in building name in the building table 
@@ -59,7 +59,7 @@ def main():
 
     #get_tokenized_string_from_asr_processor(asr_response)
     
-    asr.process_asr_string(asr_response)
+    asr.process_asr_string(query)
 
     # validator = QueryValidator()
     # segment = QuerySegment("SELECT A FROM ONE AND THE FROM TWO GET B AND C")

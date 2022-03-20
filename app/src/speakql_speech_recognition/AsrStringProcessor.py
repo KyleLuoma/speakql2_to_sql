@@ -1,5 +1,7 @@
 from inspect import stack
 from ntpath import join
+
+from .AsrErrorHandler import *
 from .SpeakQlPredictorCaller import *
 from speakql_translator.SpeakQlTree import *
 from .SpeakqlKeywords import *
@@ -165,51 +167,13 @@ class AsrStringProcessor:
             segment = QuerySegment(segment_string)
             segment.summary()
             query_segments.append(segment)
-        
-        # Analyze segments for error patterns:
 
-        # Error pattern: partial (typically mis-interpreted keyword in segment)
-        # Action 1: process segment to identify possible mis-interpreted keywords
+        # Handle L1 errors using the AsrErrorHandler
+        error_handler = AsrErrorHandler()
 
-        # Action 2: if no valid query emerges from action 1, flag this segment for human clarification.
-
-
-        # Error pattern: illegal keywords (typically missing or misinterpreted "and then" in segment)
-        # Action 1: Check if there are enough keywords for two valid queries, if so, process 
-        #           segment to identify possible "and then" delimiters
-        #    approach a: look for "and then" phonemes (i.e. in then, and them, etc.)
-        #    approach b: look for the natural junction between two valid segments 
-        #                (a start keyword following a valid query)
-
-        # Action 2: If two valid segments do not emerge from action 1, then consider false positive
-        #           L2 keyword (i.e. IN instead of AND). 
-        #    approach a: We need probabilistic replacement here. First, figure out which L2 keywords
-        #                appear valid based on context, then predict the most likely alternate keyword
-        #                for the apparently incorrectly interpreted keyword.
-
-
-        
-        # Error pattern: partial, illegal keywords (False positive "and then" in segment, 
-        # spillover into next segment with false negative "and then")
-        # Action 1: retrieve substring from ASR text that spans from beginning of partial to end 
-        #           of illegal segment. Re-process this substring to separate into two valid queries.
-        #    approach a: Ignore all "and then" keywords. Identify natural delimiting point. This would
-        #                be following the presence of minimum required keywords and prior to a start
-        #                keyword. Within this zone, search for "and then" candidates. If found, ignore
-        #                all other "and then" keywords.
-
-
-        # Error pattern: partial, partial (typically errant "and then" incorrectly separating a segment)
-        # Action 1: Retrieve substring from ASR text that spans from beginning of first partial to end of
-        #           the second partial. Ignore "and then" keyword candidates. Run validation on this string
-        #           to see if it produces a valid L1 segment.
-
-        # Action 2: If no valid l2 segment emerges, scan for L2 keyword candidates, experiment with replacements
-        #           to see if we can produce a valid query segment.
-
-        # Action 3: If no valid query is produced using L2 keyword replacement, then flag this segment for 
-        #           human clarification.
-
+        # Group consecutive errors, add to list, and pass to error handler
+        error_segment_list = self._create_l1_error_segment_list(query_segments)
+        error_handler.handle_l1_errors(error_segment_list, asr_string)
 
         # ---- LEVEL 2: Break into fragments using keywords and validate, handle errors ----
         for query_segment in query_segments:
@@ -225,6 +189,9 @@ class AsrStringProcessor:
                 print(fragment.to_string())
 
             # Analyze fragments for error patterns:
+            
+            
+
 
 
         # ---- LEVEL 3: Break into elements using delimiters and validate, handle errors ----
@@ -246,6 +213,25 @@ class AsrStringProcessor:
 
 
     
+    # Receives a list of query segments, and groups the ones with errors into a list.
+    # Returns a list of lists, where each list contains adjacent segments that have errors
+    # If there is a segment without errors between to groups of error segments, that is 
+    # what leads to creating a new segment list.
+    def _create_l1_error_segment_list(self, query_segments):
+        error_segment_list = []
+        last_segment_had_error = False
+        for segment in query_segments:
+            if segment.has_errors() and not last_segment_had_error:
+                error_segment_list.append([segment])
+                last_segment_had_error = True
+            elif segment.has_errors() and last_segment_had_error:
+                error_segment_list[len(error_segment_list) - 1].append(segment)
+                last_segment_had_error = True
+            else:
+                last_segment_had_error = False
+        return error_segment_list
+
+
 
     #Calls ASR multi-process parallel processing method and the serial processing method
     # and prints a time comparison to the console.
