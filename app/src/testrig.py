@@ -48,6 +48,7 @@ def main():
         )
     asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
     predictor = SpeakQlPredictorCaller()
+    error_handler = AsrErrorHandler()
     # analyzer = DbAnalyzer(DbConnector())
     # preferred_phrases = preferred_phrases + analyzer.get_column_names()["COLUMN_NAME"].to_list()
     # preferred_phrases = preferred_phrases + analyzer.get_table_names()["TABLE_NAME"].to_list()
@@ -59,7 +60,10 @@ def main():
 
     #get_tokenized_string_from_asr_processor(asr_response)
     
-    asr.process_asr_string(query)
+    #asr.process_asr_string(query)
+
+    likenesses = error_handler.find_word_sounds_like_keyword_in_string("select a in one", "FROM TABLE")
+    print(likenesses)
 
     # validator = QueryValidator()
     # segment = QuerySegment("SELECT A FROM ONE AND THE FROM TWO GET B AND C")

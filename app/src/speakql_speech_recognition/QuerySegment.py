@@ -44,6 +44,21 @@ class QuerySegment:
         return self.l1_errors["PARTIAL"]
 
 
+    def get_missing_keyword_list(self):
+        if not self.has_partial_error():
+            return []
+        if self.is_sfw:
+            if self.kw_count_dict["SELECT"] == 0:
+                return self.speakql_keywords.get_select_kws()
+            elif self.kw_count_dict["FROM"] == 0:
+                return self.speakql_keywords.get_from_kws()
+        elif self.is_join:
+            if self.kw_count_dict["JOIN"] == 0:
+                return self.speakql_keywords.get_join_kws()
+            elif self.kw_count_dict["WITH"] == 0:
+                return self.speakql_keywords.get_with_kws()
+
+
     def has_illegal_combination_error(self):
         return self.l1_errors["ILLEGAL COMBINATION"]
 

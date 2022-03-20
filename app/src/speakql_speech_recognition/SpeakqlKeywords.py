@@ -178,6 +178,9 @@ class SpeakQlKeywords:
     def get_join_kws(self):
         return self.join_kw
 
+    def get_with_kws(self):
+        return self.with_kw
+
     def get_start_kws(self):
         return (
             self.select_kw 

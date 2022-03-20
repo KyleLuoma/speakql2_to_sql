@@ -1,8 +1,25 @@
+from pyphonetics import Metaphone
 
 class AsrErrorHandler:
 
     def __init__(self):
-        pass
+        self.metaphone = Metaphone()
+
+    # Search a string for word (or words) that sound like the keyword. return 
+    # a list containing the replacement candidate and the keyword
+    def find_word_sounds_like_keyword_in_string(self, asr_string, keyword, phonetic_distance_threshold = 1):
+        num_kw_words = len(keyword.split(" "))
+        asr_word_list = asr_string.split(" ")
+        num_asr_words = len(asr_word_list)
+        for i in range(0, num_asr_words - num_kw_words):
+            asr_fragment = " ".join(asr_word_list[i : i + num_kw_words])
+            words_are_similar = self.metaphone.distance(
+                self.metaphone.phonetics(keyword),
+                self.metaphone.phonetics(asr_fragment)
+            ) <= phonetic_distance_threshold
+            if words_are_similar:
+                return [" ".join(asr_word_list[i : i + num_kw_words]), keyword]
+        return ["",""]
 
 
     # Handle errors resulting from L1 separation and validation. 
@@ -15,11 +32,11 @@ class AsrErrorHandler:
             # Error pattern: partial (typically mis-interpreted keyword in segment)
             if len(error_group) == 1 and error_group[0].has_partial_error():
                 print("ErrorHandler is handling a single partial error")
+                segment = error_group[0]
+                # Action 1: process segment to identify possible mis-interpreted keywords
+                missing_keywords = segment.get_missing_keyword_list()
 
-            # Action 1: process segment to identify possible mis-interpreted keywords
-            
-
-            # Action 2: if no valid query emerges from action 1, flag this segment for human clarification.
+                # Action 2: if no valid query emerges from action 1, flag this segment for human clarification.
 
 
             # Error pattern: illegal keywords (typically missing or misinterpreted "and then" in segment)
