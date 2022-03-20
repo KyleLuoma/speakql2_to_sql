@@ -79,6 +79,10 @@ class QuerySegment:
         return self.fragments
 
 
+    def get_segment_string(self):
+        return self.segment
+
+
     def _l1_error_check(self):
         for token in self.tokens:
             kw_type = self.speakql_keywords.lookup_kw_synonym(token)

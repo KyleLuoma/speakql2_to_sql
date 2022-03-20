@@ -33,8 +33,23 @@ class AsrErrorHandler:
             if len(error_group) == 1 and error_group[0].has_partial_error():
                 print("ErrorHandler is handling a single partial error")
                 segment = error_group[0]
+                modified_segment_string = segment.get_segment_string()
+
                 # Action 1: process segment to identify possible mis-interpreted keywords
                 missing_keywords = segment.get_missing_keyword_list()
+                replacement_candidates = []
+                for keyword in missing_keywords:
+                    replacement = self.find_word_sounds_like_keyword_in_string(segment.get_segment_string(), keyword)
+                    if len(replacement[0]) > 0 and len(replacement[1]) > 0:
+                        replacement_candidates.append(replacement)
+
+                if len(replacement_candidates) == 1:
+                    modified_segment_string = modified_segment_string.replace(
+                        replacement_candidates[0][0], replacement_candidates[0][1]
+                        )
+                    print("Replaced", replacement_candidates[0][0], "with", replacement_candidates[0][1],
+                          "in asr string", segment.get_segment_string(), "resulting in modified asr string", modified_segment_string
+                    )
 
                 # Action 2: if no valid query emerges from action 1, flag this segment for human clarification.
 

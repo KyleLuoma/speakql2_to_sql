@@ -27,10 +27,10 @@ def main():
                 and then
                 show me department name in the department table
                 and then
-                get title and units from the course table
+                get title and units frem the course table
                 and than
                 in course offering show me thin and on days and start time
-                end then
+                and then
                 display nothing from the term table where year equals 2022
     """
 
@@ -60,10 +60,10 @@ def main():
 
     #get_tokenized_string_from_asr_processor(asr_response)
     
-    #asr.process_asr_string(query)
+    asr.process_asr_string(query)
 
-    likenesses = error_handler.find_word_sounds_like_keyword_in_string("select a in one", "FROM TABLE")
-    print(likenesses)
+    # likenesses = error_handler.find_word_sounds_like_keyword_in_string("select a in one", "FROM TABLE")
+    # print(likenesses)
 
     # validator = QueryValidator()
     # segment = QuerySegment("SELECT A FROM ONE AND THE FROM TWO GET B AND C")
