@@ -25,9 +25,7 @@ class SpeakQlKeywords:
 
         self.from_kw = [
             "FROM",
-            "FROM TABLE",
             "IN",
-            "IN TABLE"
         ]
 
         self.join_kw = [

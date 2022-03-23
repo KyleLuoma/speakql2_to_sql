@@ -1,4 +1,5 @@
 import random
+from numpy import where
 import pandas as pd
 import SpeakqlKeywords as sk
 
@@ -7,14 +8,13 @@ schema_df = pd.read_excel("C:/research_projects/speakql2_to_sql/artifacts/query_
 select_query_patterns = [
     "_KW_SELECT_ _SE_ and _SE_ and _SE_ _KW_FROM_ _TE_",
     "_KW_SELECT_ _SE_ _KW_FROM_ _TE_",
-    "_KW_SELECT_ _SE_ _KW_FROM_ the _TE_ table",
     "_KW_FROM_ _TE_ _KW_SELECT_ _SE_ , _SE_ , _SE_",
     "_KW_SELECT_ _SE_ , _SE_ and _SE_ _KW_FROM_ _TE_"
-
 ]
 
 join_query_patterns = [
-    "join _JTE_1_ with _JTE_2_ on _JTE_1_ dot _JSE_1_ equals _JTE_2_ dot _JSE_2_"
+    "join _JTE_1_ with _JTE_2_ on _JTE_1_ dot _JSE_1_ equals _JTE_2_ dot _JSE_2_",
+    "natural join _JTE_1_ with _JTE_2_"
 ]
 
 modifier_query_patterns = [
@@ -46,31 +46,59 @@ num_function_patterns = [
 ]
 
 table_element_patterns = [
-    "_TN_"
+    "_TN_ table",
+    "the _TN_ table",
+    "the _TN_ table as _ALIAS_",
+    "table _TN_",
+    "table _TN_ as _ALIAS_",
+    "_TN_",
+    "_TN_ as _ALIAS_"
 ]
 
-column_names = [
-    "capacity",
-    "id",
-    "salary",
-    "firstname",
-    "lastname",
-    "city",
-    "state",
-    "ssn"
+where_expression_patterns = [
+    "where _CN_ _COMP_OP_ _VALUE_",
+    "where _CN_ _COMP_OP_ _VALUE_ and _CN_ _COMP_OP_ _VALUE_",
+    "where _CN_ _COMP_OP_ _VALUE_ or _CN_ _COMP_OP_ _VALUE_"
 ]
-
-table_names = [
-    "customer",
-    "building",
-    "room",
-    "employee",
-    "course",
-    "courseoffering"
-]
-
 
 random.seed()
+
+select_query_patterns = [
+    "_KW_SELECT_ _SE_ and _SE_ and _SE_ _KW_FROM_ _TE_",
+    "_KW_SELECT_ _SE_ _KW_FROM_ _TE_",
+    "_KW_FROM_ _TE_ _KW_SELECT_ _SE_ , _SE_ , _SE_",
+    "_KW_SELECT_ _SE_ , _SE_ and _SE_ _KW_FROM_ _TE_"
+]
+
+def build_select_query_pattern(table_element_patterns, where_expression_patterns):
+    select_string = "_KW_SELECT_ _SE_"
+    from_string = "_KW_FROM_ _TE_"
+    if random.randint(0, 1) == 1:
+        where_string = "_WHERE_EXPR_"
+    else:
+        where_string = ""
+    query = ""
+
+    for i in range(0, random.randint(1, 6)):
+        delim = ["and", ","][random.randrange(0,2)]
+        select_string = select_string + " " + delim + " _SE_"
+
+    rand_number = random.randint(1,4)
+
+    if rand_number == 1:
+        query = select_string.strip() + " " + from_string.strip() + " " + where_string.strip()
+    if rand_number == 2:
+        query = from_string.strip() + " " + select_string.strip() + " " + where_string.strip()
+    if rand_number == 3:
+        query = select_string.strip() + " " + where_string.strip() + " " + from_string.strip()
+    if rand_number == 4:
+        query = from_string.strip() + " " + where_string.strip() + " " + select_string.strip()
+
+    return query
+
+
+    
+
 
 def build_select_element(
     select_element_patterns, 
@@ -111,13 +139,21 @@ def build_select_element(
             timeout_counter = timeout_counter - 1
 
     while "_FUN_" in element_string and timeout_counter > 0:
-        if len(int_columns) > 0:
+        do_num_function = random.randint(0, 1) == 1
+        if len(int_columns) > 0 and do_num_function:
+            fun_string = num_function_patterns[random.randrange(0, len(num_function_patterns))]
+            while "_CN_INT_" in fun_string:
+                fun_string = fun_string.replace("_CN_INT_", int_columns[random.randrange(0, len(int_columns))])
             element_string = element_string.replace(
-                "_FUN_", num_function_patterns[random.randrange(0, len(num_function_patterns))]
+                "_FUN_", fun_string
             )
-        elif len(int_columns) == 0:
+
+        elif len(int_columns) == 0 or not do_num_function:
+            fun_string = function_patterns[random.randrange(0, len(function_patterns))]
+            while "_CN_" in fun_string:
+                fun_string = fun_string.replace("_CN_", column_names[random.randrange(0, len(column_names))])
             element_string = element_string.replace(
-                "_FUN_", function_patterns[random.randrange(0, len(function_patterns))]
+                "_FUN_", fun_string
             )
         else:
             timeout_counter = timeout_counter - 1
@@ -125,13 +161,34 @@ def build_select_element(
 
     return element_string, column_names_in_query
 
-def build_table_element(table_element_patterns, table_name):
+def build_table_element(table_element_patterns, table_name, table_alias):
     element_string = table_element_patterns[(random.randint(0, len(table_element_patterns) - 1))]
     if "_TN_" in element_string:
         element_string = element_string.replace(
             "_TN_", table_name
             )
+    if "_ALIAS_" in element_string:
+        element_string = element_string.replace(
+            "_ALIAS_", table_alias
+        )
     return element_string
+
+def build_where_expression(where_expression_patterns, columns_in_query, int_columns, tables_in_query, alias_dict):
+    string_values = ["foo", "bar"]
+    where_expr_string = where_expression_patterns[random.randrange(0, len(where_expression_patterns))]
+    while "_CN_" in where_expr_string and len(columns_in_query) > 0:
+        column = columns_in_query[random.randrange(0, len(columns_in_query))]
+        where_expr_string = where_expr_string.replace("_CN_", column, 1)
+        if column in int_columns:
+            value = random.randint(0, 2100)
+            operator = ["equals", "is greater than", "is less than", "greater than", "less than", "is equal to", "equal to"][random.randrange(0, 7)]
+        else:
+            value = string_values[random.randrange(0, len(string_values))]
+            operator = ["equals", "is equal to"][random.randrange(0, 2)]
+        where_expr_string = where_expr_string.replace("_VALUE_", str(value), 1)
+        where_expr_string = where_expr_string.replace("_COMP_OP_", operator, 1)
+    return where_expr_string
+        
 
 def build_query(
     query_patterns, 
@@ -139,13 +196,16 @@ def build_query(
     table_element_patterns,
     function_patterns,
     num_function_patterns, 
+    where_expression_patterns,
     schema_df
     ):
     schema_names = schema_df.SCHEMA.unique()
     keywords = sk.SpeakQlKeywords()
 
     # Random selection of a query pattern:
-    query_string = query_patterns[(random.randrange(0, len(query_patterns)))]
+    #query_string = query_patterns[(random.randrange(0, len(query_patterns)))]
+    query_string = build_select_query_pattern(table_element_patterns, where_expression_patterns)
+    print("Randomly generated query template:", query_string)
 
     # Random selection of a database schema:
     schema_name = schema_names[(random.randrange(0, len(schema_names)))]
@@ -164,14 +224,16 @@ def build_query(
 
     tables_in_query = []
     columns_in_query = []
-    
+    alias_dict = {}
 
     while "_TE_" in query_string:
         table_name = tables_in_schema[random.randrange(0, len(tables_in_schema))]
+        table_alias = table_name[0] + table_name[len(table_name) - 1]
+        alias_dict[table_name] = table_alias
         if table_name not in tables_in_query:
             query_string = query_string.replace(
                 "_TE_",
-                build_table_element(table_element_patterns, table_name),
+                build_table_element(table_element_patterns, table_name, table_alias),
                 1
             )
             tables_in_query.append(table_name)
@@ -202,6 +264,17 @@ def build_query(
             select_element,
             1
             )
+
+    while "_WHERE_EXPR_" in query_string:
+        query_string = query_string.replace("_WHERE_EXPR_",  build_where_expression(
+            where_expression_patterns,
+            available_columns,
+            int_columns,
+            tables_in_query,
+            alias_dict
+        ))
+
+    query_string = query_string.replace("_CN_ _COMP_OP_ _VALUE_", "")
     
     return query_string
 
@@ -212,6 +285,7 @@ print(build_query(
     table_element_patterns, 
     function_patterns,
     num_function_patterns,
+    where_expression_patterns,
     schema_df
     ))
 
