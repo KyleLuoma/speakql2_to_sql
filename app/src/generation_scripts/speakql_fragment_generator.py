@@ -29,15 +29,19 @@ query_patterns = select_query_patterns #+ join_query_patterns + modifier_query_p
 
 select_element_patterns = [
     "_CN_",
-    "_TN_ dot _TNCN_"
+    "_TN_ dot _TNCN_",
+    "_FUN_",
     ]
 
 function_patterns = [
-    "sum ( _CN_INT_ )",
     "count ( _CN_ )",
+    "the count of ( _CN_ )"
+]
+
+num_function_patterns = [
+    "sum ( _CN_INT_ )",
     "average ( _CN_INT_ )",
     "the sum of ( _CN_INT_ )",
-    "the count of ( _CN_ )",
     "the average of ( _CN_INT_ )"
 ]
 
@@ -68,7 +72,16 @@ table_names = [
 
 random.seed()
 
-def build_select_element(select_element_patterns, column_names, table_names, column_names_in_query):
+def build_select_element(
+    select_element_patterns, 
+    column_names, 
+    table_names, 
+    column_names_in_query,
+    function_patterns,
+    num_function_patterns,
+    int_columns,
+    schema_df
+    ):
     timeout_counter = 10
     element_string = select_element_patterns[(random.randint(0, len(select_element_patterns) - 1))]
 
@@ -96,6 +109,20 @@ def build_select_element(select_element_patterns, column_names, table_names, col
             column_names_in_query.append(column_name)
         else:
             timeout_counter = timeout_counter - 1
+
+    while "_FUN_" in element_string and timeout_counter > 0:
+        if len(int_columns) > 0:
+            element_string = element_string.replace(
+                "_FUN_", num_function_patterns[random.randrange(0, len(num_function_patterns))]
+            )
+        elif len(int_columns) == 0:
+            element_string = element_string.replace(
+                "_FUN_", function_patterns[random.randrange(0, len(function_patterns))]
+            )
+        else:
+            timeout_counter = timeout_counter - 1
+
+
     return element_string, column_names_in_query
 
 def build_table_element(table_element_patterns, table_name):
@@ -109,7 +136,9 @@ def build_table_element(table_element_patterns, table_name):
 def build_query(
     query_patterns, 
     select_element_patterns, 
-    table_element_patterns, 
+    table_element_patterns,
+    function_patterns,
+    num_function_patterns, 
     schema_df
     ):
     schema_names = schema_df.SCHEMA.unique()
@@ -135,6 +164,7 @@ def build_query(
 
     tables_in_query = []
     columns_in_query = []
+    
 
     while "_TE_" in query_string:
         table_name = tables_in_schema[random.randrange(0, len(tables_in_schema))]
@@ -147,8 +177,11 @@ def build_query(
             tables_in_query.append(table_name)
 
     available_columns = []
+    int_columns = []
+    int_column_df = schema_df.where(schema_df.IS_NUMBER).dropna(how = "all")
     for table in tables_in_query:
         available_columns = available_columns + schema_df.where(schema_df.TABLE_NAME == table).dropna(how = "all").COLUMN_NAME.to_list()
+        int_columns = int_columns + int_column_df.where(int_column_df.TABLE_NAME == table).dropna(how = "all").COLUMN_NAME.to_list()
 
     column_names_in_query = []
 
@@ -157,7 +190,11 @@ def build_query(
             select_element_patterns, 
             available_columns, 
             tables_in_query, 
-            column_names_in_query
+            column_names_in_query,
+            function_patterns,
+            num_function_patterns,
+            int_columns,
+            schema_df
             )
 
         query_string = query_string.replace(
@@ -173,6 +210,8 @@ print(build_query(
     query_patterns, 
     select_element_patterns, 
     table_element_patterns, 
+    function_patterns,
+    num_function_patterns,
     schema_df
     ))
 
