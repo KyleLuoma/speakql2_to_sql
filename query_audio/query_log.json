@@ -22,5 +22,13 @@
         "voice": "Justin",
         "engine": "neural",
         "sample_rate": "8000"
+    },
+    {
+        "filename": "polly_voicequery_03222022171732.mp3",
+        "query": "WHAT IS countrylanguage dot CountryCode and countrylanguage dot Language and countrylanguage dot IsOfficial FROM TABLE countrylanguage",
+        "service": "polly",
+        "voice": "Matthew",
+        "engine": "neural",
+        "sample_rate": "8000"
     }
 ]

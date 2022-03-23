@@ -114,4 +114,4 @@ class PollyVoice:
 
 polly = PollyVoice()
 
-polly.create_query_audio_and_log("join room with customer on courseoffering dot state equals employee dot salary")
+polly.create_query_audio_and_log("WHAT IS countrylanguage dot CountryCode and countrylanguage dot Language and countrylanguage dot IsOfficial FROM TABLE countrylanguage")

@@ -320,7 +320,7 @@ class AsrStringProcessor:
 
                 #Check if the asr_phrase word is a query keyword
                 kw_type = self._get_kw_type(asr_phrase, dist_threshold=0)
-                print(asr_phrase, "is a", kw_type, "keyword." )
+                #print(asr_phrase, "is a", kw_type, "keyword." )
                 if kw_type == "select":
                     select_kw = True
                 elif kw_type == "from":

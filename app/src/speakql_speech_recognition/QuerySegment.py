@@ -4,11 +4,14 @@ from .SpeakqlKeywords import *
 
 class QuerySegment:
 
-    def __init__(self, segment):
+    def __init__(self, segment, gen_tokens = False):
         self.segment = segment
         self.predictor = SpeakQlPredictorCaller()
         self.speakql_keywords = SpeakQlKeywords()
-        self.tokens = self.predictor.getLexerTokensFromQuery(segment)
+        if gen_tokens:
+            self.tokens = self.predictor.getLexerTokensFromQuery(segment)
+        else:
+            self.tokens = []
         self.fragments = []
 
         self.l1_errors = {
@@ -72,7 +75,11 @@ class QuerySegment:
 
 
     def get_tokens(self):
-        return self.tokens
+        if len(self.tokens) > 0:
+            return self.tokens
+        else:
+            self.tokens = self.predictor.getLexerTokensFromQuery(self.segment)
+            return self.tokens
 
 
     def get_fragments(self):
@@ -84,7 +91,7 @@ class QuerySegment:
 
 
     def _l1_error_check(self):
-        for token in self.tokens:
+        for token in self.get_tokens():
             kw_type = self.speakql_keywords.lookup_kw_synonym(token)
             self.kw_count_dict[kw_type] = self.kw_count_dict[kw_type] + 1
 
