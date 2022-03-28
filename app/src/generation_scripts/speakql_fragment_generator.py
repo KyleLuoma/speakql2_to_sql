@@ -1,7 +1,9 @@
+from ntpath import join
 import random
 from numpy import where
 import pandas as pd
 import SpeakqlKeywords as sk
+import JoinPair as jp
 
 schema_df = pd.read_excel("C:/research_projects/speakql2_to_sql/artifacts/query_gen_schemas/query_gen_schemas.xlsx")
 
@@ -202,80 +204,126 @@ def build_query(
     schema_names = schema_df.SCHEMA.unique()
     keywords = sk.SpeakQlKeywords()
 
-    # Random selection of a query pattern:
-    #query_string = query_patterns[(random.randrange(0, len(query_patterns)))]
-    query_string = build_select_query_pattern(table_element_patterns, where_expression_patterns)
-    print("Randomly generated query template:", query_string)
 
     # Random selection of a database schema:
     schema_name = schema_names[(random.randrange(0, len(schema_names)))]
     schema_df = schema_df.where(schema_df.SCHEMA == schema_name).dropna(how = "all")
     tables_in_schema = schema_df.where(schema_df.SCHEMA == schema_name).dropna(how = "all").TABLE_NAME.unique()
-    
 
-    select_kws = keywords.get_select_kws()
-    from_kws = keywords.get_from_kws()
-    
-    while "_KW_SELECT_" in query_string:
-        query_string = query_string.replace("_KW_SELECT_", select_kws[random.randrange(0, len(select_kws))])
+    num_relations = random.randint(1, 3)
+    if num_relations > len(tables_in_schema):
+        num_relations = len(tables_in_schema)
 
-    while "_KW_FROM_" in query_string:
-        query_string = query_string.replace("_KW_FROM_", from_kws[random.randrange(0, len(from_kws))])
+    join_pairs = schema_df.dropna(subset = ["FK_REF_TABLE", "FK_REF_COL"])[["TABLE_NAME", "COLUMN_NAME", "FK_REF_TABLE", "FK_REF_COL"]]
+    #join_pairs.reset_index(inplace = True)
+    print(join_pairs)
 
     tables_in_query = []
+    joins_in_query = []
     columns_in_query = []
     alias_dict = {}
 
-    while "_TE_" in query_string:
-        table_name = tables_in_schema[random.randrange(0, len(tables_in_schema))]
-        table_alias = table_name[0] + table_name[len(table_name) - 1]
-        alias_dict[table_name] = table_alias
-        if table_name not in tables_in_query:
+    # Create a list of join pairs:
+    for i in range(0, num_relations):
+        if len(joins_in_query) == 0:
+            rand_join = random.randrange(0, join_pairs.shape[0])
+            available_pairs = join_pairs
+
+        else:
+            available_pairs = join_pairs.where(
+                join_pairs["TABLE_NAME"] == joins_in_query[
+                    len(joins_in_query) - 1
+                    ].get_right_table_name()).dropna(how = "all")
+            if len(available_pairs) > 0:
+                rand_join = random.randrange(0, available_pairs.shape[0])
+
+        if len(available_pairs) > 0:
+            joins_in_query.append(
+                jp.JoinPair(
+                    available_pairs.iloc[rand_join]["TABLE_NAME"],
+                    available_pairs.iloc[rand_join]["FK_REF_TABLE"],
+                    available_pairs.iloc[rand_join]["COLUMN_NAME"],
+                    available_pairs.iloc[rand_join]["FK_REF_COL"]
+                )
+            )
+            if available_pairs.iloc[rand_join]["TABLE_NAME"] not in tables_in_query:
+                tables_in_query.append(available_pairs.iloc[rand_join]["TABLE_NAME"])
+            if available_pairs.iloc[rand_join]["FK_REF_TABLE"] not in tables_in_query:
+                tables_in_query.append(available_pairs.iloc[rand_join]["FK_REF_TABLE"])
+
+    select_kws = keywords.get_select_kws()
+    from_kws = keywords.get_from_kws()
+
+    #Create select project queries for each relation in join pairs
+    for pair in joins_in_query:
+        print(pair.to_string())
+
+    sel_proj_queries = []
+
+    print("Tables in query:", tables_in_query)
+
+    for table_name in tables_in_query:
+
+        # Random selection of a query pattern:
+        #query_string = query_patterns[(random.randrange(0, len(query_patterns)))]
+        query_string = build_select_query_pattern(table_element_patterns, where_expression_patterns)
+        print("Randomly generated query template:", query_string)
+        
+        while "_KW_SELECT_" in query_string:
+            query_string = query_string.replace("_KW_SELECT_", select_kws[random.randrange(0, len(select_kws))])
+
+        while "_KW_FROM_" in query_string:
+            query_string = query_string.replace("_KW_FROM_", from_kws[random.randrange(0, len(from_kws))])
+
+        while "_TE_" in query_string:
+            table_alias = table_name[0] + table_name[len(table_name) - 1]
+            alias_dict[table_name] = table_alias
             query_string = query_string.replace(
                 "_TE_",
                 build_table_element(table_element_patterns, table_name, table_alias),
                 1
             )
-            tables_in_query.append(table_name)
 
-    available_columns = []
-    int_columns = []
-    int_column_df = schema_df.where(schema_df.IS_NUMBER).dropna(how = "all")
-    for table in tables_in_query:
-        available_columns = available_columns + schema_df.where(schema_df.TABLE_NAME == table).dropna(how = "all").COLUMN_NAME.to_list()
-        int_columns = int_columns + int_column_df.where(int_column_df.TABLE_NAME == table).dropna(how = "all").COLUMN_NAME.to_list()
+        available_columns = []
+        int_columns = []
+        int_column_df = schema_df.where(schema_df.IS_NUMBER).dropna(how = "all")
+        available_columns = available_columns + schema_df.where(schema_df.TABLE_NAME == table_name).dropna(how = "all").COLUMN_NAME.to_list()
+        int_columns = int_columns + int_column_df.where(int_column_df.TABLE_NAME == table_name).dropna(how = "all").COLUMN_NAME.to_list()
 
-    column_names_in_query = []
+        column_names_in_query = []
 
-    while "_SE_" in query_string:
-        select_element, column_names_in_query = build_select_element(
-            select_element_patterns, 
-            available_columns, 
-            tables_in_query, 
-            column_names_in_query,
-            function_patterns,
-            num_function_patterns,
-            int_columns,
-            schema_df
-            )
+        while "_SE_" in query_string:
+            select_element, column_names_in_query = build_select_element(
+                select_element_patterns, 
+                available_columns, 
+                tables_in_query, 
+                column_names_in_query,
+                function_patterns,
+                num_function_patterns,
+                int_columns,
+                schema_df
+                )
 
-        query_string = query_string.replace(
-            "_SE_", 
-            select_element,
-            1
-            )
+            query_string = query_string.replace(
+                "_SE_", 
+                select_element,
+                1
+                )
 
-    while "_WHERE_EXPR_" in query_string:
-        query_string = query_string.replace("_WHERE_EXPR_",  build_where_expression(
-            where_expression_patterns,
-            available_columns,
-            int_columns,
-            tables_in_query,
-            alias_dict
-        ))
+        while "_WHERE_EXPR_" in query_string:
+            query_string = query_string.replace("_WHERE_EXPR_",  build_where_expression(
+                where_expression_patterns,
+                available_columns,
+                int_columns,
+                tables_in_query,
+                alias_dict
+            ))
 
-    query_string = query_string.replace("_CN_ _COMP_OP_ _VALUE_", "")
+        sp_query = query_string.replace("_CN_ _COMP_OP_ _VALUE_", "")
+        sel_proj_queries.append(sp_query)
     
+    query_string = " AND THEN ".join(sel_proj_queries)
+
     return query_string
 
 

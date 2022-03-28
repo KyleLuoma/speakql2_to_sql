@@ -30,5 +30,21 @@
         "voice": "Matthew",
         "engine": "neural",
         "sample_rate": "8000"
+    },
+    {
+        "filename": "polly_voicequery_03232022165344.mp3",
+        "query": "IN the address table as as WHAT ARE THE address dot address2 , address and address dot location , count ( phone ) , the count of ( district ) and address dot district ",
+        "service": "polly",
+        "voice": "Ivy",
+        "engine": "neural",
+        "sample_rate": "8000"
+    },
+    {
+        "filename": "polly_voicequery_03232022165534.mp3",
+        "query": "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt ",
+        "service": "polly",
+        "voice": "Ivy",
+        "engine": "neural",
+        "sample_rate": "8000"
     }
 ]
