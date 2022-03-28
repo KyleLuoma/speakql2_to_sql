@@ -275,6 +275,12 @@ def build_query(
 
     #print("Tables in query:", tables_in_query)
 
+    # We don't want every single query to have a join, so we'll randomly reduce tables_in_query down
+    # to just one table.
+    if random.randrange(0, 100) < 50:
+        tables_in_query = [tables_in_query[0]]
+        join_queries = []
+
     for table_name in tables_in_query:
 
         # Random selection of a query pattern:
@@ -335,12 +341,14 @@ def build_query(
         sp_query = query_string.replace("_CN_ _COMP_OP_ _VALUE_", "")
         sel_proj_queries.append(sp_query)
     
-    if random.randint(0, 1) == 1:
+    if random.randint(0, 1) == 1 and len(join_queries) > 0:
         query_string = " AND THEN ".join(sel_proj_queries)
         query_string = query_string + " AND THEN " + " AND THEN ".join(join_queries)
-    else:
+    elif len(join_queries) > 0:
         query_string = " AND THEN ".join(join_queries)
         query_string = query_string + " AND THEN " + " AND THEN ".join(sel_proj_queries)
+    else:
+        query_string = sel_proj_queries[0]
 
     modifier_added = False
     group_string = ""
