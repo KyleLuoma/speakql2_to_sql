@@ -195,9 +195,17 @@ def build_where_expression(where_expression_patterns, columns_in_query, int_colu
         if column in int_columns:
             value = random.randint(0, 2100)
             operator = ["equals", "is greater than", "is less than", "greater than", "less than", "is equal to", "equal to"][random.randrange(0, 7)]
-        else:
+        elif random.randrange(0, 100) < 80:
             value = string_values[random.randrange(0, len(string_values))]
             operator = ["equals", "is equal to"][random.randrange(0, 2)]
+        else:
+            value = (
+                "( " + ["SELECT", "FIND", "DISPLAY"][random.randrange(0, 3)] +
+                " " + columns_in_query[random.randrange(0, len(columns_in_query))] +
+                " " + ["FROM", "FROM TABLE", "IN TABLE"][random.randrange(0, 3)] +
+                " " + tables_in_query[random.randrange(0, len(tables_in_query))] + " )"
+                )
+            operator = "IN"
         where_expr_string = where_expr_string.replace("_VALUE_", str(value), 1)
         where_expr_string = where_expr_string.replace("_COMP_OP_", operator, 1)
     return where_expr_string
@@ -210,7 +218,8 @@ def build_query(
     function_patterns,
     num_function_patterns, 
     where_expression_patterns,
-    schema_df
+    schema_df,
+    force_single_relation = False
     ):
     schema_names = schema_df.SCHEMA.unique()
     keywords = sk.SpeakQlKeywords()
@@ -277,7 +286,7 @@ def build_query(
 
     # We don't want every single query to have a join, so we'll randomly reduce tables_in_query down
     # to just one table.
-    if random.randrange(0, 100) < 50:
+    if random.randrange(0, 100) < 50 or force_single_relation:
         tables_in_query = [tables_in_query[0]]
         join_queries = []
 
@@ -297,11 +306,26 @@ def build_query(
         while "_TE_" in query_string:
             table_alias = table_name[0] + table_name[len(table_name) - 1]
             alias_dict[table_name] = table_alias
-            query_string = query_string.replace(
-                "_TE_",
-                build_table_element(table_element_patterns, table_name, table_alias),
-                1
-            )
+            if random.randrange(0, 100) < 90:
+                query_string = query_string.replace(
+                    "_TE_",
+                    build_table_element(table_element_patterns, table_name, table_alias),
+                    1
+                )
+            else: #Insert a subquery:
+                query_string = query_string.replace(
+                    "_TE_",
+                    "( " + build_query(
+                        query_patterns, 
+                        select_element_patterns, 
+                        table_element_patterns,
+                        function_patterns,
+                        num_function_patterns, 
+                        where_expression_patterns,
+                        schema_df,
+                        force_single_relation = True
+                    ) + " ) as sq_alias"
+                )
 
         available_columns = []
         int_columns = []
@@ -409,5 +433,20 @@ print(build_query(
     where_expression_patterns,
     schema_df
     ))
+
+queries = []
+
+for i in range (0, 100):
+    queries.append(build_query(
+    query_patterns, 
+    select_element_patterns, 
+    table_element_patterns, 
+    function_patterns,
+    num_function_patterns,
+    where_expression_patterns,
+    schema_df
+    ))
+
+pd.Series(queries).to_excel("./generated_queries.xlsx")
 
 
