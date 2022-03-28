@@ -20,9 +20,15 @@ class JoinPair:
         return self.right_key
 
     def to_string(self):
-        return (
-            "join " + str(self.left_table) + 
-            " with " + str(self.right_table) + 
-            " on " + str(self.left_table) + " . " + str(self.left_key) 
-            + " equals " + str(self.right_table) + " . " + str(self.right_key)
-            )
+        if self.left_key != self.right_key:
+            return (
+                "join " + str(self.left_table) + 
+                " with " + str(self.right_table) + 
+                " on " + str(self.left_table) + " . " + str(self.left_key) 
+                + " equals " + str(self.right_table) + " . " + str(self.right_key)
+                )
+        else:
+            return (
+                "natural join " + str(self.left_table) + 
+                " with " + str(self.right_table)
+                )

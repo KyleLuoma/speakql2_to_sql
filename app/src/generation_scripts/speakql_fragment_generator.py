@@ -15,7 +15,7 @@ select_query_patterns = [
 ]
 
 join_query_patterns = [
-    "join _JTE_1_ with _JTE_2_ on _JTE_1_ dot _JSE_1_ equals _JTE_2_ dot _JSE_2_",
+    "join _JTE_1_ with _JTE_2_ on _JTE_1_ . _JSE_1_ equals _JTE_2_ . _JSE_2_",
     "natural join _JTE_1_ with _JTE_2_"
 ]
 
@@ -31,7 +31,7 @@ query_patterns = select_query_patterns #+ join_query_patterns + modifier_query_p
 
 select_element_patterns = [
     "_CN_",
-    "_TN_ dot _TNCN_",
+    "_TN_ . _TNCN_",
     "_FUN_",
     ]
 
@@ -81,7 +81,18 @@ def build_select_query_pattern(table_element_patterns, where_expression_patterns
         where_string = ""
     query = ""
 
-    for i in range(0, random.randint(1, 6)):
+    num_elements = 0
+    rand_num = random.randint(0,100)
+    if rand_num < 40:
+        num_elements = 1
+    elif rand_num < 70:
+        num_elements = 2
+    elif rand_num < 90:
+        num_elements = 3
+    else:
+        num_elements = random.randint(4, 6)
+
+    for i in range(0, random.randint(1, num_elements)):
         delim = ["and", ","][random.randrange(0,2)]
         select_string = select_string + " " + delim + " _SE_"
 
@@ -216,7 +227,7 @@ def build_query(
 
     join_pairs = schema_df.dropna(subset = ["FK_REF_TABLE", "FK_REF_COL"])[["TABLE_NAME", "COLUMN_NAME", "FK_REF_TABLE", "FK_REF_COL"]]
     #join_pairs.reset_index(inplace = True)
-    print(join_pairs)
+    #print(join_pairs)
 
     tables_in_query = []
     joins_in_query = []
@@ -255,19 +266,21 @@ def build_query(
     from_kws = keywords.get_from_kws()
 
     #Create select project queries for each relation in join pairs
+    join_queries = []
+
     for pair in joins_in_query:
-        print(pair.to_string())
+        join_queries.append(pair.to_string())
 
     sel_proj_queries = []
 
-    print("Tables in query:", tables_in_query)
+    #print("Tables in query:", tables_in_query)
 
     for table_name in tables_in_query:
 
         # Random selection of a query pattern:
         #query_string = query_patterns[(random.randrange(0, len(query_patterns)))]
         query_string = build_select_query_pattern(table_element_patterns, where_expression_patterns)
-        print("Randomly generated query template:", query_string)
+        #print("Randomly generated query template:", query_string)
         
         while "_KW_SELECT_" in query_string:
             query_string = query_string.replace("_KW_SELECT_", select_kws[random.randrange(0, len(select_kws))])
@@ -322,9 +335,61 @@ def build_query(
         sp_query = query_string.replace("_CN_ _COMP_OP_ _VALUE_", "")
         sel_proj_queries.append(sp_query)
     
-    query_string = " AND THEN ".join(sel_proj_queries)
+    if random.randint(0, 1) == 1:
+        query_string = " AND THEN ".join(sel_proj_queries)
+        query_string = query_string + " AND THEN " + " AND THEN ".join(join_queries)
+    else:
+        query_string = " AND THEN ".join(join_queries)
+        query_string = query_string + " AND THEN " + " AND THEN ".join(sel_proj_queries)
 
-    return query_string
+    modifier_added = False
+    group_string = ""
+    order_string = ""
+    limit_string = ""
+    having_string = ""
+
+    if "(" in query_string:
+        group_string = [
+            "GROUP BY AUTOMATIC", 
+            "GROUP AUTOMATIC", 
+            "GROUP AUTOMATICALLY", 
+            "GROUP BY AUTOMATICALLY"
+            ][random.randrange(0,4)]
+        modifier_added = True
+
+    if len(column_names_in_query) > 0:
+
+        if random.randrange(0, 100) < 10:
+            order_string = " ORDER BY " + column_names_in_query[random.randrange(0, len(column_names_in_query))] + [" ASC ", " DESC ", ""][random.randrange(0, 3)]
+            modifier_added = True
+
+        if random.randrange(0, 100) < 20:
+            limit_string = " LIMIT " + str(random.randrange(1, 50)) 
+            modifier_added = True
+
+        if random.randrange(0, 100) < 30:
+            having_string = (
+                " HAVING " + 
+                ["AVG", "SUM", "COUNT"][random.randrange(0, 3)] + " ( " +
+                column_names_in_query[random.randrange(0, len(column_names_in_query))] + 
+                " ) " + 
+                ["less than ", "greater than ", "equal to "][random.randrange(0, 3)] + 
+                str(random.randrange(0, 200))
+            )
+            modifier_added = True
+
+    modifier_strings = [group_string, order_string, limit_string, having_string]
+
+    if modifier_added:
+        query_string = query_string + " AND THEN "
+
+        while len(modifier_strings)> 0:
+            query_string = query_string + modifier_strings.pop(random.randrange(0, len(modifier_strings))) + " "
+
+    while "  " in query_string:
+        query_string = query_string.replace("  ", " ")
+
+    return query_string.strip()
 
 
 print(build_query(
