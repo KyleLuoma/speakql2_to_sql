@@ -4,6 +4,7 @@ from numpy import where
 import pandas as pd
 import SpeakqlKeywords as sk
 import JoinPair as jp
+import english_words as ew
 
 schema_df = pd.read_excel("C:/research_projects/speakql2_to_sql/artifacts/query_gen_schemas/query_gen_schemas.xlsx")
 
@@ -37,6 +38,9 @@ select_element_patterns = [
 
 function_patterns = [
     "count ( _CN_ )",
+    "count ( distinct _CN_ )"
+    "count of ( _CN_ )",
+    "the count ( _CN_ )",
     "the count of ( _CN_ )"
 ]
 
@@ -44,7 +48,9 @@ num_function_patterns = [
     "sum ( _CN_INT_ )",
     "average ( _CN_INT_ )",
     "the sum of ( _CN_INT_ )",
-    "the average of ( _CN_INT_ )"
+    "the average of ( _CN_INT_ )",
+    "max ( _CN_INT_ )",
+    "min ( _CN_INT_ )"
 ]
 
 table_element_patterns = [
@@ -187,7 +193,6 @@ def build_table_element(table_element_patterns, table_name, table_alias):
     return element_string
 
 def build_where_expression(where_expression_patterns, columns_in_query, int_columns, tables_in_query, alias_dict):
-    string_values = ["foo", "bar"]
     where_expr_string = where_expression_patterns[random.randrange(0, len(where_expression_patterns))]
     while "_CN_" in where_expr_string and len(columns_in_query) > 0:
         column = columns_in_query[random.randrange(0, len(columns_in_query))]
@@ -196,7 +201,7 @@ def build_where_expression(where_expression_patterns, columns_in_query, int_colu
             value = random.randint(0, 2100)
             operator = ["equals", "is greater than", "is less than", "greater than", "less than", "is equal to", "equal to"][random.randrange(0, 7)]
         elif random.randrange(0, 100) < 80:
-            value = string_values[random.randrange(0, len(string_values))]
+            value = ew.english_words_alpha_set.pop()
             operator = ["equals", "is equal to"][random.randrange(0, 2)]
         else:
             value = (
@@ -324,7 +329,7 @@ def build_query(
                         where_expression_patterns,
                         schema_df,
                         force_single_relation = True
-                    ) + " ) as sq_alias"
+                    ) + " ) as " + ew.english_words_alpha_set.pop()
                 )
 
         available_columns = []
@@ -380,7 +385,7 @@ def build_query(
     limit_string = ""
     having_string = ""
 
-    if "(" in query_string:
+    if " count " in query_string or " sum " in query_string or " average " in query_string:
         group_string = [
             "GROUP BY AUTOMATIC", 
             "GROUP AUTOMATIC", 
@@ -402,7 +407,7 @@ def build_query(
         if random.randrange(0, 100) < 30:
             having_string = (
                 " HAVING " + 
-                ["AVG", "SUM", "COUNT"][random.randrange(0, 3)] + " ( " +
+                ["AVG", "SUM", "COUNT", "MAX", "MIN"][random.randrange(0, 5)] + " ( " +
                 column_names_in_query[random.randrange(0, len(column_names_in_query))] + 
                 " ) " + 
                 ["less than ", "greater than ", "equal to "][random.randrange(0, 3)] + 
@@ -413,10 +418,11 @@ def build_query(
     modifier_strings = [group_string, order_string, limit_string, having_string]
 
     if modifier_added:
-        query_string = query_string + " AND THEN "
+        if len(tables_in_query) > 1:
+            query_string = query_string + " AND THEN "
 
         while len(modifier_strings)> 0:
-            query_string = query_string + modifier_strings.pop(random.randrange(0, len(modifier_strings))) + " "
+            query_string = query_string + " " + modifier_strings.pop(random.randrange(0, len(modifier_strings)))
 
     while "  " in query_string:
         query_string = query_string.replace("  ", " ")
@@ -436,17 +442,17 @@ print(build_query(
 
 queries = []
 
-for i in range (0, 100):
-    queries.append(build_query(
-    query_patterns, 
-    select_element_patterns, 
-    table_element_patterns, 
-    function_patterns,
-    num_function_patterns,
-    where_expression_patterns,
-    schema_df
-    ))
+# for i in range (0, 100):
+#     queries.append(build_query(
+#     query_patterns, 
+#     select_element_patterns, 
+#     table_element_patterns, 
+#     function_patterns,
+#     num_function_patterns,
+#     where_expression_patterns,
+#     schema_df
+#     ))
 
-pd.Series(queries).to_excel("./generated_queries.xlsx")
+# pd.Series(queries).to_excel("./generated_queries.xlsx")
 
 
