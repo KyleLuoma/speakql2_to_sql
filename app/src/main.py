@@ -13,7 +13,7 @@ from db_util.db_connector import *
 
 verbose = True
 
-parse_engine = spc.JavaSpeakQlParseEngine("gen_simple_is_in", simple_speakql= True)
+parse_engine = spc.JavaSpeakQlParseEngine("gen_simple_reorder_modifiers", simple_speakql= True)
 parse_caller = spc.SpeakQlParseCaller(parse_engine)
 
 py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")

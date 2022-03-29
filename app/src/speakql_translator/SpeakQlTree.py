@@ -731,10 +731,39 @@ class SpeakQlTree:
             self.get_node(node_id).update_children(new_children)
         for child in node.get_children():
             self.reorder_select_and_table_expressions(child)
-        
 
 
-    
+    # Reorders the groupByClause, havingClause, orderbyClause and limitClause to meet SQL
+    # requirements.
+    def reorder_select_modifiers(self, node_id = 0):
+        # Parent of any clauses that will display in the query. Although rare, it is valid
+        # for more than one to exist in a query.
+        select_modifier_expressions = self.find_nodes_by_rule_name("selectModifierExpression")
+
+        for sme_id in select_modifier_expressions:
+
+            sme_node = self.get_node(sme_id)
+            reordered_sme_items = []
+
+            group_by_id = self.find_nodes_by_rule_name("groupByClause", sme_id)
+            having_id = self.find_nodes_by_rule_name("havingClause", sme_id)
+            orderby_id = self.find_nodes_by_rule_name("orderByClause", sme_id)
+            limit_id = self.find_nodes_by_rule_name("limitClause", sme_id)
+
+            if len(group_by_id) > 0:
+                reordered_sme_items.append(group_by_id[0])
+            if len(having_id) > 0:
+                reordered_sme_items.append(having_id[0])
+            if len(orderby_id) > 0:    
+                reordered_sme_items.append(orderby_id[0])
+            if len(limit_id) > 0:
+                reordered_sme_items.append(limit_id[0])
+
+            sme_node.update_children(reordered_sme_items)
+
+
+
+
 
 
     # -------------------------------------------------------------------------------------------------------

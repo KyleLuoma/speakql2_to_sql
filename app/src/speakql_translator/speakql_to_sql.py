@@ -180,6 +180,7 @@ def translate_speakql_to_sql_with_st(speakql_tree, verbose = False):
         speakql_tree.replace_keywords_for_rule_name(key, SQL_KEYWORDS_FOR_ST[key])
     speakql_tree.remove_syntactic_sugar()
     speakql_tree.reorder_select_and_table_expressions(0)
+    speakql_tree.reorder_select_modifiers()
     speakql_tree.rebundle_query()
     if(verbose):
         print("---- Tables and table attributes in query ----")
