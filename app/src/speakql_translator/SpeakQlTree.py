@@ -1,6 +1,7 @@
 #lisp_tree = "(selectStatement (querySpecification (tableThenSelectExpression (tableExpression (fromClause (fromKeyword FROM TABLE) (tableSources (tableSource (tableSourceItem (tableName (fullId (uid (simpleId A))))))) (whereKeyword WHERE) (expression (predicate (predicate (expressionAtom (fullColumnName (uid (simpleId A))))) (comparisonOperator =) (predicate (expressionAtom (fullColumnName (uid (simpleId B))))))))) (selectExpression (selectClause (selectKeyword DISPLAY)) (selectElements (selectElement (fullColumnName (uid (simpleId B))))))) selectModifierExpression))"
 from os import remove
 import json
+
 from .TableSourceItem import TableSourceItem
 from .MultiJoinPartItem import MultiJoinPartItem
 from .SpeakQlNode import SpeakQlNode
@@ -20,6 +21,7 @@ class SpeakQlTree:
         ]
         if("(" not in lisp_tree and ")" not in lisp_tree):
             lisp_tree = "(emptyTree)"
+        lisp_tree, self.sq_dict = self._mask_and_index_subqueries(lisp_tree)
         self.parse_tree = lisp_tree
         self._build_tree(self.parse_tree)
         self.properties = self._get_properties_from_parse_tree(self.parse_tree)
@@ -35,6 +37,19 @@ class SpeakQlTree:
             self.initial_table_source_items
         )
         self.verbose = verbose
+
+        self.SQL_KEYWORDS = {
+            "selectKeyword" : "SELECT", 
+            "fromKeyword" : "FROM",
+            "selectElementDelimiter" : ",",
+            "tableSourceDelimiter" : ",",
+            "groupByItemDelimiter" : ",",
+            "selectElementDot" : ".",
+            "joinKeyword" : "JOIN",
+            "groupByKeyword" : "GROUP BY",
+            "leftParen" : "(",
+            "rightParen" : ")"
+            }
 
 
 
@@ -177,6 +192,31 @@ class SpeakQlTree:
 
 
 
+    def _mask_and_index_subqueries(self, lisp_tree):
+        sq_dict = {}
+        sq_num = 0
+        subquery_rule_names = ["subQueryTable", "subQueryPredicate"]
+        for rule in subquery_rule_names:
+            while rule in lisp_tree:
+                sq_start = lisp_tree.find("(" + rule)
+                paren_count = 1
+                ix = sq_start + 1
+                while paren_count >= 1:
+                    if lisp_tree[ix] == "(":
+                        paren_count = paren_count + 1
+                    if lisp_tree[ix] == ")":
+                        paren_count = paren_count - 1
+                    ix = ix + 1
+                sq_end = ix
+                sq_substring = lisp_tree[sq_start : sq_end]
+                lisp_tree = lisp_tree.replace(sq_substring, "(subQueryMask SUBQUERY_" + str(sq_num) + ")")
+                sq_substring = sq_substring.replace(rule, "topOfSubquery")
+                sq_dict[("SUBQUERY_" + str(sq_num))] = SpeakQlTree(sq_substring)
+                sq_num = sq_num + 1
+        print(sq_dict)
+        return lisp_tree, sq_dict
+
+
     # -------------------------------------------------------------------------------------------------------
     # Console output methods
     # -------------------------------------------------------------------------------------------------------
@@ -252,6 +292,11 @@ class SpeakQlTree:
 
 
 
+    def get_parse_tree(self):
+        return self.parse_tree
+
+
+
     # -------------------------------------------------------------------------------------------------------
     # Misc Accessor Methods (both simple and complex)
     # -------------------------------------------------------------------------------------------------------
@@ -269,6 +314,8 @@ class SpeakQlTree:
     def as_json(self, node_id = 0, at_start = True):
         node = self.get_node(node_id)
         tree_dict = {}
+        if "subQueryMask" in node.get_rule_name():
+            return self.sq_dict[node.get_rule_name().split()[1].strip()].as_dict()
         tree_dict['name'] = node.get_rule_name()
         tree_dict['children'] = []
         for child in node.get_children():
@@ -278,6 +325,16 @@ class SpeakQlTree:
         else: 
             return tree_dict
 
+
+
+    def as_dict(self, node_id = 0):
+        node = self.get_node(node_id)
+        tree_dict = {}
+        tree_dict['name'] = node.get_rule_name()
+        tree_dict['children'] = []
+        for child in node.get_children():
+            tree_dict['children'].append(self.as_json(child, at_start = False))
+        return tree_dict
 
 
     def get_initial_tables_and_elements_as_json(self):
@@ -297,6 +354,8 @@ class SpeakQlTree:
         for rule in ignore_rules:
             if rule in node.get_rule_name():
                 return output
+        if "subQueryMask" in node.get_rule_name():
+            return self.sq_dict[node.get_rule_name().split()[1].strip()].preorder_serialize_tokens(0)
         if node.get_is_leaf():
             return self.get_token_string_from_rule(node)
         if len(node.get_rule_name().split()) > 1:
@@ -672,6 +731,9 @@ class SpeakQlTree:
                     rule_name + " " + new_keyword
                 )
 
+        for key in self.sq_dict:
+            self.sq_dict[key].replace_keywords_for_rule_name(rule_name, new_keyword)
+
 
 
     def remove_syntactic_sugar(
@@ -684,9 +746,12 @@ class SpeakQlTree:
             for node_id in keyword_ids:
                 self.remove_node_from_tree(node_id)
 
+        for key in self.sq_dict:
+            self.sq_dict[key].remove_syntactic_sugar(sugar_list)
 
 
-    def reorder_select_and_table_expressions(self, node_id):
+
+    def reorder_select_and_table_expressions(self, node_id = 0):
         node = self.get_node(node_id)
         select_expression = -1
         table_expression = -1
@@ -732,6 +797,9 @@ class SpeakQlTree:
         for child in node.get_children():
             self.reorder_select_and_table_expressions(child)
 
+        for key in self.sq_dict:
+            self.sq_dict[key].reorder_select_and_table_expressions()
+
 
     # Reorders the groupByClause, havingClause, orderbyClause and limitClause to meet SQL
     # requirements.
@@ -760,6 +828,9 @@ class SpeakQlTree:
                 reordered_sme_items.append(limit_id[0])
 
             sme_node.update_children(reordered_sme_items)
+
+            for key in self.sq_dict:
+                self.sq_dict[key].reorder_select_modifiers()
 
 
 
@@ -803,6 +874,8 @@ class SpeakQlTree:
         for node_id in garbage_nodes:
             self.remove_node_from_tree(node_id)
     
+        for key in self.sq_dict:
+            self.sq_dict[key].rebundle_query()
 
 
     #Scan the query. If aggregate functions exist, then infer that all non-agg elements should be in group by statement

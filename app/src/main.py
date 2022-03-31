@@ -44,7 +44,7 @@ while user_input.upper() != "QUIT":
     elif(user_input.upper() == "PREDICT OFF"):
         predict = False
     elif(user_input.upper() == "PRINT PARSE TREE"):
-        print(tree)
+        print(speakql_tree.get_parse_tree())
     elif(user_input.upper() == "VERBOSE ON"):
         print("Verbose mode is on. Type verbose off to turn it off again")
         verbose = True

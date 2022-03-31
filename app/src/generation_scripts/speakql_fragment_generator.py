@@ -16,7 +16,7 @@ select_query_patterns = [
 ]
 
 join_query_patterns = [
-    "join _JTE_1_ with _JTE_2_ on _JTE_1_ . _JSE_1_ equals _JTE_2_ . _JSE_2_",
+    "join _JTE_1_ with _JTE_2_ on _JTE_1_ . _JSE_1_ = _JTE_2_ . _JSE_2_",
     "natural join _JTE_1_ with _JTE_2_"
 ]
 
@@ -24,8 +24,9 @@ modifier_query_patterns = [
     "group by _CN_ and _CN_",
     "group by automatic",
     "group by _CN_",
-    "having _FUN_ equals _NUM_",
-    "having _FUN_ greater than _NUM_"
+    "having _FUN_ = _NUM_",
+    "having _FUN_ > _NUM_",
+    "having _FUN_ < _NUM_"
 ]
 
 query_patterns = select_query_patterns #+ join_query_patterns + modifier_query_patterns
@@ -38,7 +39,7 @@ select_element_patterns = [
 
 function_patterns = [
     "count ( _CN_ )",
-    "count ( distinct _CN_ )"
+    "count ( distinct _CN_ )",
     "count of ( _CN_ )",
     "the count ( _CN_ )",
     "the count of ( _CN_ )"
@@ -100,18 +101,18 @@ def build_select_query_pattern(table_element_patterns, where_expression_patterns
 
     for i in range(0, random.randint(1, num_elements)):
         delim = ["and", ","][random.randrange(0,2)]
-        select_string = select_string + " " + delim + " _SE_"
+        select_string = select_string + " " + delim + " _SE_ "
 
     rand_number = random.randint(1,4)
 
     if rand_number == 1:
-        query = select_string.strip() + " " + from_string.strip() + " " + where_string.strip()
+        query = select_string.strip() + " " + from_string.strip() + " " + where_string.strip() + " "
     if rand_number == 2:
-        query = from_string.strip() + " " + select_string.strip() + " " + where_string.strip()
+        query = from_string.strip() + " " + select_string.strip() + " " + where_string.strip() + " "
     if rand_number == 3:
-        query = select_string.strip() + " " + where_string.strip() + " " + from_string.strip()
+        query = select_string.strip() + " " + where_string.strip() + " " + from_string.strip() + " "
     if rand_number == 4:
-        query = from_string.strip() + " " + where_string.strip() + " " + select_string.strip()
+        query = from_string.strip() + " " + where_string.strip() + " " + select_string.strip() + " "
 
     return query
 
@@ -199,16 +200,23 @@ def build_where_expression(where_expression_patterns, columns_in_query, int_colu
         where_expr_string = where_expr_string.replace("_CN_", column, 1)
         if column in int_columns:
             value = random.randint(0, 2100)
-            operator = ["equals", "is greater than", "is less than", "greater than", "less than", "is equal to", "equal to"][random.randrange(0, 7)]
+            operator = ["=", ">", "<", "<>", "<=", ">="][random.randrange(0, 6)]
+        elif "date" in column.lower():
+            value = (
+                "'" + str(random.randrange(1910, 2023)) + "-" + 
+                str(random.randint(1, 12)) + "-" + 
+                str(random.randint(1, 28)) + "'"
+                )
+            operator = ["=", ">", "<", "<>", "<=", ">="][random.randrange(0, 6)]
         elif random.randrange(0, 100) < 80:
-            value = ew.english_words_alpha_set.pop()
-            operator = ["equals", "is equal to"][random.randrange(0, 2)]
+            value = "'" + ew.english_words_alpha_set.pop() + "'"
+            operator = ["=", "<>"][random.randrange(0, 2)]
         else:
             value = (
                 "( " + ["SELECT", "FIND", "DISPLAY"][random.randrange(0, 3)] +
                 " " + columns_in_query[random.randrange(0, len(columns_in_query))] +
                 " " + ["FROM", "FROM TABLE", "IN TABLE"][random.randrange(0, 3)] +
-                " " + tables_in_query[random.randrange(0, len(tables_in_query))] + " )"
+                " " + tables_in_query[random.randrange(0, len(tables_in_query))] + " ) "
                 )
             operator = "IN"
         where_expr_string = where_expr_string.replace("_VALUE_", str(value), 1)
@@ -410,7 +418,7 @@ def build_query(
                 ["AVG", "SUM", "COUNT", "MAX", "MIN"][random.randrange(0, 5)] + " ( " +
                 column_names_in_query[random.randrange(0, len(column_names_in_query))] + 
                 " ) " + 
-                ["less than ", "greater than ", "equal to "][random.randrange(0, 3)] + 
+                ["< ", "> ", "= ", "<> "][random.randrange(0, 4)] + 
                 str(random.randrange(0, 200))
             )
             modifier_added = True
@@ -442,17 +450,17 @@ print(build_query(
 
 queries = []
 
-# for i in range (0, 100):
-#     queries.append(build_query(
-#     query_patterns, 
-#     select_element_patterns, 
-#     table_element_patterns, 
-#     function_patterns,
-#     num_function_patterns,
-#     where_expression_patterns,
-#     schema_df
-#     ))
+for i in range (0, 10000):
+    queries.append(build_query(
+    query_patterns, 
+    select_element_patterns, 
+    table_element_patterns, 
+    function_patterns,
+    num_function_patterns,
+    where_expression_patterns,
+    schema_df
+    ))
 
-# pd.Series(queries).to_excel("./generated_queries.xlsx")
+pd.Series(queries).to_excel("./generated_queries.xlsx")
 
 
