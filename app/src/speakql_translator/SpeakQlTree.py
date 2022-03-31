@@ -1016,11 +1016,13 @@ class SpeakQlTree:
 
     def _bundle_where_statements(self, node_id = 0):
 
-        if (self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0):
+        query_order_spec_node_ids = self.find_nodes_by_rule_name("multiQueryOrderSpecification", node_id = node_id)
+
+        if ((self.properties["num_select_and_table_expression"] <= 1 and self.properties["num_multi_query_order_specification"] == 0)
+                or len(query_order_spec_node_ids) == 0):
             self.print_verbose("Cannot aggregate where statements in a query with only one table expression.")
             return
 
-        query_order_spec_node_ids = self.find_nodes_by_rule_name("multiQueryOrderSpecification", node_id = node_id)
         first_qos_node = self.get_node(query_order_spec_node_ids[0])
         where_expression_ids = []
         where_expression_table_lookup = {}

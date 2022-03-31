@@ -232,7 +232,8 @@ def build_query(
     num_function_patterns, 
     where_expression_patterns,
     schema_df,
-    force_single_relation = False
+    force_single_relation = False,
+    allow_subquery = True
     ):
     schema_names = schema_df.SCHEMA.unique()
     keywords = sk.SpeakQlKeywords()
@@ -319,7 +320,7 @@ def build_query(
         while "_TE_" in query_string:
             table_alias = table_name[0] + table_name[len(table_name) - 1]
             alias_dict[table_name] = table_alias
-            if random.randrange(0, 100) < 90:
+            if random.randrange(0, 100) < 90 or not allow_subquery:
                 query_string = query_string.replace(
                     "_TE_",
                     build_table_element(table_element_patterns, table_name, table_alias),
@@ -336,8 +337,9 @@ def build_query(
                         num_function_patterns, 
                         where_expression_patterns,
                         schema_df,
-                        force_single_relation = True
-                    ) + " ) as " + ew.english_words_alpha_set.pop()
+                        force_single_relation = True,
+                        allow_subquery=False
+                    ) + " ) as " + table_name
                 )
 
         available_columns = []
@@ -352,7 +354,7 @@ def build_query(
             select_element, column_names_in_query = build_select_element(
                 select_element_patterns, 
                 available_columns, 
-                tables_in_query, 
+                [table_name], 
                 column_names_in_query,
                 function_patterns,
                 num_function_patterns,
@@ -450,17 +452,17 @@ print(build_query(
 
 queries = []
 
-for i in range (0, 10000):
-    queries.append(build_query(
-    query_patterns, 
-    select_element_patterns, 
-    table_element_patterns, 
-    function_patterns,
-    num_function_patterns,
-    where_expression_patterns,
-    schema_df
-    ))
+# for i in range (0, 10000):
+#     queries.append(build_query(
+#     query_patterns, 
+#     select_element_patterns, 
+#     table_element_patterns, 
+#     function_patterns,
+#     num_function_patterns,
+#     where_expression_patterns,
+#     schema_df
+#     ))
 
-pd.Series(queries).to_excel("./generated_queries.xlsx")
+# pd.Series(queries).to_excel("./generated_queries.xlsx")
 
 
