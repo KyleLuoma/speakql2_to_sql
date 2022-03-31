@@ -81,6 +81,9 @@ class MultiJoinPartItem:
     def get_join_table_alias(self):
         return self.right_table_alias
 
+    def get_right_table_alias(self):
+        return self.right_table_alias
+
     def get_join_type(self):
         return self.join_type
 

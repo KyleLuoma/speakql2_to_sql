@@ -511,12 +511,16 @@ class SpeakQlTree:
                     table_source_item.set_name(
                         self.preorder_serialize_tokens(child)
                     )
+                elif "subQueryMask" in self.get_node(child).get_rule_name():
+                    table_source_item.set_name(
+                        self.get_node(child).get_rule_name().split()[1]
+                    )
                 elif "tableAlias" in self.get_node(child).get_rule_name():
                     alias_token = self.preorder_serialize_tokens(child)
                     alias_token = alias_token.replace("AS", "")
                     table_source_item.set_alias(alias_token)
-            if table_source_item.has_alias() and not table_source_item.has_name():
-                table_source_item.set_name("_SUBQUERY_" + table_source_item.get_alias())
+            # if table_source_item.has_alias() and not table_source_item.has_name():
+            #     table_source_item.set_name("SUBQUERY_" + table_source_item.get_alias())
             table_source_items.append(table_source_item)
             return table_source_items
         for child in node.get_children():
@@ -1108,7 +1112,7 @@ class SpeakQlTree:
                     join_type = "outer"
 
                 join_direction = ""
-                if self.rule_exists_in_tree("joinDirection"):
+                if self.rule_exists_in_tree("joinDirection", join_part_id):
                     join_direction = self.preorder_serialize_tokens(
                         self.find_nodes_by_rule_name("joinDirection", join_part_id)[0]
                     )
@@ -1121,17 +1125,51 @@ class SpeakQlTree:
                     self.find_nodes_by_rule_name("tableName", table_source_item_ids[0])[0]
                 )
 
+                #Handle case where table is a subquery
+                if left_table_name.strip() in self.table_lookup_by_alias_dict.keys() and "SUBQUERY_" in self.table_lookup_by_alias_dict[left_table_name.strip()]:
+                    print(left_table_name, "is an alias for", self.table_lookup_by_alias_dict[left_table_name.strip()])
+                    left_table_alias = left_table_name.strip()
+                    left_table_name = self.table_lookup_by_alias_dict[left_table_alias]
+                    name_node = self.get_node(self.find_nodes_by_rule_name("tableName", table_source_item_ids[0])[0])
+                    name_node.update_rule_name("subQueryMask " + left_table_name)
+                    parent_node = self.get_node(name_node.get_parent())
+                    parent_node.update_children([])
+                    self._add_node_under_parent("leftParen (", True, parent_node.get_depth() + 1, parent_node.get_id())
+                    parent_node.add_child(name_node.get_id())
+                    self._add_node_under_parent("rightParen )", True, parent_node.get_depth() + 1, parent_node.get_id())
+                    self._add_node_under_parent("asKeyword AS", True, parent_node.get_depth() + 1, parent_node.get_id())
+                    self._add_node_under_parent("subQueryAlias " + left_table_alias, True, parent_node.get_depth() + 1, parent_node.get_id())
+
+                else:
+                    left_table_alias = ""
+
                 right_table_name = self.preorder_serialize_tokens(
                     self.find_nodes_by_rule_name("tableName", table_source_item_ids[1])[0]
                 )
 
-                left_table_alias = ""
+                #Handle case where table is a subquery again, yes this seems to violate DRY a bit. TODO: consolidate left and right into one method.
+                if right_table_name.strip() in self.table_lookup_by_alias_dict.keys():
+                    print(right_table_name, "is an alias for", self.table_lookup_by_alias_dict[right_table_name.strip()])
+                    right_table_alias = right_table_name.strip()
+                    right_table_name = self.table_lookup_by_alias_dict[right_table_alias]
+                    name_node = self.get_node(self.find_nodes_by_rule_name("tableName", table_source_item_ids[1])[0])
+                    name_node.update_rule_name("subQueryMask " + right_table_name)
+                    parent_node = self.get_node(name_node.get_parent())
+                    parent_node.update_children([])
+                    self._add_node_under_parent("leftParen (", True, parent_node.get_depth() + 1, parent_node.get_id())
+                    parent_node.add_child(name_node.get_id())
+                    self._add_node_under_parent("rightParen )", True, parent_node.get_depth() + 1, parent_node.get_id())
+                    self._add_node_under_parent("asKeyword AS", True, parent_node.get_depth() + 1, parent_node.get_id())
+                    self._add_node_under_parent("subQueryAlias " + right_table_alias, True, parent_node.get_depth() + 1, parent_node.get_id())
+
+                else:
+                    right_table_alias = ""
+
                 if self.rule_exists_in_tree("tableAlias", table_source_item_ids[0]):
                     left_table_alias = self.preorder_serialize_tokens(
                         self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[0])[0]
                     )
 
-                right_table_alias = ""
                 if self.rule_exists_in_tree("tableAlias", table_source_item_ids[1]):
                     left_table_alias = self.preorder_serialize_tokens(
                         self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[1])[0]
@@ -1142,6 +1180,7 @@ class SpeakQlTree:
                         self.find_nodes_by_rule_name("withKeyword", join_part_id)[0]
                     )
 
+                print(left_table_name, left_table_alias, right_table_name, right_table_alias)
                 join_part_items.append(
                     MultiJoinPartItem(
                         join_part_id, 
@@ -1217,6 +1256,7 @@ class SpeakQlTree:
         join_nodes = self.find_nodes_by_rule_name("multiJoinExpression")
         table_expression_node = self.get_node(self.find_nodes_by_rule_name("tableExpressionNoJoin")[0])
         for node_id in join_nodes:
+            join_node = self.get_node(node_id)
             table_expression_node.add_child(node_id)
             table_expression_node.update_rule_name("tableExpression")
             parent = self.get_node(self.get_node(node_id).get_parent())
