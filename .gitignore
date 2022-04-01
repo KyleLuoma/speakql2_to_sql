@@ -11,6 +11,7 @@ bin/
 
 *.pyc
 *.mp3
+*.xlsx
 
 update_react_app.ps1
 

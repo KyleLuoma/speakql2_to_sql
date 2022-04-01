@@ -8,11 +8,101 @@ from speakql_speech_recognition.SpeakQlPredictorCaller import *
 from db_util.db_analyzer import *
 from db_util.db_connector import *
 
-def translate_from_excel(filename):
+
+
+def main():
+
+    parse_engine = spc.JavaSpeakQlParseEngine("gen_simple_reorder_modifiers", simple_speakql= True)
+    parse_caller = spc.SpeakQlParseCaller(parse_engine)
+
+    py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
+    py_parse_caller = spc.SpeakQlParseCaller(py_parse_engine)
+
+    tree = ""
+    user_input = ""
+    speakql_query = ""
+
+    verbose = False
+    connect = False
+    predict = False
+
+    speakql_tree = st.SpeakQlTree(tree)
+    predictor = SpeakQlPredictorCaller()
+
+
+    while user_input.upper() != "QUIT":
+        print("SpeakQl2>", end = ' ')
+        user_input = input()
+        if(user_input.upper() == "QUIT"):
+            break
+        elif(user_input.upper() == "CONNECT"):
+            connection = DbConnector(db_engine = "mysql", db_name="speakql_university")
+            connect = True
+        elif(user_input.upper() == "PREDICT ON"):
+            predict = True
+        elif(user_input.upper() == "PREDICT OFF"):
+            predict = False
+        elif(user_input.upper() == "PRINT PARSE TREE"):
+            print(speakql_tree.get_parse_tree())
+        elif(user_input.upper() == "VERBOSE ON"):
+            print("Verbose mode is on. Type verbose off to turn it off again")
+            verbose = True
+            speakql_tree.set_verbose(verbose)
+        elif(user_input.upper() == "VERBOSE OFF"):
+            print("Verbose mode is off. Type verbose on to turn it back on.")
+            verbose = False
+            speakql_tree.set_verbose(verbose)
+        elif(user_input.upper() == "PRINT SPEAKQL TREE"):
+            speakql_tree.print_tree_to_console()
+        elif(user_input.upper() == "PRINT ALL NODES"):
+            speakql_tree.print_nodes_to_console()
+        elif(user_input.upper() == "PRINT ELEMENTS"):
+            print(speakql_tree.get_all_tables_and_elements())
+        elif(user_input.upper() == "PRINT TABLES"):
+            tables = speakql_tree.get_all_table_source_items()
+            for table in tables:
+                print(table.to_string())
+        elif(user_input.upper() in ["PRINT PROPERTIES", "PRINT PROPS"]):
+            print(speakql_tree.get_properties())
+        elif(user_input.upper() == "TEST AGGREGATE COLUMNS"):
+            speakql_tree._bundle_select_elements()
+        elif(user_input.upper() == "TEST AGGREGATE TABLES"):
+            speakql_tree._bundle_tables()
+        elif(user_input.upper() == "TEST AGGREGATE WHERE"):
+            speakql_tree._bundle_where_statements()
+        elif(user_input.upper() == "TEST AGGREGATE ALL"):
+            speakql_tree.rebundle_query()
+        elif(user_input.upper() == "PRINT JSON"):
+            print(speakql_tree.as_json())
+        elif(user_input.upper() in ["PRINT SERIAL TREE", "PRINT SQL"]):
+            print(
+                remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
+            )
+        elif(user_input.upper() in ["PRINT SPEAKQL", "PRINT SPEAKQL QUERY"]):
+            print(speakql_query)  
+        elif(user_input.upper() == "TRANSLATE EXCEL FILE"):
+            translate_from_excel("./generated_query_pairs.xlsx", parse_caller)
+        else:
+            speakql_query = user_input
+            tree = parse_caller.run_select_statement(speakql_query)
+            speakql_tree = st.SpeakQlTree(tree, verbose)
+            #print("Serial translator:", translate_speakql_to_sql(tree, verbose = verbose))
+            sql_query = translate_speakql_to_sql_with_st(speakql_tree, verbose = verbose)
+            print("Tree translator:", sql_query)
+            if connect:
+                print(connection.do_single_select_query_into_dataframe(sql_query))
+            if predict:
+                print("Next valid keywords:", predictor.getNextWordsFromQuery(speakql_query))
+
+        
+        
+
+def translate_from_excel(filename, parse_caller):
     queries = pd.read_excel("./generated_queries.xlsx")
     print(queries.head())
     speakql_queries = []
     sql_queries = []
+    status = []
     for row in queries.iterrows():
         speakql_query = row[1][0]
         try:
@@ -21,93 +111,17 @@ def translate_from_excel(filename):
             sql_query = translate_speakql_to_sql_with_st(speakql_tree, False)
             sql_queries.append(sql_query)
             speakql_queries.append(speakql_query)
+            if(sql_query.split(" ")[0] == "SELECT"):
+                status.append("TRANSLATED")
+            else:
+                status.append("PARTIAL ERROR")
         except:
-            pass
-    pd.DataFrame({"SPEAKQL" : speakql_queries, "SQL" : sql_queries}).to_excel(filename)
-
-verbose = True
-
-parse_engine = spc.JavaSpeakQlParseEngine("gen_simple_reorder_modifiers", simple_speakql= True)
-parse_caller = spc.SpeakQlParseCaller(parse_engine)
-
-py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
-py_parse_caller = spc.SpeakQlParseCaller(py_parse_engine)
-
-tree = ""
-user_input = ""
-speakql_query = ""
-
-verbose = False
-connect = False
-predict = False
-
-speakql_tree = st.SpeakQlTree(tree)
-predictor = SpeakQlPredictorCaller()
+            speakql_queries.append(speakql_query)
+            sql_queries.append("")
+            status.append("TOTAL ERROR")
+    pd.DataFrame({"SPEAKQL" : speakql_queries, "SQL" : sql_queries, "STATUS" : status}).to_excel(filename)
 
 
-while user_input.upper() != "QUIT":
-    print("SpeakQl2>", end = ' ')
-    user_input = input()
-    if(user_input.upper() == "QUIT"):
-        break
-    elif(user_input.upper() == "CONNECT"):
-        connection = DbConnector(db_engine = "mysql", db_name="speakql_university")
-        connect = True
-    elif(user_input.upper() == "PREDICT ON"):
-        predict = True
-    elif(user_input.upper() == "PREDICT OFF"):
-        predict = False
-    elif(user_input.upper() == "PRINT PARSE TREE"):
-        print(speakql_tree.get_parse_tree())
-    elif(user_input.upper() == "VERBOSE ON"):
-        print("Verbose mode is on. Type verbose off to turn it off again")
-        verbose = True
-        speakql_tree.set_verbose(verbose)
-    elif(user_input.upper() == "VERBOSE OFF"):
-        print("Verbose mode is off. Type verbose on to turn it back on.")
-        verbose = False
-        speakql_tree.set_verbose(verbose)
-    elif(user_input.upper() == "PRINT SPEAKQL TREE"):
-        speakql_tree.print_tree_to_console()
-    elif(user_input.upper() == "PRINT ALL NODES"):
-        speakql_tree.print_nodes_to_console()
-    elif(user_input.upper() == "PRINT ELEMENTS"):
-        print(speakql_tree.get_all_tables_and_elements())
-    elif(user_input.upper() == "PRINT TABLES"):
-        tables = speakql_tree.get_all_table_source_items()
-        for table in tables:
-            print(table.to_string())
-    elif(user_input.upper() in ["PRINT PROPERTIES", "PRINT PROPS"]):
-        print(speakql_tree.get_properties())
-    elif(user_input.upper() == "TEST AGGREGATE COLUMNS"):
-        speakql_tree._bundle_select_elements()
-    elif(user_input.upper() == "TEST AGGREGATE TABLES"):
-        speakql_tree._bundle_tables()
-    elif(user_input.upper() == "TEST AGGREGATE WHERE"):
-        speakql_tree._bundle_where_statements()
-    elif(user_input.upper() == "TEST AGGREGATE ALL"):
-        speakql_tree.rebundle_query()
-    elif(user_input.upper() == "PRINT JSON"):
-        print(speakql_tree.as_json())
-    elif(user_input.upper() in ["PRINT SERIAL TREE", "PRINT SQL"]):
-        print(
-            remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
-        )
-    elif(user_input.upper() in ["PRINT SPEAKQL", "PRINT SPEAKQL QUERY"]):
-        print(speakql_query)  
-    elif(user_input.upper() == "TRANSLATE EXCEL FILE"):
-        translate_from_excel("./generated_query_pairs.xlsx")
-    else:
-        speakql_query = user_input
-        tree = parse_caller.run_select_statement(speakql_query)
-        speakql_tree = st.SpeakQlTree(tree, verbose)
-        #print("Serial translator:", translate_speakql_to_sql(tree, verbose = verbose))
-        sql_query = translate_speakql_to_sql_with_st(speakql_tree, verbose = verbose)
-        print("Tree translator:", sql_query)
-        if connect:
-            print(connection.do_single_select_query_into_dataframe(sql_query))
-        if predict:
-            print("Next valid keywords:", predictor.getNextWordsFromQuery(speakql_query))
 
-    
-    
+if __name__ == "__main__":
+    main()
