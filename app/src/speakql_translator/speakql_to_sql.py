@@ -7,6 +7,8 @@ Created on Tue Nov 23 17:00:11 2021
 """
 
 #from .SpeakQlTree import SpeakQlTree as st
+import pandas as pd
+
 
 open_paren = 0
 close_paren = 0
@@ -219,3 +221,6 @@ def translate_speakql_to_sql(speakql_tree, verbose = False):
         print(final_tree)
 
     return final_tree
+
+
+

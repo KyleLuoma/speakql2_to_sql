@@ -1,7 +1,6 @@
 import speakql_translator.SpeakQlParseCaller as spc
 import speakql_translator.SpeakQlTree as st
 import json
-
 from speakql_translator.speakql_to_sql import *
 
 from speakql_speech_recognition.SpeakQlPredictorCaller import *
@@ -9,7 +8,22 @@ from speakql_speech_recognition.SpeakQlPredictorCaller import *
 from db_util.db_analyzer import *
 from db_util.db_connector import *
 
-
+def translate_from_excel(filename):
+    queries = pd.read_excel("./generated_queries.xlsx")
+    print(queries.head())
+    speakql_queries = []
+    sql_queries = []
+    for row in queries.iterrows():
+        speakql_query = row[1][0]
+        try:
+            tree = parse_caller.run_select_statement(speakql_query)
+            speakql_tree = st.SpeakQlTree(tree, False)
+            sql_query = translate_speakql_to_sql_with_st(speakql_tree, False)
+            sql_queries.append(sql_query)
+            speakql_queries.append(speakql_query)
+        except:
+            pass
+    pd.DataFrame({"SPEAKQL" : speakql_queries, "SQL" : sql_queries}).to_excel(filename)
 
 verbose = True
 
@@ -80,7 +94,9 @@ while user_input.upper() != "QUIT":
             remove_unwanted_white_space(speakql_tree.preorder_serialize_tokens(0))
         )
     elif(user_input.upper() in ["PRINT SPEAKQL", "PRINT SPEAKQL QUERY"]):
-        print(speakql_query)
+        print(speakql_query)  
+    elif(user_input.upper() == "TRANSLATE EXCEL FILE"):
+        translate_from_excel("./generated_query_pairs.xlsx")
     else:
         speakql_query = user_input
         tree = parse_caller.run_select_statement(speakql_query)

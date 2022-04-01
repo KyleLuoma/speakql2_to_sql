@@ -1,6 +1,7 @@
 from .speakql_translator.SpeakQlParseCaller import *
 from .speakql_translator.SpeakQlTree import *
 from .speakql_translator.speakql_to_sql import *
+import pandas as pd
 
 parse_engine = JavaSpeakQlParseEngine("gen_simple_reorder_modifiers", simple_speakql=True)
 parse_caller = SpeakQlParseCaller(parse_engine)
@@ -70,3 +71,5 @@ def remove_unwanted_white_space(speakql_tree):
         speakql_tree = speakql_tree.replace("< =", "<=")
         speakql_tree = speakql_tree.replace("> =", ">=")
     return speakql_tree
+
+

@@ -47,9 +47,9 @@ function_patterns = [
 
 num_function_patterns = [
     "sum ( _CN_INT_ )",
-    "average ( _CN_INT_ )",
+    "avg ( _CN_INT_ )",
     "the sum of ( _CN_INT_ )",
-    "the average of ( _CN_INT_ )",
+    "the avg of ( _CN_INT_ )",
     "max ( _CN_INT_ )",
     "min ( _CN_INT_ )"
 ]
@@ -395,7 +395,7 @@ def build_query(
     limit_string = ""
     having_string = ""
 
-    if " count " in query_string or " sum " in query_string or " average " in query_string:
+    if " count " in query_string or " sum " in query_string or " avg " in query_string:
         group_string = [
             "GROUP BY AUTOMATIC", 
             "GROUP AUTOMATIC", 
@@ -440,20 +440,19 @@ def build_query(
     return query_string.strip()
 
 
-print(build_query(
-    query_patterns, 
-    select_element_patterns, 
-    table_element_patterns, 
-    function_patterns,
-    num_function_patterns,
-    where_expression_patterns,
-    schema_df
-    ))
+def get_query():
+    return build_query(
+                query_patterns, 
+                select_element_patterns, 
+                table_element_patterns, 
+                function_patterns,
+                num_function_patterns,
+                where_expression_patterns,
+                schema_df
+            )
 
-queries = []
 
-# for i in range (0, 10000):
-#     queries.append(build_query(
+# print(build_query(
 #     query_patterns, 
 #     select_element_patterns, 
 #     table_element_patterns, 
@@ -463,6 +462,19 @@ queries = []
 #     schema_df
 #     ))
 
-# pd.Series(queries).to_excel("./generated_queries.xlsx")
+queries = []
+
+for i in range (0, 50):
+    queries.append(build_query(
+    query_patterns, 
+    select_element_patterns, 
+    table_element_patterns, 
+    function_patterns,
+    num_function_patterns,
+    where_expression_patterns,
+    schema_df
+    ))
+
+pd.Series(queries).to_excel("./generated_queries.xlsx")
 
 
