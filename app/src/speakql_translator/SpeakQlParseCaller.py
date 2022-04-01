@@ -38,9 +38,9 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
         simple = ""
         if self.simple_speakql: simple = "Simple" 
         tree = subprocess.run(
-            "java org.antlr.v4.gui.TestRig " + simple + "SpeakQl " + rule + " -inputFile \"" + query_path + "\" -tree", 
+            "java -jar speakql_predictor.jar -parse \"" + query.upper() +"\"", 
             capture_output=True,
-            cwd="c:/research_projects/speakql2_to_sql/app/src/speakql_translator/antlr_builds/" + self.build_name
+            cwd="C:/research_projects/speakql2_to_sql/app/bin/"
             )
         tree = str(tree)
         tree_start = tree.find("stdout=b") + len("stdout=b*")
