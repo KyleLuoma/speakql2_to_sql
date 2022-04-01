@@ -1095,7 +1095,7 @@ class SpeakQlTree:
 
         #first_table_expression_node is where we will align all of the consolidated join parts
         for node_id in multi_query_order_specification_ids:
-            if self.rule_exists_in_tree("tableExpressionNoJoin"):
+            if self.rule_exists_in_tree("tableExpressionNoJoin", node_id):
                 first_table_expression_node = self.get_node(
                     self.find_nodes_by_rule_name("tableExpressionNoJoin", node_id)[0]
                 )
@@ -1127,7 +1127,7 @@ class SpeakQlTree:
                     self.find_nodes_by_rule_name("tableName", table_source_item_ids[0])[0]
                 )
 
-                #Handle case where table is a subquery
+                #Handle case where table is a subquery and substitute in subquery mask and alias in the join expression
                 if left_table_name.strip() in self.table_lookup_by_alias_dict.keys() and "SUBQUERY_" in self.table_lookup_by_alias_dict[left_table_name.strip()]:
                     print(left_table_name, "is an alias for", self.table_lookup_by_alias_dict[left_table_name.strip()])
                     left_table_alias = left_table_name.strip()
@@ -1167,15 +1167,22 @@ class SpeakQlTree:
                 else:
                     right_table_alias = ""
 
-                if self.rule_exists_in_tree("tableAlias", table_source_item_ids[0]):
-                    left_table_alias = self.preorder_serialize_tokens(
-                        self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[0])[0]
-                    )
+                # Check if left table has a table name and alias and if so, add alias to join expression
+                if left_table_name.strip() in self.alias_lookup_by_table_dict.keys() and self.rule_exists_in_tree("tableName", table_source_item_ids[0]):
+                    left_table_alias = self.alias_lookup_by_table_dict[left_table_name.strip()]
+                    left_table_node = self.get_node(self.find_nodes_by_rule_name("tableName", table_source_item_ids[0])[0])
+                    parent_node = self.get_node(left_table_node.get_parent())
+                    self._add_node_under_parent("asKeyword AS", True, parent_node.get_depth() + 1, parent_node.get_id())
+                    self._add_node_under_parent("multiJoinTableAlias " + left_table_alias, True, parent_node.get_depth() + 1, parent_node.get_id())
 
-                if self.rule_exists_in_tree("tableAlias", table_source_item_ids[1]):
-                    left_table_alias = self.preorder_serialize_tokens(
-                        self.find_nodes_by_rule_name("tableAlias", table_source_item_ids[1])[0]
-                    )
+                # Check if right table has a table name and alias and if so, add alias to join expression
+                if right_table_name.strip() in self.alias_lookup_by_table_dict.keys() and self.rule_exists_in_tree("tableName", table_source_item_ids[1]):
+                    print("RIGHT TABLE HAS ALIAS")
+                    right_table_alias = self.alias_lookup_by_table_dict[right_table_name.strip()]
+                    right_table_node = self.get_node(self.find_nodes_by_rule_name("tableName", table_source_item_ids[1])[0])
+                    parent_node = self.get_node(right_table_node.get_parent())
+                    self._add_node_under_parent("asKeyword AS", True, parent_node.get_depth() + 1, parent_node.get_id())
+                    self._add_node_under_parent("multiJoinTableAlias " + right_table_alias, True, parent_node.get_depth() + 1, parent_node.get_id())
 
                 while len(self.find_nodes_by_rule_name("withKeyword", join_part_id)) > 0:
                     self.remove_node_from_tree(
