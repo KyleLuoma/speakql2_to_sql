@@ -47,7 +47,7 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
         tree = subprocess.run(
             "java -jar speakql_predictor.jar -parse \"" + query.upper() +"\"", 
             capture_output=True,
-            cwd="/home/kyle/repos/speakql2_to_sql/app/bin/",
+            cwd=working_directory,
             shell=True
             )
         tree = str(tree)
