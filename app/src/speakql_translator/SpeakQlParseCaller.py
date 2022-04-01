@@ -1,6 +1,7 @@
 import subprocess
 import antlr4
 from antlr4.tree.Trees import Trees
+from sys import platform
 
 from .antlr_builds.pySpeakQl.SpeakQlLexer import SpeakQlLexer
 from .antlr_builds.pySpeakQl.SpeakQlParser import SpeakQlParser
@@ -23,6 +24,7 @@ class SpeakQlParseEngine:
     def __init__(self, build_name, simple_speakql = False):
         self.build_name = build_name
         self.simple_speakql = simple_speakql
+        self.platform = platform
         pass
 
     def get_parse_tree(rule):
@@ -33,20 +35,25 @@ class SpeakQlParseEngine:
 class JavaSpeakQlParseEngine(SpeakQlParseEngine):
 
     def get_parse_tree(self, rule, query):
-        query_path = "C:/research_projects/speakql2_to_sql/app/query.txt"
-        self.write_query_file(query, query_path)
-        simple = ""
-        if self.simple_speakql: simple = "Simple" 
+        if "linux" in self.platform:
+            print("LINUX") 
+            end_text = "\\n', stderr=b"
+            working_directory = "/home/kyle/repos/speakql2_to_sql/app/bin/"
+        else:
+            end_text = "\\r\\n"
+            working_directory = "c:/research_projects/speakql2_to_sql/app/bin/"
+
+
         tree = subprocess.run(
             "java -jar speakql_predictor.jar -parse \"" + query.upper() +"\"", 
             capture_output=True,
-            cwd="C:/research_projects/speakql2_to_sql/app/bin/"
+            cwd="/home/kyle/repos/speakql2_to_sql/app/bin/",
+            shell=True
             )
         tree = str(tree)
         tree_start = tree.find("stdout=b") + len("stdout=b*")
-        tree_end = tree.find("\\r\\n")
+        tree_end = tree.find(end_text)
         tree = tree[tree_start:tree_end]
-
         return tree
 
     def write_query_file(self, query, file_path):
