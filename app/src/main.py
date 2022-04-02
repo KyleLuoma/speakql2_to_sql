@@ -8,6 +8,10 @@ from speakql_speech_recognition.SpeakQlPredictorCaller import *
 from db_util.db_analyzer import *
 from db_util.db_connector import *
 
+from sys import platform
+import time
+
+
 
 
 def main():
@@ -81,7 +85,7 @@ def main():
         elif(user_input.upper() in ["PRINT SPEAKQL", "PRINT SPEAKQL QUERY"]):
             print(speakql_query)  
         elif(user_input.upper() == "TRANSLATE EXCEL FILE"):
-            translate_from_excel("./generated_query_pairs.xlsx", parse_caller)
+            translate_from_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01_translated.xlsx", parse_caller)
         else:
             speakql_query = user_input
             tree = parse_caller.run_select_statement(speakql_query)
@@ -98,13 +102,27 @@ def main():
         
 
 def translate_from_excel(filename, parse_caller):
-    queries = pd.read_excel("./generated_queries.xlsx")
+    if "linux" in platform:
+        queries = pd.read_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01.xlsx")
+    else:
+        queries = pd.read_excel("./generated_queries.xlsx")
     print(queries.head())
     speakql_queries = []
     sql_queries = []
     status = []
-    for row in queries.iterrows():
-        speakql_query = row[1][0]
+    time_to_translate = []
+    numrows = queries.shape[0]
+    onrow = 0
+    query_list = queries[0].to_list()
+    num_queries = len(query_list)
+    start_all_time = time.time()
+    num_translated = 0
+    for speakql_query in query_list:
+        #speakql_query = row[1][0]
+        if onrow % 100 == 0:
+            print("Translated", str(onrow), "queries.", str((onrow/numrows)*100), "percent complete.")
+        onrow = onrow + 1
+        start_time = time.time()
         try:
             tree = parse_caller.run_select_statement(speakql_query)
             speakql_tree = st.SpeakQlTree(tree, False)
@@ -115,11 +133,25 @@ def translate_from_excel(filename, parse_caller):
                 status.append("TRANSLATED")
             else:
                 status.append("PARTIAL ERROR")
-        except:
+        except KeyError:
+            print("Handling KeyError exception")
             speakql_queries.append(speakql_query)
             sql_queries.append("")
-            status.append("TOTAL ERROR")
-    pd.DataFrame({"SPEAKQL" : speakql_queries, "SQL" : sql_queries, "STATUS" : status}).to_excel(filename)
+            status.append("KEY ERROR")
+            continue
+        num_translated = num_translated + 1
+        end_time = time.time()
+        elapsed_time = end_time - start_all_time
+        translation_time = end_time - start_time
+        avg_translation_time = elapsed_time / num_translated
+        time_to_translate.append(translation_time)
+
+    pd.DataFrame({
+        "SPEAKQL" : speakql_queries, 
+        "SQL" : sql_queries, 
+        "TRANSLATION_SECONDS" : time_to_translate,
+        "STATUS" : status
+        }).to_excel(filename)
 
 
 

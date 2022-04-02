@@ -5,8 +5,15 @@ import pandas as pd
 import SpeakqlKeywords as sk
 import JoinPair as jp
 import english_words as ew
+from sys import platform
+import time
 
-schema_df = pd.read_excel("C:/research_projects/speakql2_to_sql/artifacts/query_gen_schemas/query_gen_schemas.xlsx")
+if "linux" in platform:
+    working_directory = "/home/kyle/repos"
+else:
+    working_directory = "C:/research_projects"
+
+schema_df = pd.read_excel(working_directory + "/speakql2_to_sql/artifacts/query_gen_schemas/query_gen_schemas.xlsx")
 
 select_query_patterns = [
     "_KW_SELECT_ _SE_ and _SE_ and _SE_ _KW_FROM_ _TE_",
@@ -210,6 +217,7 @@ def build_where_expression(where_expression_patterns, columns_in_query, int_colu
             operator = ["=", ">", "<", "<>", "<=", ">="][random.randrange(0, 6)]
         elif random.randrange(0, 100) < 80:
             value = "'" + ew.english_words_alpha_set.pop() + "'"
+            ew.english_words_alpha_set.add(value)
             operator = ["=", "<>"][random.randrange(0, 2)]
         else:
             value = (
@@ -464,7 +472,11 @@ def get_query():
 
 queries = []
 
-for i in range (0, 50):
+start_time = time.time()
+queries_to_generate = 50000
+
+for i in range (0, queries_to_generate):
+
     queries.append(build_query(
     query_patterns, 
     select_element_patterns, 
@@ -475,6 +487,17 @@ for i in range (0, 50):
     schema_df
     ))
 
-pd.Series(queries).to_excel("./generated_queries.xlsx")
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    avg_time_per_translation = elapsed_time / (i + 1)
+    time_remaining = avg_time_per_translation * (queries_to_generate - i)
+
+    if i % 1000 == 0:
+        print("Completed", str(i), "queries")
+        print("Elapsed time", str(elapsed_time), "seconds")
+        print("Time remaining", str(int(time_remaining / 60)), "min", str(time_remaining % 60), "sec")
+
+
+pd.Series(queries).to_excel("./generated_queries_01.xlsx")
 
 

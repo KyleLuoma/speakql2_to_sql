@@ -36,11 +36,10 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
 
     def get_parse_tree(self, rule, query):
         if "linux" in self.platform:
-            print("LINUX") 
-            end_text = "\\n', stderr=b"
+            end_text = ["\\n\", stderr=b", "\\n', stderr=b"]
             working_directory = "/home/kyle/repos/speakql2_to_sql/app/bin/"
         else:
-            end_text = "\\r\\n"
+            end_text = ["\\r\\n"]
             working_directory = "c:/research_projects/speakql2_to_sql/app/bin/"
 
 
@@ -52,7 +51,10 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
             )
         tree = str(tree)
         tree_start = tree.find("stdout=b") + len("stdout=b*")
-        tree_end = tree.find(end_text)
+        for text in end_text:
+            possible_tree_end = tree.find(text)
+            if possible_tree_end > 0:
+                tree_end = possible_tree_end
         tree = tree[tree_start:tree_end]
         return tree
 
