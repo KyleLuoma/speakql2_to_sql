@@ -25,7 +25,7 @@ class JoinPair:
                 "join " + str(self.left_table) + 
                 " with " + str(self.right_table) + 
                 " on " + str(self.left_table) + " . " + str(self.left_key) 
-                + " equals " + str(self.right_table) + " . " + str(self.right_key)
+                + " = " + str(self.right_table) + " . " + str(self.right_key)
                 )
         else:
             return (

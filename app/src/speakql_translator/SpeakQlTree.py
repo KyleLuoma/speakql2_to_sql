@@ -754,7 +754,7 @@ class SpeakQlTree:
 
 
 
-    def reorder_select_and_table_expressions(self, node_id = 0):
+    def reorder_select_and_table_expressions(self, node_id = 0, first_call = True):
         node = self.get_node(node_id)
         select_expression = -1
         table_expression = -1
@@ -798,10 +798,11 @@ class SpeakQlTree:
                     new_children.append(where_expression)
             self.get_node(node_id).update_children(new_children)
         for child in node.get_children():
-            self.reorder_select_and_table_expressions(child)
+            self.reorder_select_and_table_expressions(child, first_call=False)
 
-        for key in self.sq_dict:
-            self.sq_dict[key].reorder_select_and_table_expressions()
+        if first_call:
+            for key in self.sq_dict:
+                self.sq_dict[key].reorder_select_and_table_expressions()
 
 
     # Reorders the groupByClause, havingClause, orderbyClause and limitClause to meet SQL
@@ -832,8 +833,8 @@ class SpeakQlTree:
 
             sme_node.update_children(reordered_sme_items)
 
-            for key in self.sq_dict:
-                self.sq_dict[key].reorder_select_modifiers()
+        for key in self.sq_dict:
+            self.sq_dict[key].reorder_select_modifiers()
 
 
 

@@ -473,7 +473,7 @@ def get_query():
 queries = []
 
 start_time = time.time()
-queries_to_generate = 50000
+queries_to_generate = 200000
 
 for i in range (0, queries_to_generate):
 

@@ -85,7 +85,7 @@ def main():
         elif(user_input.upper() in ["PRINT SPEAKQL", "PRINT SPEAKQL QUERY"]):
             print(speakql_query)  
         elif(user_input.upper() == "TRANSLATE EXCEL FILE"):
-            translate_from_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01_translated.xlsx", parse_caller)
+            translate_from_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_02_translated.xlsx", parse_caller)
         else:
             speakql_query = user_input
             tree = parse_caller.run_select_statement(speakql_query)
@@ -103,7 +103,7 @@ def main():
 
 def translate_from_excel(filename, parse_caller):
     if "linux" in platform:
-        queries = pd.read_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01.xlsx")
+        queries = pd.read_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_02.xlsx")
     else:
         queries = pd.read_excel("./generated_queries.xlsx")
     print(queries.head())
@@ -119,9 +119,6 @@ def translate_from_excel(filename, parse_caller):
     num_translated = 0
     for speakql_query in query_list:
         #speakql_query = row[1][0]
-        if onrow % 100 == 0:
-            print("Translated", str(onrow), "queries.", str((onrow/numrows)*100), "percent complete.")
-        onrow = onrow + 1
         start_time = time.time()
         try:
             tree = parse_caller.run_select_statement(speakql_query)
@@ -138,13 +135,41 @@ def translate_from_excel(filename, parse_caller):
             speakql_queries.append(speakql_query)
             sql_queries.append("")
             status.append("KEY ERROR")
-            continue
+            
+        except IndexError:
+            print("Handling IndexError exception")
+            speakql_queries.append(speakql_query)
+            sql_queries.append("")
+            status.append("INDEX ERROR")
+
+        except ValueError:
+            print("Handling ValueError exception")
+            speakql_queries.append(speakql_query)
+            sql_queries.append("")
+            status.append("VALUE ERROR")
+            
         num_translated = num_translated + 1
         end_time = time.time()
         elapsed_time = end_time - start_all_time
         translation_time = end_time - start_time
         avg_translation_time = elapsed_time / num_translated
         time_to_translate.append(translation_time)
+        remaining_time = avg_translation_time * (num_queries - num_translated)
+        if onrow % 100 == 0:
+            print("Translated", str(onrow), "of", str(num_queries),"queries.", str((onrow/numrows)*100), "percent complete.")
+            print("Elapsed time:", str(int(elapsed_time/60)), "min", str(int(elapsed_time % 60)), "sec")
+            print("Remaining time:", str(int(remaining_time/60)), "min", str(int(remaining_time % 60)), "sec")
+            print("Average translation time:", str(avg_translation_time))
+            print(str(len(speakql_queries)), str(len(sql_queries)), str(len(time_to_translate)), str(len(status)))
+        onrow = onrow + 1
+        if onrow % 1000 == 0:
+            print("Writing intermediate results to DF", (filename.replace(".xlsx", (str(onrow) + ".xlsx"))))
+            pd.DataFrame({
+                "SPEAKQL" : speakql_queries, 
+                "SQL" : sql_queries, 
+                "TRANSLATION_SECONDS" : time_to_translate,
+                "STATUS" : status
+                }).to_excel((filename.replace(".xlsx", (str(onrow) + ".xlsx"))))
 
     pd.DataFrame({
         "SPEAKQL" : speakql_queries, 
