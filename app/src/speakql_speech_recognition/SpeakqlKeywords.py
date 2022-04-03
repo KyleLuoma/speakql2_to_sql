@@ -135,6 +135,31 @@ class SpeakQlKeywords:
             "quote" : "'"
         }
 
+        self.symbols_to_word_list_dict = {
+            "+" : ["plus"],
+            "-" : ["minus"],
+            "<=" : ["less than or equal to", "is less than or equal to"],
+            "<" : ["less than", "is less than"],
+            ">=" : ["greater than or equal to", "is greater than or equal to"],
+            ">" : ["greater than", "is greater than"],
+            "<>" : [
+                "not equal to", "is not equal to",  
+                "does not equal", "not equal"
+                ],
+            "=" : ["equals", "equal", "equal to", "is equal to"],
+            "*" : ["times"],
+            "/" : ["divided by"],
+            "(" : ["open parenthesis", "opened parenthesis", "left parenthesis"],
+            ")" : ["close parenthesis", "closed parenthesis", "right parenthesis"],
+            "'" : ["quote", "quotation mark"],
+            "." : ["dot"],
+            "_" : ["underscore"],
+            "," : ["comma"],
+            "avg" : ["average"],
+            "desc" : ["descending"],
+            "asc" : ["ascending"]
+        }
+
 
     def lookup_kw_synonym(self, kw):
         try:
@@ -184,9 +209,12 @@ class SpeakQlKeywords:
     def get_start_kws(self):
         return (
             self.select_kw 
+            + ["WHAT", "SHOW"]
             + self.from_kw 
             + self.join_kw 
+            + ["BY", "JOINED"]
             + self.order_kw 
+            + ["ORDER"]
             + self.group_kw 
             + self.having_kw
             + self.limit_kw

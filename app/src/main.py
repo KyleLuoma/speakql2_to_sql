@@ -4,12 +4,14 @@ import json
 from speakql_translator.speakql_to_sql import *
 
 from speakql_speech_recognition.SpeakQlPredictorCaller import *
+from speakql_speech_recognition.SpeakqlKeywords import *
 
 from db_util.db_analyzer import *
 from db_util.db_connector import *
 
 from sys import platform
 import time
+import random
 
 
 
@@ -86,6 +88,8 @@ def main():
             print(speakql_query)  
         elif(user_input.upper() == "TRANSLATE EXCEL FILE"):
             translate_from_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_02_translated.xlsx", parse_caller)
+        elif(user_input.upper() == "ADD SPOKEN TO EXCEL"):
+            speakql_to_spoken_query("test.xlsx", "test_spoken.xlsx")
         else:
             speakql_query = user_input
             tree = parse_caller.run_select_statement(speakql_query)
@@ -99,6 +103,63 @@ def main():
                 print("Next valid keywords:", predictor.getNextWordsFromQuery(speakql_query))
 
         
+
+def speakql_to_spoken_query(input_filename, output_filename):
+    spqkw = SpeakQlKeywords()
+    if "linux" in platform:
+        path = "/home/kyle/repos/speakql2_to_sql/artifacts/queries/"
+    else:
+        path = "./artifacts/queries/"
+    queries = pd.read_excel(path + input_filename)
+    spoken_queries = []
+    for row in queries.itertuples():
+        speakql_query = row.SPEAKQL
+        if type(speakql_query) != str:
+            continue
+        speakql_query = speakql_query.lower()
+        tokens = speakql_query.split(" ")
+        for i in range(0, len(tokens)):
+            token = tokens[i]
+            try:
+                token = spqkw.symbols_to_word_list_dict[token][
+                    random.randrange(0, len(spqkw.symbols_to_word_list_dict[token]))
+                    ]
+            except KeyError:
+                pass
+            if len(token.split("-")) == 3:
+                date_time = token.replace("'", "").strip().split("-")
+                year = date_time[0]
+                month = ["january", "february", "march", "april", "may", 
+                         "june", "july", "august", "september", "october",
+                         "november", "december"][int(date_time[1]) - 1]
+                day = date_time[2]
+                print(month, day, year)
+                token = month + " " + day + " " + year
+            if "'" in token:
+                token = token.replace("'", " " + spqkw.symbols_to_word_list_dict["'"][
+                    random.randrange(0, len(spqkw.symbols_to_word_list_dict["'"]))
+                ] + " ")
+            if "id" in token:
+                token = token.replace("id", " I D ")
+            if token == "as" and len(tokens[i + 1]) == 2:
+                alias_acronym = ""
+                for character in tokens[i + 1]:
+                    alias_acronym = alias_acronym + character.upper() + " "
+                tokens[i + 1] = alias_acronym.strip()
+            tokens[i] = token
+        spoken_query = " ".join(tokens)
+        spoken_query = spoken_query.replace(" and", ", and")
+        spoken_queyr = spoken_query.replace(" comma", ", comma")
+        spoken_query = spoken_query.replace(", and then", ". and then")
+        for token in tokens:
+            if token.upper() in spqkw.get_start_kws():
+                spoken_query = spoken_query.replace(" " + token, ". " + token)
+        spoken_query = spoken_query.replace("..", ".")
+        spoken_query = spoken_query.replace("natural.", "natural")
+        
+        spoken_queries.append(spoken_query)
+    queries["SPOKEN_SPEAKQL"] = spoken_queries
+    queries.to_excel(path + output_filename)
         
 
 def translate_from_excel(filename, parse_caller):
