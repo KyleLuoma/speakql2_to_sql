@@ -89,7 +89,7 @@ def main():
         elif(user_input.upper() == "TRANSLATE EXCEL FILE"):
             translate_from_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_02_translated.xlsx", parse_caller)
         elif(user_input.upper() == "ADD SPOKEN TO EXCEL"):
-            speakql_to_spoken_query("test.xlsx", "test_spoken.xlsx")
+            speakql_to_spoken_query("generated_queries_02_translated.xlsx", "generated_translated_spoken_script_queries_02.xlsx")
         else:
             speakql_query = user_input
             tree = parse_caller.run_select_statement(speakql_query)
@@ -156,6 +156,7 @@ def speakql_to_spoken_query(input_filename, output_filename):
                 spoken_query = spoken_query.replace(" " + token, ". " + token)
         spoken_query = spoken_query.replace("..", ".")
         spoken_query = spoken_query.replace("natural.", "natural")
+        spoken_query = spoken_query.replace("quote quote", "quote")
         
         spoken_queries.append(spoken_query)
     queries["SPOKEN_SPEAKQL"] = spoken_queries
