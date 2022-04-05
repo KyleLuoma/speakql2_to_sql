@@ -216,8 +216,9 @@ def build_where_expression(where_expression_patterns, columns_in_query, int_colu
                 )
             operator = ["=", ">", "<", "<>", "<=", ">="][random.randrange(0, 6)]
         elif random.randrange(0, 100) < 80:
-            value = "'" + ew.english_words_alpha_set.pop() + "'"
-            ew.english_words_alpha_set.add(value)
+            word = ew.english_words_alpha_set.pop()
+            value = "'" + word + "'"
+            ew.english_words_alpha_set.add(word)
             operator = ["=", "<>"][random.randrange(0, 2)]
         else:
             value = (
@@ -473,7 +474,7 @@ def get_query():
 queries = []
 
 start_time = time.time()
-queries_to_generate = 200000
+queries_to_generate = 250000
 
 for i in range (0, queries_to_generate):
 

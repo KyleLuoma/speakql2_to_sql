@@ -87,9 +87,9 @@ def main():
         elif(user_input.upper() in ["PRINT SPEAKQL", "PRINT SPEAKQL QUERY"]):
             print(speakql_query)  
         elif(user_input.upper() == "TRANSLATE EXCEL FILE"):
-            translate_from_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_02_translated.xlsx", parse_caller)
+            translate_from_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01_translated.xlsx", parse_caller)
         elif(user_input.upper() == "ADD SPOKEN TO EXCEL"):
-            speakql_to_spoken_query("generated_queries_02_translated.xlsx", "generated_translated_spoken_script_queries_02.xlsx")
+            speakql_to_spoken_query("generated_queries_01_translated.xlsx", "generated_translated_spoken_script_queries_01.xlsx")
         else:
             speakql_query = user_input
             tree = parse_caller.run_select_statement(speakql_query)
@@ -165,7 +165,7 @@ def speakql_to_spoken_query(input_filename, output_filename):
 
 def translate_from_excel(filename, parse_caller):
     if "linux" in platform:
-        queries = pd.read_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_02.xlsx")
+        queries = pd.read_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01.xlsx")
     else:
         queries = pd.read_excel("./generated_queries.xlsx")
     print(queries.head())
