@@ -213,7 +213,6 @@ class SpeakQlTree:
                 sq_substring = sq_substring.replace(rule, "topOfSubquery")
                 sq_dict[("SUBQUERY_" + str(sq_num))] = SpeakQlTree(sq_substring)
                 sq_num = sq_num + 1
-        print(sq_dict)
         return lisp_tree, sq_dict
 
 
@@ -755,7 +754,7 @@ class SpeakQlTree:
 
 
 
-    def reorder_select_and_table_expressions(self, node_id = 0):
+    def reorder_select_and_table_expressions(self, node_id = 0, first_call = True):
         node = self.get_node(node_id)
         select_expression = -1
         table_expression = -1
@@ -799,10 +798,11 @@ class SpeakQlTree:
                     new_children.append(where_expression)
             self.get_node(node_id).update_children(new_children)
         for child in node.get_children():
-            self.reorder_select_and_table_expressions(child)
+            self.reorder_select_and_table_expressions(child, first_call=False)
 
-        for key in self.sq_dict:
-            self.sq_dict[key].reorder_select_and_table_expressions()
+        if first_call:
+            for key in self.sq_dict:
+                self.sq_dict[key].reorder_select_and_table_expressions()
 
 
     # Reorders the groupByClause, havingClause, orderbyClause and limitClause to meet SQL
@@ -833,8 +833,8 @@ class SpeakQlTree:
 
             sme_node.update_children(reordered_sme_items)
 
-            for key in self.sq_dict:
-                self.sq_dict[key].reorder_select_modifiers()
+        for key in self.sq_dict:
+            self.sq_dict[key].reorder_select_modifiers()
 
 
 
@@ -1129,7 +1129,7 @@ class SpeakQlTree:
 
                 #Handle case where table is a subquery and substitute in subquery mask and alias in the join expression
                 if left_table_name.strip() in self.table_lookup_by_alias_dict.keys() and "SUBQUERY_" in self.table_lookup_by_alias_dict[left_table_name.strip()]:
-                    print(left_table_name, "is an alias for", self.table_lookup_by_alias_dict[left_table_name.strip()])
+                    self.print_verbose(left_table_name, "is an alias for", self.table_lookup_by_alias_dict[left_table_name.strip()])
                     left_table_alias = left_table_name.strip()
                     left_table_name = self.table_lookup_by_alias_dict[left_table_alias]
                     name_node = self.get_node(self.find_nodes_by_rule_name("tableName", table_source_item_ids[0])[0])
@@ -1151,7 +1151,7 @@ class SpeakQlTree:
 
                 #Handle case where table is a subquery again, yes this seems to violate DRY a bit. TODO: consolidate left and right into one method.
                 if right_table_name.strip() in self.table_lookup_by_alias_dict.keys():
-                    print(right_table_name, "is an alias for", self.table_lookup_by_alias_dict[right_table_name.strip()])
+                    self.print_verbose(right_table_name, "is an alias for", self.table_lookup_by_alias_dict[right_table_name.strip()])
                     right_table_alias = right_table_name.strip()
                     right_table_name = self.table_lookup_by_alias_dict[right_table_alias]
                     name_node = self.get_node(self.find_nodes_by_rule_name("tableName", table_source_item_ids[1])[0])
@@ -1177,7 +1177,7 @@ class SpeakQlTree:
 
                 # Check if right table has a table name and alias and if so, add alias to join expression
                 if right_table_name.strip() in self.alias_lookup_by_table_dict.keys() and self.rule_exists_in_tree("tableName", table_source_item_ids[1]):
-                    print("RIGHT TABLE HAS ALIAS")
+                    self.print_verbose("RIGHT TABLE HAS ALIAS")
                     right_table_alias = self.alias_lookup_by_table_dict[right_table_name.strip()]
                     right_table_node = self.get_node(self.find_nodes_by_rule_name("tableName", table_source_item_ids[1])[0])
                     parent_node = self.get_node(right_table_node.get_parent())
@@ -1189,7 +1189,7 @@ class SpeakQlTree:
                         self.find_nodes_by_rule_name("withKeyword", join_part_id)[0]
                     )
 
-                print(left_table_name, left_table_alias, right_table_name, right_table_alias)
+                self.print_verbose(left_table_name, left_table_alias, right_table_name, right_table_alias)
                 join_part_items.append(
                     MultiJoinPartItem(
                         join_part_id, 

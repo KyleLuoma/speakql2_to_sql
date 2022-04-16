@@ -11,8 +11,12 @@ bin/
 
 *.pyc
 *.mp3
+<<<<<<< HEAD
 *.xlsx
 *.wav
+=======
+*.xlsx*
+>>>>>>> ea0a1d83b6adb29695a975299cd7c0c6700b655f
 
 update_react_app.ps1
 
