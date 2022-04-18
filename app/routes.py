@@ -1,14 +1,18 @@
 from app import app
 from flask import render_template
-from flask import request
+from flask import request, session
 import flask
 import base64
 from .src.translator import *
 from .src.speakql_speech_recognition.PollyVoice import *
+from .src.speakql_speech_recognition.AsrStringProcessor import *
+from .src.db_util.db_analyzer import *
+from .src.db_util.db_connector import *
+
 from flask_cors import CORS
 #CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 CORS(app, resources={r"/*": {"origins": "*"}})
-
+asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
 
 
 @app.route('/')
@@ -49,15 +53,21 @@ def do_progressive_query():
 
 @app.route('/wav_data', methods = ['POST'])
 def wav_data():
-    print("Wav file payload received from requestor.")
+    if 'test' not in session:
+        session['test'] = 0
+    else:
+        session['test'] = session['test'] + 1
     wav_blob = request.get_json()['wavBlob']
     count = request.get_json()['count']
     transcript = request.get_json()['transcript'].replace(" ", "-").replace(".", "")
     file = open('query_audio/user_recordings/' + "recording_test_" + transcript + ".wav", 'wb')
     file.write(base64.b64decode(wav_blob))
     file.close()
-    response = flask.jsonify({"status" : "blank"})
+    response = flask.jsonify(
+        asr.process_asr_string(request.get_json()['transcript'])
+        )
     response.headers.add('Access-Control-Allow-Origin', '*')
+    
     return(response)
 
 

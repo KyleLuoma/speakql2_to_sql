@@ -130,6 +130,13 @@ class QuerySegment:
         self.l1_errors["ILLEGAL COMBINATION"] = has_illegal_combination
 
 
+
+    def get_segment_fragment_list(self):
+        fragment_list = []
+        for fragment in self.fragments:
+            fragment_list.append(fragment.as_dict())
+        return fragment_list
+
     def summary(self):
         print("Query:", self.segment)
         print("Tokens:", self.tokens)
@@ -138,4 +145,19 @@ class QuerySegment:
         print("Is SFW:", self.is_sfw)
         print("Is Join:", self.is_join)
         print("Is Modifier", self.is_modifier)
+
+
+
+    def as_dict(self):
+        return {
+            'query' : self.segment,
+            'tokens' : self.get_tokens(),
+            'l1_errors' : self.l1_errors,
+            'l1_valid' : self.l1_is_valid,
+            'is_sfw' : self.is_sfw,
+            'is_join' : self.is_join,
+            'is_modifier' : self.is_modifier,
+            'fragments' : self.get_segment_fragment_list()
+        }
+        
         

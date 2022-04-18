@@ -1,11 +1,13 @@
 from inspect import stack
 from ntpath import join
 
+from app.src.speakql_speech_recognition.FragmentElement import FragmentElement
+
 from .AsrErrorHandler import *
 from .SpeakQlPredictorCaller import *
-from speakql_translator.SpeakQlTree import *
+from ..speakql_translator.SpeakQlTree import *
 from .SpeakqlKeywords import *
-from db_util.db_analyzer import *
+from ..db_util.db_analyzer import *
 from pyphonetics import Metaphone
 from .QuerySegment import *
 from .SegmentFragment import *
@@ -162,6 +164,7 @@ class AsrStringProcessor:
         # Generate segments based on delimiter. Assume keywords are correct. We'll handle
         # resulting errors after this.
         query_segment_strings = self._separate_unbundled_query(asr_string)
+        
         query_segments = []
         for segment_string in query_segment_strings:
             segment = QuerySegment(segment_string)
@@ -174,6 +177,7 @@ class AsrStringProcessor:
         # Group consecutive errors, add to list, and pass to error handler
         error_segment_list = self._create_l1_error_segment_list(query_segments)
         error_handler.handle_l1_errors(error_segment_list, asr_string)
+
 
         # ---- LEVEL 2: Break into fragments using keywords and validate, handle errors ----
         for query_segment in query_segments:
@@ -205,12 +209,19 @@ class AsrStringProcessor:
                     element_strings = self._separate_fragment_by_delimiters(fragment_string, ["AND", ","])
                     for element in element_strings:
                         print(element)
+                        fragment_element = FragmentElement(element)
+                        segment_fragment.append_element(fragment_element)
 
 
-        
+        segment_dicts = []
+        for segment in query_segments:
+            segment_dicts.append(segment.as_dict())
 
-        # ---- RETURN: A list of segments containing fragments and elements ----
-
+        # ---- RETURN: A dict with a list segments containing fragments and elements and unresolved errors ----
+        return {
+            "input_asr_string" : asr_string,
+            "query_segments" : segment_dicts
+        }
 
     
     # Receives a list of query segments, and groups the ones with errors into a list.
