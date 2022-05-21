@@ -45,20 +45,29 @@ select_element_patterns = [
     ]
 
 function_patterns = [
+    "count _CN_",
     "count ( _CN_ )",
     "count ( distinct _CN_ )",
+    "count of _CN_",
     "count of ( _CN_ )",
-    "the count ( _CN_ )",
+    "the count _CN_",
+    "the count of _CN_",
     "the count of ( _CN_ )"
 ]
 
 num_function_patterns = [
     "sum ( _CN_INT_ )",
+    "sum _CN_INT_",
     "avg ( _CN_INT_ )",
+    "average _CN_INT_",
     "the sum of ( _CN_INT_ )",
+    "the sum of _CN_INT_",
     "the avg of ( _CN_INT_ )",
+    "the average of _CN_INT_",
     "max ( _CN_INT_ )",
-    "min ( _CN_INT_ )"
+    "max _CN_INT_",
+    "min ( _CN_INT_ )",
+    "min _CN_INT_"
 ]
 
 table_element_patterns = [
@@ -474,7 +483,7 @@ def get_query():
 queries = []
 
 start_time = time.time()
-queries_to_generate = 250000
+queries_to_generate = 400000
 
 for i in range (0, queries_to_generate):
 
@@ -499,6 +508,6 @@ for i in range (0, queries_to_generate):
         print("Time remaining", str(int(time_remaining / 60)), "min", str(time_remaining % 60), "sec")
 
 
-pd.Series(queries).to_excel("./generated_queries_01.xlsx")
+pd.Series(queries).to_excel("./artifacts/queries/generated_queries_01.xlsx")
 
 

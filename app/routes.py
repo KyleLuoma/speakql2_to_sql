@@ -1,6 +1,7 @@
 from app import app
-from flask import render_template
-from flask import request, session
+from flask import render_template, request
+# https://flask-jwt-extended.readthedocs.io/en/stable/add_custom_data_claims/
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
 import flask
 import base64
 from .src.translator import *
@@ -12,12 +13,18 @@ from .src.db_util.db_connector import *
 from flask_cors import CORS
 #CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 CORS(app, resources={r"/*": {"origins": "*"}})
-asr = AsrStringProcessor(DbAnalyzer(DbConnector()))
+
+db_connector = DbConnector()
+db_analyzer = DbAnalyzer(db_connector)
+asr = AsrStringProcessor(db_analyzer)
+
 
 
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
+
+
 
 @app.route('/test_query')
 def test_query():
@@ -28,6 +35,8 @@ def test_query():
     return (
         response
     )
+
+
 
 @app.route('/do_query', methods = ['POST'])
 def do_query():
@@ -40,6 +49,8 @@ def do_query():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return(response)
 
+
+
 @app.route('/do_progressive_query', methods = ['POST'])
 def do_progressive_query():
     print("Data payload received from requestor", request.get_data(as_text = True))
@@ -51,26 +62,50 @@ def do_progressive_query():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return(response)
 
+
+
 @app.route('/wav_data', methods = ['POST'])
 def wav_data():
-    if 'test' not in session:
-        session['test'] = 0
-    else:
-        session['test'] = session['test'] + 1
     wav_blob = request.get_json()['wavBlob']
     count = request.get_json()['count']
     transcript = request.get_json()['transcript'].replace(" ", "-").replace(".", "")
-    file = open('query_audio/user_recordings/' + "recording_test_" + transcript + ".wav", 'wb')
+    file = open('query_audio/user_recordings/' + "recording_test_" + str(count) + ".wav", 'wb')
     file.write(base64.b64decode(wav_blob))
     file.close()
-    response = flask.jsonify(
-        asr.process_asr_string(request.get_json()['transcript'])
-        )
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    print("TRANSCRIPT OBJECT:", request.get_json()['transcript'], "END", str(len(request.get_json()['transcript'])))
+    if not len(request.get_json()['transcript']) <= 1:
+        response = flask.jsonify(
+            asr.process_asr_string(request.get_json()['transcript'])
+            )
+        response.headers.add('Access-Control-Allow-Origin', '*')
+    else: 
+        response = flask.jsonify({})
     
     return(response)
 
 
+
+
+@app.route('/register_participant', methods = ['POST'])
+def register_participant():
+    participant = request.json.get('participant', None)
+    if len(participant) == 0:
+        return flask.jsonify({"msg": "No data in the participant field."})
+
+    result_df = db_connector.do_select_from_parameters(
+        schema = 'speakql_study',
+        columns = ['*'],
+        table = ['participants']
+        )
+    result_df = result_df.where(result_df.username == participant).dropna(how = 'all')
+    
+    print(result_df)
+    return flask.jsonify({})
+    # access_token = create_access_token(participant)
+    # return flask.jsonify(access_token = access_token)
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-
+    app.config["JWT_SECRET_KEY"] = 'insertsecretkeyhereforproduction'
+    jwt = JWTManager(app)

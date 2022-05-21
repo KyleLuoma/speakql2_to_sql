@@ -1,0 +1,58 @@
+### MySQL SQL tables, with their properties:
+#
+# department (
+#                    id varchar(8) NOT NULL,
+#                   departmentName varchar(255),
+#                    primary key(id)
+#                    )
+# course (
+#                id varchar(16) NOT NULL,
+#                deptId varchar(8) NOT NULL,
+#                title varchar(255),
+#                code varchar(8),
+#                units int,
+#                primary key(id),
+#                foreign key(deptId) references department(id)
+ #               )
+# term (
+#             id varchar(16) NOT NULL,
+#             startDate date,
+#             endDate date,
+#             termPeriod varchar(16),
+#             year int,
+#             primary key(id)
+#             )
+# building (
+#                        id varchar(16) NOT NULL,
+#                        buildingNumber varchar(32),
+#                        buildingName varchar(255),
+#                        primary key(id)
+#                        )
+# room (
+#                    id varchar(32) NOT NULL,
+#                    buildingId varchar(16) NOT NULL,
+#                    roomNumber varchar(16),
+#                    floor varchar(16),
+#                    area int,
+#                    capacity int,
+#                    wheelchairSpaces int,
+#                    primary key(id),
+#                    foreign key(buildingId) references building(id)
+#                    )
+# courseOffering (
+#                        id int NOT NULL AUTO_INCREMENT,
+#                        courseId varchar(16) NOT NULL,
+#                        termId varchar(16) NOT NULL,
+#                        roomId varchar(32) NOT NULL,
+#                        facultyName varchar(255),
+#                        onDays varchar(255),
+#                        startTime time(6),
+#                        endTime time(6),
+#                        capacity int,
+#                        primary key(id),
+#                        foreign key(courseId) references course(id),
+#                        foreign key(termId) references term(id),
+#                        foreign key(roomId) references room(id)
+#                        )
+### A query to show the average units of all courses
+SELECT avg(units) FROM course

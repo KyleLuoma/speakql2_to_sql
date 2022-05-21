@@ -28,6 +28,7 @@ class DbConnector:
 
 
 
+    # Only use this internally. Do not integrate with API calls from the frontend.
     def do_single_select_query_into_dataframe(self, query):
 
         if self.verbose:
@@ -48,6 +49,42 @@ class DbConnector:
                 result_df = pd.DataFrame()
             cursor.close()
             return result_df
+
+
+
+    # Simple select / project query generation using provided parameters.
+    # Use this instead of do_single_select_query_into_dataframe
+    # when exposing to APIs
+    def do_select_from_parameters(self, schema = '', columns = [], table = [], where = []):
+        select_statement = "SELECT _COLUMNS_ FROM _TABLE_ WHERE _PREDICATES_"
+
+        if len(schema) > 0:
+            schema = schema + "."
+        
+        select_statement = select_statement.replace('_COLUMNS_', ', '.join(columns))
+
+        select_statement = select_statement.replace('_TABLE_', ', '.join([schema + t for t in table]))
+
+        if len(where) == 0:
+            select_statement = select_statement.replace("_PREDICATES_", "")
+            select_statement = select_statement.replace("WHERE", "")
+        else:
+            select_statement = select_statement.replace('_PREDICATES_', ' AND '.join(where))
+
+        if self.db_engine == "mysql":
+            cursor = self.connection.cursor()
+            try:
+                cursor.execute(select_statement)
+                result_df = pd.DataFrame(
+                    columns = cursor.column_names,
+                    data = cursor.fetchall()
+                )
+            except mysql.connector.ProgrammingError as pe:
+                print(pe)
+                result_df = pd.DataFrame()
+            cursor.close()
+            return result_df
+
 
 
     def get_mysql_database_connector(self, db_name):

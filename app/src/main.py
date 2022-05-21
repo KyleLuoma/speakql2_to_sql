@@ -87,9 +87,14 @@ def main():
         elif(user_input.upper() in ["PRINT SPEAKQL", "PRINT SPEAKQL QUERY"]):
             print(speakql_query)  
         elif(user_input.upper() == "TRANSLATE EXCEL FILE"):
-            translate_from_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01_translated.xlsx", parse_caller)
+            if "linux" in platform:
+                translate_from_excel(
+                    "/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01_translated.xlsx", parse_caller
+                    )
+            else:
+                translate_from_excel("./generated_queries_01_translated.xlsx", parse_caller)
         elif(user_input.upper() == "ADD SPOKEN TO EXCEL"):
-            speakql_to_spoken_query("generated_queries_01_translated.xlsx", "generated_translated_spoken_script_queries_01.xlsx")
+            speakql_to_spoken_query("generated_queries_01.xlsx", "generated_spoken_script_queries_01.xlsx")
         else:
             speakql_query = user_input
             tree = parse_caller.run_select_statement(speakql_query)
@@ -104,7 +109,7 @@ def main():
 
         
 
-def speakql_to_spoken_query(input_filename, output_filename):
+def speakql_to_spoken_query(input_filename, output_filename, for_model_train = True):
     spqkw = SpeakQlKeywords()
     if "linux" in platform:
         path = "/home/kyle/repos/speakql2_to_sql/artifacts/queries/"
@@ -139,24 +144,30 @@ def speakql_to_spoken_query(input_filename, output_filename):
                 token = token.replace("'", " " + spqkw.symbols_to_word_list_dict["'"][
                     random.randrange(0, len(spqkw.symbols_to_word_list_dict["'"]))
                 ] + " ")
-            if "id" in token:
-                token = token.replace("id", " I D ")
-            if token == "as" and len(tokens[i + 1]) == 2:
-                alias_acronym = ""
-                for character in tokens[i + 1]:
-                    alias_acronym = alias_acronym + character.upper() + " "
-                tokens[i + 1] = alias_acronym.strip()
+            #Space out acronyms to make poly voice say each letter:
+            if not for_model_train:
+                if "id" in token:
+                    token = token.replace("id", " I D ")
+                if token == "as" and len(tokens[i + 1]) == 2:
+                    alias_acronym = ""
+                    for character in tokens[i + 1]:
+                        alias_acronym = alias_acronym + character.upper() + " "
+                    tokens[i + 1] = alias_acronym.strip()
+
             tokens[i] = token
         spoken_query = " ".join(tokens)
-        spoken_query = spoken_query.replace(" and", ", and")
-        spoken_queyr = spoken_query.replace(" comma", ", comma")
-        spoken_query = spoken_query.replace(", and then", ". and then")
-        for token in tokens:
-            if token.upper() in spqkw.get_start_kws():
-                spoken_query = spoken_query.replace(" " + token, ". " + token)
-        spoken_query = spoken_query.replace("..", ".")
-        spoken_query = spoken_query.replace("natural.", "natural")
-        spoken_query = spoken_query.replace("quote quote", "quote")
+
+        #Add punctuation to make poly voice sound more natural:
+        if not for_model_train:
+            spoken_query = spoken_query.replace(" and", ", and")
+            spoken_queyr = spoken_query.replace(" comma", ", comma")
+            spoken_query = spoken_query.replace(", and then", ". and then")
+            for token in tokens:
+                if token.upper() in spqkw.get_start_kws():
+                    spoken_query = spoken_query.replace(" " + token, ". " + token)
+            spoken_query = spoken_query.replace("..", ".")
+            spoken_query = spoken_query.replace("natural.", "natural")
+            spoken_query = spoken_query.replace("quote quote", "quote")
         
         spoken_queries.append(spoken_query)
     queries["SPOKEN_SPEAKQL"] = spoken_queries
@@ -167,7 +178,7 @@ def translate_from_excel(filename, parse_caller):
     if "linux" in platform:
         queries = pd.read_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01.xlsx")
     else:
-        queries = pd.read_excel("./generated_queries.xlsx")
+        queries = pd.read_excel("./generated_queries_01.xlsx")
     print(queries.head())
     speakql_queries = []
     sql_queries = []
