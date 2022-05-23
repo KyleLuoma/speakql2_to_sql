@@ -8,17 +8,20 @@ app/src/speakql_speech_recognition/local/
 *__pycache__*
 bin/
 .aws/
+aws/
+
 
 *.pyc
 *.mp3
 *.xlsx
 *.wav
 *.pyc
-
+*.zip
 
 update_react_app.ps1
 
 *db_info.json
+*log.json
 
 select_tokens.txt
 /artifacts/token_permutations
