@@ -100,7 +100,20 @@ def register_participant():
     result_df = result_df.where(result_df.username == participant).dropna(how = 'all')
     
     print(result_df)
-    return flask.jsonify({})
+    if result_df.shape[0] == 1:
+        response =  flask.jsonify(
+            {
+                'idparticipant': result_df['idparticipants'].to_list()[0],
+                'username': result_df['username'].to_list()[0],
+                'token': 'access token goes here'
+            }
+        )
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+    else:
+        #Do create participant id here
+        return flask.jsonify({'error': 'No participant id exists or created.'})
+
     # access_token = create_access_token(participant)
     # return flask.jsonify(access_token = access_token)
 
