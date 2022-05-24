@@ -112,8 +112,8 @@ class PollyVoice:
     
 
 
-polly = PollyVoice()
+# polly = PollyVoice()
 
-polly.create_query_audio_and_log(
-    "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt "
-    )
+# polly.create_query_audio_and_log(
+#     "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt "
+#     )
