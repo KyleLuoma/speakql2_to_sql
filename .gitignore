@@ -19,9 +19,11 @@ aws/
 *.zip
 
 update_react_app.ps1
+launch_gunicorn_server
 
 *db_info.json
 *log.json
+parsecaller.config
 
 select_tokens.txt
 /artifacts/token_permutations

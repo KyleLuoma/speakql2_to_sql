@@ -2,6 +2,7 @@ import subprocess
 import antlr4
 from antlr4.tree.Trees import Trees
 from sys import platform
+from os.path import exists
 
 from .antlr_builds.pySpeakQl.SpeakQlLexer import SpeakQlLexer
 from .antlr_builds.pySpeakQl.SpeakQlParser import SpeakQlParser
@@ -25,7 +26,16 @@ class SpeakQlParseEngine:
         self.build_name = build_name
         self.simple_speakql = simple_speakql
         self.platform = platform
-        pass
+
+        self.parser_directory = ''
+
+        if exists('./app/src/speakql_translator/parsecaller.config'):
+            with open('./app/src/speakql_translator/parsecaller.config') as f:
+                for line in f:
+                    print(line)
+                    if 'parser_directory' in line:
+                        self.parser_directory = line.replace('parser_directory:', '').strip()
+
 
     def get_parse_tree(rule):
         tree = "()"
@@ -35,12 +45,15 @@ class SpeakQlParseEngine:
 class JavaSpeakQlParseEngine(SpeakQlParseEngine):
 
     def get_parse_tree(self, rule, query):
-        if "linux" in self.platform:
+        if "linux" in self.platform and self.parser_directory == '':
             end_text = ["\\n\", stderr=b", "\\n', stderr=b"]
             working_directory = "/home/kyle/repos/speakql2_to_sql/app/bin/"
-        else:
+        elif self.parser_directory == '':
             end_text = ["\\r\\n"]
             working_directory = "c:/research_projects/speakql2_to_sql/app/bin/"
+        else:
+            end_text = ["\\n\", stderr=b", "\\n', stderr=b"]
+            working_directory = self.parser_directory
 
 
         tree = subprocess.run(
@@ -50,12 +63,14 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
             shell=True
             )
         tree = str(tree)
+        
         tree_start = tree.find("stdout=b") + len("stdout=b*")
         for text in end_text:
             possible_tree_end = tree.find(text)
             if possible_tree_end > 0:
                 tree_end = possible_tree_end
         tree = tree[tree_start:tree_end]
+
         return tree
 
     def write_query_file(self, query, file_path):

@@ -15,12 +15,8 @@ def run_test_query_translation(test_query):
     return query_results
 
 def full_query_translation(query):
-    tree = parse_caller.run_select_statement(query)
-    speakql_tree = SpeakQlTree(tree)
-    query_results = {}
-    query_results["sql_query"] = translate_speakql_to_sql_query(speakql_tree, verbose = False)
-    query_results["speakql_tree_json"] = speakql_tree.as_json()
-    return query_results
+    steps = full_query_translation_with_intermediate_steps(query)
+    return steps['sql_query']
 
 def full_query_translation_with_intermediate_steps(query):
     tree = parse_caller.run_select_statement(query)
