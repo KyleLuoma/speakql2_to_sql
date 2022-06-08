@@ -9,13 +9,16 @@ from .src.speakql_speech_recognition.PollyVoice import *
 from .src.speakql_speech_recognition.AsrStringProcessor import *
 from .src.db_util.db_analyzer import *
 from .src.db_util.db_connector import *
+from .src.user_study.study_driver import StudyDriver 
 
 from flask_cors import CORS
 #CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-db_connector = DbConnector()
 study_db_connector = DbConnector(db_name = "speakql_study")
+study_driver = StudyDriver(study_db_connector)
+
+db_connector = DbConnector(db_name = "speakql_university")
 db_analyzer = DbAnalyzer(db_connector)
 asr = AsrStringProcessor(db_analyzer)
 
@@ -87,6 +90,23 @@ def wav_data():
     
     return(response)
 
+
+
+@app.route('/study/get_next_prompt', methods = ['POST'])
+def get_next_prompt():
+    idparticipant = request.json.get('idparticipant', None)
+    print(idparticipant)
+    prompt = study_driver.get_next_prompt(int(idparticipant))
+    response_dict = {}
+    if prompt.shape[0] == 1:
+        for column in prompt.columns:
+            response_dict[column] = str(prompt[column][0])
+    else:
+        response_dict = {'error': 'Unable to retrieve next prompt'}
+    print(response_dict)
+    response = flask.jsonify(response_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 
