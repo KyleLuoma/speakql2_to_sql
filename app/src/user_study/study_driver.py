@@ -15,16 +15,31 @@ class StudyDriver:
     # for the session including participant id, and query sequence id
     def register_participant_session(self, participant_id, sequence_id):
         query = """
-        insert into session (idparticipant, idsequence) values({}, '{}')
+        insert into speakql_study.session (idsession, idparticipant, idsequence) values(default, {}, '{}')
         """.format(str(participant_id), str(sequence_id))
-        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        result = self.db_connector.do_single_insert_query_into_dataframe(query)
         return result
 
 
-    # Retrieve participant session parameters
-    def get_participant_session_params(self, participant_id):
-        pass
 
+    def get_most_recent_session_id(self, participant_id):
+        query = """
+        select max(idsession) as idsession 
+        from session
+        where idparticipant = {}
+        """.format(str(participant_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result.iloc[0]['idsession']
+
+
+
+    # Retrieve session parameters
+    def get_session_params(self, session_id):
+        query = """
+        select * from session where idsession = {}
+        """.format(str(session_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
 
 
     # Retrieve query sequence from database (ids ar a, b, p1 or p2)
@@ -33,8 +48,8 @@ class StudyDriver:
         query = """
         select * 
         from query_sequences
-        where idsequence = '{sequence_id}';
-        """
+        where idsequence = '{}';
+        """.format(str(sequence_id))
         result = self.db_connector.do_single_select_query_into_dataframe(query)
         return result
 
@@ -46,7 +61,27 @@ class StudyDriver:
         self, participant_id, query_id, step, transcript,
         audio_filename, time_taken, used_speakql, attempt_num
         ):
-        pass
+        query = """
+        insert into attemptsubmissions (
+            idattemptsubmission, idparticipant, idquery,
+            idstep, transcript, audiofilename,
+            time_taken, usedspeakql, attemptnum,
+            reviewed
+            ) 
+        values(
+            default, {}, {},
+            {}, '{}', '{}',
+            {}, {}, {},
+            default
+            )
+        """.format(
+            str(participant_id), str(query_id),
+            str(step), str(transcript), str(audio_filename),
+            str(time_taken), str(used_speakql), str(attempt_num)
+        )
+
+        result = self.db_connector.do_single_insert_query_into_dataframe(query)
+        return result
 
 
 

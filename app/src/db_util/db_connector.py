@@ -27,6 +27,20 @@ class DbConnector:
         return self.db_engine
 
 
+    def do_single_insert_query_into_dataframe(self, query):
+
+        if self.verbose:
+            print("DBCONNECTOR: Executing query '", query, "' in database", self.db_name)
+
+        if self.db_engine == "mysql":
+            cursor = self.connection.cursor()
+            try:
+                cursor.execute(query)
+                self.connection.commit()
+            except mysql.connector.Error as error:
+                print("Failed to INSERT in MySQL: {}".format(error))
+
+
 
     # Only use this internally. Do not integrate with API calls from the frontend.
     def do_single_select_query_into_dataframe(self, query):
