@@ -1,3 +1,4 @@
+from operator import is_
 import sys
 sys.path.append("..") # Adds higher directory to python modules path.
 
@@ -87,29 +88,113 @@ class StudyDriver:
 
     # Log validated query attempt in database
     def save_attempt(
-        self, participant_id, query_id, step, transcript, 
-        audio_filename, time_taken, used_speakql, attempt_num, is_correct
+        self, submission_id, is_correct
         ):
-        pass
+        correct = 0
+        if is_correct:
+            correct = 1
+        query = """
+        insert into attemptscommitted (
+            idattemptcommitted, idattemptsubmission, iscorrect
+            ) 
+        values(
+            default, {}, {}
+            )
+        """.format(
+            str(submission_id), str(correct)
+        )
+
+        result = self.db_connector.do_single_insert_query_into_dataframe(query)
+        return result
 
     
     
-    # Get the most recent attempt performed by the participant
-    def get_last_attempt(self, participant_id):
-        pass
+    # Get the most recent attempt submitted by the participant
+    def get_last_submitted_attempt(self, participant_id):
+        query = """
+        select * 
+        from attemptsubmissions
+        where idattemptsubmission in (
+            select max(idattemptsubmission) as idattemptsubmission
+            from attemptsubmissions
+            where idparticipant = {}
+        )
+        """.format(str(participant_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
+
+
+    # Get the most recent attempt committed by the researcher for a participant
+    def get_last_committed_attempt(self, participant_id):
+        query = """
+        select max(c.idattemptcommitted), c.*, s.*
+        from attemptscommitted c
+        natural join attemptsubmissions s
+        where 
+            s.idparticipant = {}
+        """.format(str(participant_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
 
 
 
-    # Retrieve all commited attempts made by the participant
-    def get_all_attempts(self, participant_id):
-        pass
+    # Retrieve all submitted attempts made by the participant
+    def get_all_submitted_attempts(self, participant_id):
+        query = """
+        select * 
+        from attemptsubmitted
+        where idparticipant = {}
+        """.format(str(participant_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
+
+
+
+    # Retrieve all committed attempts made by the participant
+    def get_all_comitted_attempts(self, participant_id):
+        query = """
+        select * 
+        from attemptscommitted
+        where idparticipant = {}
+        """.format(str(participant_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
 
 
 
     # Retreive the next prompt in the sequence, or return the current prompt
     # if the last attempt is < 3 and not correct.
     def get_next_prompt(self, participant_id):
-        pass
+        last_attempt = self.get_last_committed_attempt(participant_id)
+        step = last_attempt.iloc[0]['idstep']
+        iscorrect = last_attempt.iloc[0]['iscorrect']
+        attempt_num = last_attempt.iloc[0]['attemptnum']
+
+        session_id = self.get_most_recent_session_id(participant_id)
+        session_params = self.get_session_params(session_id)
+        sequence_id = session_params.iloc[0]['idsequence']
+
+        sequences = self.get_query_sequence(sequence_id)
+
+        if iscorrect or attempt_num >= 3:
+            step += 1
+
+        sequence = sequences.where(sequences.step == step).dropna(how = 'all').reset_index(drop = True)
+
+        query_id = sequence.iloc[0]['idquery']
+
+        queries_query = """
+        select *
+        from queries
+        where idquery = {}
+        """.format(str(query_id))
+        prompt_df = self.db_connector.do_single_select_query_into_dataframe(queries_query)
+        joined_df = prompt_df.join(sequence, rsuffix = "_sequence")        
+
+        return joined_df
+        
+
+        
 
 
 

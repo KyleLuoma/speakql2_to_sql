@@ -30,7 +30,7 @@ query_sequences_table = """CREATE TABLE IF NOT EXISTS query_sequences (
                             step int NOT NULL,
                             idquery varchar(8) NOT NULL,
                             speakql_first int NOT NULL,
-                            primary key (idsequence)
+                            language varchar(16) NOT NULL
                         )"""
 commands.append(query_sequences_table)
 
@@ -87,14 +87,7 @@ commands.append(attempt_sumbission_table)
 
 attempt_committed_table = """CREATE TABLE IF NOT EXISTS attemptscommitted (
                                 idattemptcommitted int NOT NULL AUTO_INCREMENT,
-                                idparticipant int NOT NULL,
-                                idquery int NOT NULL,
-                                idstep int NOT NULL,
-                                transcript varchar(1024) NOT NULL,
-                                audiofilename varchar(256) NOT NULL,
-                                time_taken int NOT NULL,
-                                usedspeakql int NOT NULL,
-                                attemptnum int NOT NULL,
+                                idattemptsubmission int NOT NULL UNIQUE,
                                 iscorrect int NOT NULL,
                                 primary key (idattemptcommitted)
                             )"""
