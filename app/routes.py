@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, request
 # https://flask-jwt-extended.readthedocs.io/en/stable/add_custom_data_claims/
-# from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
 import flask
 import base64
 from .src.translator import *
@@ -17,6 +17,9 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 db_connector = DbConnector()
 db_analyzer = DbAnalyzer(db_connector)
 asr = AsrStringProcessor(db_analyzer)
+
+jwt = JWTManager()
+jwt.init_app(app)
 
 
 
@@ -101,11 +104,12 @@ def register_participant():
     
     print(result_df)
     if result_df.shape[0] == 1:
+        access_token = create_access_token(participant)
         response =  flask.jsonify(
             {
                 'idparticipant': result_df['idparticipants'].to_list()[0],
                 'username': result_df['username'].to_list()[0],
-                'token': 'access token goes here'
+                'token': access_token
             }
         )
         response.headers.add('Access-Control-Allow-Origin', '*')
@@ -114,11 +118,8 @@ def register_participant():
         #Do create participant id here
         return flask.jsonify({'error': 'No participant id exists or created.'})
 
-    # access_token = create_access_token(participant)
-    # return flask.jsonify(access_token = access_token)
-
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
     app.config["JWT_SECRET_KEY"] = 'insertsecretkeyhereforproduction'
-    jwt = JWTManager(app)
+    app.run(debug=True, port=5000)
+    
