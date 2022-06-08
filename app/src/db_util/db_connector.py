@@ -109,7 +109,7 @@ class DbConnector:
         return mysql.connector.connect(**config)
 
     #Static method (deprecated) keeps insert_data_into_db.py happy until we refactor that.
-    def get_speakql_university_connector():
+    def get_speakql_university_connector(self, database = 'default'):
         db_info = json.load(open('./app/src/db_util/db_info.json'))
 
         config = {
@@ -119,6 +119,9 @@ class DbConnector:
             'database': db_info["database"],
             'raise_on_warnings': True
         }
+
+        if database != 'default':
+            config['database'] = database
         
         cnx = mysql.connector.connect(**config)
         return cnx

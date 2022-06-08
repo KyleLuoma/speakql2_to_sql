@@ -1,9 +1,12 @@
-from ..db_util.db_connector import *
+import sys
+sys.path.append("..") # Adds higher directory to python modules path.
+
+# from ..db_util.db_connector import *
 import pandas as pd
 
 class StudyDriver:
 
-    def __init__(self, db_connector = DbConnector(db_name = "speakql_study")):
+    def __init__(self, db_connector):
         self.db_connector = db_connector
     
 
@@ -11,8 +14,11 @@ class StudyDriver:
     # Insert a row into participant session table to set the initial parameters
     # for the session including participant id, and query sequence id
     def register_participant_session(self, participant_id, sequence_id):
-        pass
-
+        query = """
+        insert into session (idparticipant, idsequence) values({}, '{}')
+        """.format(str(participant_id), str(sequence_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
 
 
     # Retrieve participant session parameters
@@ -23,10 +29,10 @@ class StudyDriver:
 
     # Retrieve query sequence from database (ids ar a, b, p1 or p2)
     # Returns dataframe with columns idsequence, idquery, step, speakql_first
-    def get_query_sequence(self, participant_id):
+    def get_query_sequence(self, sequence_id):
         query = """
         select * 
-        from speakql_study.query_sequences
+        from query_sequences
         where idsequence = '{sequence_id}';
         """
         result = self.db_connector.do_single_select_query_into_dataframe(query)
@@ -38,7 +44,7 @@ class StudyDriver:
     # to save it in validated attempt table.
     def submit_attempt(
         self, participant_id, query_id, step, transcript,
-        audio_filename, time_taken, language, attempt_num
+        audio_filename, time_taken, used_speakql, attempt_num
         ):
         pass
 
@@ -47,7 +53,7 @@ class StudyDriver:
     # Log validated query attempt in database
     def save_attempt(
         self, participant_id, query_id, step, transcript, 
-        audio_filename, time_taken, language, attempt_num, is_correct
+        audio_filename, time_taken, used_speakql, attempt_num, is_correct
         ):
         pass
 
@@ -69,7 +75,6 @@ class StudyDriver:
     # if the last attempt is < 3 and not correct.
     def get_next_prompt(self, participant_id):
         pass
-
 
 
 

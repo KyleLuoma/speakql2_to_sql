@@ -15,6 +15,7 @@ from flask_cors import CORS
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 db_connector = DbConnector()
+study_db_connector = DbConnector(db_name = "speakql_study")
 db_analyzer = DbAnalyzer(db_connector)
 asr = AsrStringProcessor(db_analyzer)
 
@@ -95,8 +96,8 @@ def register_participant():
     if len(participant) == 0:
         return flask.jsonify({"msg": "No data in the participant field."})
 
-    result_df = db_connector.do_select_from_parameters(
-        schema = 'speakql_study',
+    result_df = study_db_connector.do_select_from_parameters(
+        # schema = 'speakql_study',
         columns = ['*'],
         table = ['participants']
         )
@@ -107,7 +108,7 @@ def register_participant():
         access_token = create_access_token(participant)
         response =  flask.jsonify(
             {
-                'idparticipant': result_df['idparticipants'].to_list()[0],
+                'idparticipant': result_df['idparticipant'].to_list()[0],
                 'username': result_df['username'].to_list()[0],
                 'token': access_token
             }
