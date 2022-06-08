@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, request
 # https://flask-jwt-extended.readthedocs.io/en/stable/add_custom_data_claims/
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
+# from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
 import flask
 import base64
 from .src.translator import *

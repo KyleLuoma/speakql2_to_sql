@@ -1,13 +1,13 @@
 import subprocess
-import antlr4
-from antlr4.tree.Trees import Trees
+# import antlr4
+# from antlr4.tree.Trees import Trees
 from sys import platform
 from os.path import exists
 
-from .antlr_builds.pySpeakQl.SpeakQlLexer import SpeakQlLexer
-from .antlr_builds.pySpeakQl.SpeakQlParser import SpeakQlParser
-from .antlr_builds.pySpeakQl.SpeakQlParserListener import SpeakQlParserListener
-from .antlr_builds.pySpeakQl.SpeakQlParserVisitor import SpeakQlParserVisitor
+# from .antlr_builds.pySpeakQl.SpeakQlLexer import SpeakQlLexer
+# from .antlr_builds.pySpeakQl.SpeakQlParser import SpeakQlParser
+# from .antlr_builds.pySpeakQl.SpeakQlParserListener import SpeakQlParserListener
+# from .antlr_builds.pySpeakQl.SpeakQlParserVisitor import SpeakQlParserVisitor
 
 
 
@@ -79,16 +79,16 @@ class JavaSpeakQlParseEngine(SpeakQlParseEngine):
         f.close()
 
 
-class PythonSpeakQlParseEngine(SpeakQlParseEngine):
+# class PythonSpeakQlParseEngine(SpeakQlParseEngine):
 
-    def get_parse_tree(self, rule, query):
-        input_stream = antlr4.InputStream(query.upper())
-        lexer = SpeakQlLexer.SpeakQlLexer(input_stream)
-        token_stream = SpeakQlParser.CommonTokenStream(lexer)
-        parser = SpeakQlParser.SpeakQlParser(token_stream)
-        tree = parser.querySpecification()
-        tree_string = Trees.toStringTree(tree, None, parser)
-        return tree_string
+#     def get_parse_tree(self, rule, query):
+#         input_stream = antlr4.InputStream(query.upper())
+#         lexer = SpeakQlLexer.SpeakQlLexer(input_stream)
+#         token_stream = SpeakQlParser.CommonTokenStream(lexer)
+#         parser = SpeakQlParser.SpeakQlParser(token_stream)
+#         tree = parser.querySpecification()
+#         tree_string = Trees.toStringTree(tree, None, parser)
+#         return tree_string
 
 
 
