@@ -9,6 +9,7 @@ from .src.speakql_speech_recognition.PollyVoice import *
 from .src.speakql_speech_recognition.AsrStringProcessor import *
 from .src.db_util.db_analyzer import *
 from .src.db_util.db_connector import *
+from sys import platform
 
 from flask_cors import CORS
 #CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
@@ -66,10 +67,15 @@ def do_progressive_query():
 
 @app.route('/wav_data', methods = ['POST'])
 def wav_data():
+
+    recording_dir = '/query_audio/user_recordings/'
+    if 'linux' in platform:
+        recording_dir = '/root/srv/www/speakql2_to_sql/query_audio/user_recordings/'
+
     wav_blob = request.get_json()['wavBlob']
     count = request.get_json()['count']
     transcript = request.get_json()['transcript'].replace(" ", "-").replace(".", "")
-    file = open('query_audio/user_recordings/' + "recording_test_" + str(count) + ".wav", 'wb')
+    file = open(recording_dir + "recording_test_" + str(count) + ".wav", 'wb')
     file.write(base64.b64decode(wav_blob))
     file.close()
     print("TRANSCRIPT OBJECT:", request.get_json()['transcript'], "END", str(len(request.get_json()['transcript'])))

@@ -2,6 +2,7 @@
 from json import JSONDecoder, JSONEncoder
 #from random import randbytes
 import subprocess
+from sys import platform
 
 
 
@@ -9,18 +10,29 @@ class SpeakQlPredictorCaller:
 
     def __init__(self):
         self.PREDICTOR_PATH = "java -jar c:/research_projects/speakql2_to_sql/app/bin/speakql_predictor_no_exp.jar"
-
+        self.END_TEXT = ["\\r\\n"]
+        if 'linux' in platform:
+            self.PREDICTOR_PATH = "java -jar /root/srv/www/speakql2_to_sql/app/bin/speakql_predictor_no_exp.jar"
+            self.END_TEXT = ["\\n\", stderr=b", "\\n', stderr=b"]
+            
     def getNextWordsFromQuery(self, query):
 
         raw_result = subprocess.run(
             self.PREDICTOR_PATH + " -predict \"" + query + "\"" ,
             capture_output=True,
+            shell=True
         )
 
         raw_result = str(raw_result)
 
         array_start = raw_result.find("stdout=b") + len("stdout=b*")
-        array_end = raw_result.find("\\r\\n")
+
+        array_end = ""
+
+        for option in self.END_TEXT:
+            if option in raw_result:
+                array_end = raw_result.find(option)
+                break
 
         array_string = raw_result[array_start : array_end]
 
@@ -37,8 +49,12 @@ class SpeakQlPredictorCaller:
 
         raw_result = subprocess.run(
             self.PREDICTOR_PATH + " -tokenize \"" + query + "\"",
-            capture_output=True
+            capture_output=True,
+            shell=True
         )
+
+        print("DEBUG:", raw_result)
+
         array_string = self.get_array_from_result(raw_result)
         raw_token_list = array_string.replace("[", "").replace("]", "").replace("\"", "").split(", ")
 
