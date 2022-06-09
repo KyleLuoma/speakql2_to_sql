@@ -128,10 +128,24 @@ class StudyDriver:
     def get_last_committed_attempt(self, participant_id):
         query = """
         select max(c.idattemptcommitted), c.*, s.*
-        from attemptscommitted c
-        natural join attemptsubmissions s
+        from speakql_study.attemptscommitted c
+        natural join speakql_study.attemptsubmissions s
         where 
             s.idparticipant = {}
+		group by 
+			c.idattemptcommitted,
+            c.idattemptsubmission,
+            c.iscorrect,
+            s.idattemptsubmission,
+            s.idparticipant,
+            s.idquery,
+            s.idstep,
+            s.transcript,
+            s.audiofilename,
+            s.time_taken,
+            s.usedspeakql,
+            s.attemptnum,
+            s.reviewed
         """.format(str(participant_id))
         result = self.db_connector.do_single_select_query_into_dataframe(query)
         return result
