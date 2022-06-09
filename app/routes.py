@@ -4,6 +4,7 @@ from flask import render_template, request
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
 import flask
 import base64
+import random
 from .src.translator import *
 from .src.speakql_speech_recognition.PollyVoice import *
 from .src.speakql_speech_recognition.AsrStringProcessor import *
@@ -96,16 +97,19 @@ def wav_data():
 def get_next_prompt():
     idparticipant = request.json.get('idparticipant', None)
     print(idparticipant)
+    print(request.headers)
     prompt = study_driver.get_next_prompt(int(idparticipant))
-    response_dict = {}
+    prompt = prompt[['idquery', 'prompt', 'step', 'language']]
+    response_dict = {'random': str(random.randint(0, 10000))}
     if prompt.shape[0] == 1:
         for column in prompt.columns:
             response_dict[column] = str(prompt[column][0])
     else:
         response_dict = {'error': 'Unable to retrieve next prompt'}
-    print(response_dict)
     response = flask.jsonify(response_dict)
+    print("/study/get_next_prompt:", response_dict)
     response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Cache-Control', 'no-store')
     return response
 
 
@@ -115,6 +119,7 @@ def register_participant():
     participant = request.json.get('participant', None)
     if len(participant) == 0:
         return flask.jsonify({"msg": "No data in the participant field."})
+    print(request.headers)
 
     result_df = study_db_connector.do_select_from_parameters(
         # schema = 'speakql_study',
