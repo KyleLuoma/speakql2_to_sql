@@ -1024,7 +1024,55 @@
         "sample_rate": "8000"
     },
     {
-        "filename": "polly_voicequery_05242022184703.mp3",
+        "filename": "polly_voicequery_05242022132542.mp3",
+        "query": "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt ",
+        "service": "polly",
+        "voice": "Matthew",
+        "engine": "neural",
+        "sample_rate": "8000"
+    },
+    {
+        "filename": "polly_voicequery_05242022132624.mp3",
+        "query": "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt ",
+        "service": "polly",
+        "voice": "Joanna",
+        "engine": "neural",
+        "sample_rate": "8000"
+    },
+    {
+        "filename": "polly_voicequery_05242022132633.mp3",
+        "query": "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt ",
+        "service": "polly",
+        "voice": "Kendra",
+        "engine": "neural",
+        "sample_rate": "8000"
+    },
+    {
+        "filename": "polly_voicequery_05242022132829.mp3",
+        "query": "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt ",
+        "service": "polly",
+        "voice": "Kevin",
+        "engine": "neural",
+        "sample_rate": "8000"
+    },
+    {
+        "filename": "polly_voicequery_05242022133210.mp3",
+        "query": "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt ",
+        "service": "polly",
+        "voice": "Kendra",
+        "engine": "neural",
+        "sample_rate": "8000"
+    },
+    {
+        "filename": "polly_voicequery_05242022134057.mp3",
+        "query": "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt ",
+        "service": "polly",
+        "voice": "Salli",
+        "engine": "neural",
+        "sample_rate": "8000"
+    },
+    {
+        "filename": "polly_voicequery_05242022134337.mp3",
         "query": "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt ",
         "service": "polly",
         "voice": "Kimberly",
@@ -1032,10 +1080,18 @@
         "sample_rate": "8000"
     },
     {
-        "filename": "polly_voicequery_05242022210141.mp3",
+        "filename": "polly_voicequery_05242022134838.mp3",
         "query": "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt ",
         "service": "polly",
-        "voice": "Justin",
+        "voice": "Matthew",
+        "engine": "neural",
+        "sample_rate": "8000"
+    },
+    {
+        "filename": "polly_voicequery_05242022134940.mp3",
+        "query": "DISPLAY nicer_but_slower_film_list dot FID and the average of ( length ) , average ( length ) , category IN nicer_but_slower_film_list as nt ",
+        "service": "polly",
+        "voice": "Joey",
         "engine": "neural",
         "sample_rate": "8000"
     }

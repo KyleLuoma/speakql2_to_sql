@@ -27,6 +27,20 @@ class DbConnector:
         return self.db_engine
 
 
+    def do_single_insert_query_into_dataframe(self, query):
+
+        if self.verbose:
+            print("DBCONNECTOR: Executing query '", query, "' in database", self.db_name)
+
+        if self.db_engine == "mysql":
+            cursor = self.connection.cursor()
+            try:
+                cursor.execute(query)
+                self.connection.commit()
+            except mysql.connector.Error as error:
+                print("Failed to INSERT in MySQL: {}".format(error))
+
+
 
     # Only use this internally. Do not integrate with API calls from the frontend.
     def do_single_select_query_into_dataframe(self, query):
@@ -109,7 +123,7 @@ class DbConnector:
         return mysql.connector.connect(**config)
 
     #Static method (deprecated) keeps insert_data_into_db.py happy until we refactor that.
-    def get_speakql_university_connector():
+    def get_speakql_university_connector(self, database = 'default'):
         db_info = json.load(open('./app/src/db_util/db_info.json'))
 
         config = {
@@ -119,6 +133,9 @@ class DbConnector:
             'database': db_info["database"],
             'raise_on_warnings': True
         }
+
+        if database != 'default':
+            config['database'] = database
         
         cnx = mysql.connector.connect(**config)
         return cnx

@@ -10,14 +10,21 @@ from .src.speakql_speech_recognition.AsrStringProcessor import *
 from .src.db_util.db_analyzer import *
 from .src.db_util.db_connector import *
 from sys import platform
+from .src.user_study.study_driver import StudyDriver 
 
 from flask_cors import CORS
 #CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-db_connector = DbConnector()
+study_db_connector = DbConnector(db_name = "speakql_study")
+study_driver = StudyDriver(study_db_connector)
+
+db_connector = DbConnector(db_name = "speakql_university")
 db_analyzer = DbAnalyzer(db_connector)
 asr = AsrStringProcessor(db_analyzer)
+
+jwt = JWTManager()
+jwt.init_app(app)
 
 
 
@@ -91,6 +98,23 @@ def wav_data():
 
 
 
+@app.route('/study/get_next_prompt', methods = ['POST'])
+def get_next_prompt():
+    idparticipant = request.json.get('idparticipant', None)
+    print(idparticipant)
+    prompt = study_driver.get_next_prompt(int(idparticipant))
+    response_dict = {}
+    if prompt.shape[0] == 1:
+        for column in prompt.columns:
+            response_dict[column] = str(prompt[column][0])
+    else:
+        response_dict = {'error': 'Unable to retrieve next prompt'}
+    print(response_dict)
+    response = flask.jsonify(response_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
 
 @app.route('/register_participant', methods = ['POST'])
 def register_participant():
@@ -98,8 +122,8 @@ def register_participant():
     if len(participant) == 0:
         return flask.jsonify({"msg": "No data in the participant field."})
 
-    result_df = db_connector.do_select_from_parameters(
-        schema = 'speakql_study',
+    result_df = study_db_connector.do_select_from_parameters(
+        # schema = 'speakql_study',
         columns = ['*'],
         table = ['participants']
         )
@@ -107,11 +131,12 @@ def register_participant():
     
     print(result_df)
     if result_df.shape[0] == 1:
+        access_token = create_access_token(participant)
         response =  flask.jsonify(
             {
-                'idparticipant': result_df['idparticipants'].to_list()[0],
+                'idparticipant': result_df['idparticipant'].to_list()[0],
                 'username': result_df['username'].to_list()[0],
-                'token': 'access token goes here'
+                'token': access_token
             }
         )
         response.headers.add('Access-Control-Allow-Origin', '*')
@@ -120,11 +145,8 @@ def register_participant():
         #Do create participant id here
         return flask.jsonify({'error': 'No participant id exists or created.'})
 
-    # access_token = create_access_token(participant)
-    # return flask.jsonify(access_token = access_token)
-
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
     app.config["JWT_SECRET_KEY"] = 'insertsecretkeyhereforproduction'
-    jwt = JWTManager(app)
+    app.run(debug=True, port=5000)
+    
