@@ -60,8 +60,14 @@ class StudyDriver:
     # to save it in validated attempt table.
     def submit_attempt(
         self, participant_id, query_id, step, transcript,
-        audio_filename, time_taken, used_speakql, attempt_num
+        audio_filename, time_taken, used_speakql
         ):
+
+        last_committed_attempt = self.get_last_committed_attempt(participant_id)
+        attemptnum = 1
+        if last_committed_attempt.shape[0] == 1:
+            attemptnum = last_committed_attempt['attemptnum'][0] + 1
+
         query = """
         insert into attemptsubmissions (
             idattemptsubmission, idparticipant, idquery,
@@ -78,7 +84,7 @@ class StudyDriver:
         """.format(
             str(participant_id), str(query_id),
             str(step), str(transcript), str(audio_filename),
-            str(time_taken), str(used_speakql), str(attempt_num)
+            str(time_taken), str(used_speakql), str(attemptnum)
         )
 
         result = self.db_connector.do_single_insert_query_into_dataframe(query)

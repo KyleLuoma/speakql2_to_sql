@@ -102,8 +102,6 @@ def wav_data():
 @app.route('/study/get_next_prompt', methods = ['POST'])
 def get_next_prompt():
     idparticipant = request.json.get('idparticipant', None)
-    print(idparticipant)
-    print(request.headers)
     prompt = study_driver.get_next_prompt(int(idparticipant))
     prompt = prompt[['idquery', 'prompt', 'step', 'language']]
     response_dict = {'random': str(random.randint(0, 10000))}
@@ -113,9 +111,38 @@ def get_next_prompt():
     else:
         response_dict = {'error': 'Unable to retrieve next prompt'}
     response = flask.jsonify(response_dict)
-    print("/study/get_next_prompt:", response_dict)
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Cache-Control', 'no-store')
+    return response
+
+
+
+# Attempt submission. Payload:
+#   idparticipant, idquery, idstep, transcript, audio_filename,
+#   time_taken, used_speakql, attempt_number
+@app.route('/study/submit_attempt', methods = ['POST'])
+def submit_attempt():
+    print(request.json)
+
+    response_dict = {'msg': 'submission complete'}
+
+    if len(request.json['transcript']) == 0 or request.json['time_taken'] == 0:
+        response_dict['msg'] = 'empty submission, did not save to database!'
+    else:
+        study_driver.submit_attempt(
+            participant_id  = request.json['idparticipant'],
+            query_id        = request.json['idquery'],
+            step            = request.json['idstep'],
+            transcript      = request.json['transcript'],
+            audio_filename  = request.json['audio_filename'],
+            time_taken      = request.json['time_taken'],
+            used_speakql    = request.json['used_speakql']
+        )
+
+    response = flask.jsonify(response_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Cache-Control', 'no-store')
+
     return response
 
 
@@ -125,7 +152,6 @@ def register_participant():
     participant = request.json.get('participant', None)
     if len(participant) == 0:
         return flask.jsonify({"msg": "No data in the participant field."})
-    print(request.headers)
 
     result_df = study_db_connector.do_select_from_parameters(
         # schema = 'speakql_study',
@@ -134,7 +160,6 @@ def register_participant():
         )
     result_df = result_df.where(result_df.username == participant).dropna(how = 'all')
     
-    print(result_df)
     if result_df.shape[0] == 1:
         access_token = create_access_token(participant)
         response =  flask.jsonify(
