@@ -18,7 +18,7 @@ from flask_cors import CORS
 #CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-study_db_connector = DbConnector(db_name = "speakql_study")
+study_db_connector = DbConnector(db_name = "speakql_study", verbose = True)
 study_driver = StudyDriver(study_db_connector)
 
 db_connector = DbConnector(db_name = "speakql_university")
@@ -198,6 +198,69 @@ def register_participant():
     else:
         #Do create participant id here
         return flask.jsonify({'error': 'No participant id exists or created.'})
+
+
+
+@app.route('/study/get_all_participant_attempts', methods = ['POST'])
+def get_all_participant_attempts():
+    attempts = study_driver.get_all_submitted_attempts(
+        request.json['idparticipant']
+    )
+    response_dict = {'msg': 'no submissions exist for this user'}
+    if attempts.shape[0] > 0:
+        response_dict = attempts.set_index('idattemptsubmission').transpose().to_dict()
+    # print("GET ALL PARTICIPANT ATTEMPTS:\n", response_dict)
+    response = flask.jsonify(response_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
+@app.route('/study/get_attempt_submissions_since_last_commit', methods = ['POST'])
+def get_attempt_submissions_since_last_commit():
+    attempts = study_driver.get_attempt_submissions_since_last_commit(
+        request.json['idparticipant']
+    )
+    response_dict = {'msg': 'no submissions exist for this user'}
+    if attempts.shape[0] > 0:
+        response_dict = attempts.set_index('idattemptsubmission').transpose().to_dict()
+    # print("GET ALL PARTICIPANT ATTEMPTS:\n", response_dict)
+    response = flask.jsonify(response_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
+@app.route('/study/get_all_committed_attempts', methods = ['POST'])
+def get_all_committed_attempts():
+    attempts = study_driver.get_all_comitted_attempts(
+        request.json['idparticipant']
+    )
+    print(attempts)
+    print(request.json)
+    response_dict = {'msg': 'no committed attempts exist for this user'}
+    if attempts.shape[0] > 0:
+        response_dict = attempts.set_index('idattemptsubmission').transpose().to_dict()
+    # print("GET ALL PARTICIPANT ATTEMPTS:\n", response_dict)
+    response = flask.jsonify(response_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
+@app.route('/study/save_attempt', methods = ['POST'])
+def save_attempt():
+
+    is_correct = request.json['iscorrect'].lower() == 'true'
+
+    study_driver.save_attempt(
+        request.json['idattemptsubmissions'], 
+        is_correct
+    )
+    response = flask.jsonify({'msg': 'Response saved and committed to db'})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response    
+
 
 
 if __name__ == '__main__':

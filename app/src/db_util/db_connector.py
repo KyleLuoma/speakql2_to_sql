@@ -61,8 +61,9 @@ class DbConnector:
             except mysql.connector.ProgrammingError as pe:
                 print(pe)
                 result_df = pd.DataFrame()
-            cursor.close()
-            return result_df
+            finally:
+                cursor.close()
+                return result_df
 
 
 

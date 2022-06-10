@@ -161,11 +161,33 @@ class StudyDriver:
     # Retrieve all submitted attempts made by the participant
     def get_all_submitted_attempts(self, participant_id):
         query = """
-        select * 
-        from attemptsubmitted
-        where idparticipant = {}
+        select s.*, c.idattemptcommitted, c.iscorrect
+        from attemptsubmissions s
+        left join attemptscommitted c 
+        on s.idattemptsubmission = c.idattemptsubmission
+        where s.idparticipant = {};
         """.format(str(participant_id))
         result = self.db_connector.do_single_select_query_into_dataframe(query)
+        result.fillna(value = '', inplace = True)
+        return result
+
+
+
+    def get_attempt_submissions_since_last_commit(self, participant_id):
+        query = """
+        select *
+        from attemptsubmissions
+        where 
+            idparticipant = {} 
+            and idattemptsubmission > (
+                select max(idattemptsubmission) 
+                from attemptscommitted c
+                natural join attemptsubmissions s
+                where idparticipant = {}
+            )
+        """.format(str(participant_id), str(participant_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        result.fillna(value = '', inplace = True)
         return result
 
 
@@ -173,8 +195,9 @@ class StudyDriver:
     # Retrieve all committed attempts made by the participant
     def get_all_comitted_attempts(self, participant_id):
         query = """
-        select * 
-        from attemptscommitted
+        select s.*, c.idattemptcommitted, c.iscorrect
+        from attemptsubmissions s
+        natural join attemptscommitted c
         where idparticipant = {}
         """.format(str(participant_id))
         result = self.db_connector.do_single_select_query_into_dataframe(query)
