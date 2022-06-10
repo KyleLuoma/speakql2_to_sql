@@ -11,6 +11,7 @@ from .src.speakql_speech_recognition.AsrStringProcessor import *
 from .src.db_util.db_analyzer import *
 from .src.db_util.db_connector import *
 from sys import platform
+import os
 from .src.user_study.study_driver import StudyDriver 
 
 from flask_cors import CORS
@@ -26,6 +27,9 @@ asr = AsrStringProcessor(db_analyzer)
 
 jwt = JWTManager()
 jwt.init_app(app)
+
+cwd = os.getcwd().replace('\\', '/')
+print('Current working directory:', cwd)
 
 
 
@@ -76,17 +80,37 @@ def do_progressive_query():
 @app.route('/wav_data', methods = ['POST'])
 def wav_data():
 
-    recording_dir = '/query_audio/user_recordings/'
+    recording_dir = cwd + '/query_audio/user_recordings/'
     if 'linux' in platform:
         recording_dir = '/root/srv/www/speakql2_to_sql/query_audio/user_recordings/'
 
     wav_blob = request.get_json()['wavBlob']
     count = request.get_json()['count']
+    username = request.get_json()['username']
+    idparticipant = request.get_json()['idparticipant']
+    idquery = request.get_json()['idquery']
+    language = request.get_json()['language']
     transcript = request.get_json()['transcript'].replace(" ", "-").replace(".", "")
-    file = open(recording_dir + "recording_test_" + str(count) + ".wav", 'wb')
+
+    attemptnum = study_driver.get_last_committed_attempt(idparticipant)
+    attemptnum = attemptnum['attemptnum'][0]
+
+    filename = (
+        username + '_' + 'queryid-' + str(idquery) 
+        + '_' + language + '-' + 'attempt-' + str(attemptnum) + '-{}.wav')
+
+    counter = 1
+    while os.path.exists(recording_dir + '/' + filename.format(str(counter))):
+        counter += 1
+
+    print("WAV DATA:", username, idparticipant, idquery, language, transcript)
+
+    file = open(recording_dir + '/' + filename.format(str(counter)), 'wb')
     file.write(base64.b64decode(wav_blob))
     file.close()
+
     print("TRANSCRIPT OBJECT:", request.get_json()['transcript'], "END", str(len(request.get_json()['transcript'])))
+    
     if not len(request.get_json()['transcript']) <= 1:
         response = flask.jsonify(
             asr.process_asr_string(request.get_json()['transcript'])
@@ -119,7 +143,7 @@ def get_next_prompt():
 
 # Attempt submission. Payload:
 #   idparticipant, idquery, idstep, transcript, audio_filename,
-#   time_taken, used_speakql, attempt_number
+#   time_taken, used_speakql
 @app.route('/study/submit_attempt', methods = ['POST'])
 def submit_attempt():
     print(request.json)
