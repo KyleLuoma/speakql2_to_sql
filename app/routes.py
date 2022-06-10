@@ -263,6 +263,18 @@ def save_attempt():
 
 
 
+@app.route('/study/revert_attempt', methods = ['POST'])
+def revert_attempt():
+
+    study_driver.revert_attempt(
+        request.json['idattemptsubmissions']
+    )
+    response = flask.jsonify({'msg': 'attempt reverted'})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
 if __name__ == '__main__':
     app.config["JWT_SECRET_KEY"] = 'insertsecretkeyhereforproduction'
     app.run(debug=True, port=5000)

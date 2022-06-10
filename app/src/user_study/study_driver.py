@@ -113,6 +113,15 @@ class StudyDriver:
         result = self.db_connector.do_single_insert_query_into_dataframe(query)
         return result
 
+
+
+    def revert_attempt(self, submission_id):
+        query = """
+        delete from attemptscommitted where idattemptsubmission = {}
+        """.format(submission_id)
+        result = self.db_connector.do_single_insert_query_into_dataframe(query)
+        return result
+
     
     
     # Get the most recent attempt submitted by the participant
@@ -133,14 +142,13 @@ class StudyDriver:
     # Get the most recent attempt committed by the researcher for a participant
     def get_last_committed_attempt(self, participant_id):
         query = """
-        select max(c.idattemptcommitted), c.*, s.*
+        select max(s.idattemptsubmission), c.iscorrect, c.idattemptcommitted, s.*
         from speakql_study.attemptscommitted c
         natural join speakql_study.attemptsubmissions s
         where 
             s.idparticipant = {}
 		group by 
 			c.idattemptcommitted,
-            c.idattemptsubmission,
             c.iscorrect,
             s.idattemptsubmission,
             s.idparticipant,
@@ -152,6 +160,18 @@ class StudyDriver:
             s.usedspeakql,
             s.attemptnum,
             s.reviewed
+        """.format(str(participant_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
+
+
+
+    def get_last_committed_attempt_submission_id(self, participant_id):
+        query = """
+        select max(s.idattemptsubmission) as idattemptsubmission
+        from speakql_study.attemptscommitted c
+        natural join speakql_study.attemptsubmissions s
+        where s.idparticipant = {}
         """.format(str(participant_id))
         result = self.db_connector.do_single_select_query_into_dataframe(query)
         return result
@@ -187,6 +207,15 @@ class StudyDriver:
             )
         """.format(str(participant_id), str(participant_id))
         result = self.db_connector.do_single_select_query_into_dataframe(query)
+
+        if result.shape[0] == 0:
+            result = self.get_all_submitted_attempts(participant_id)
+            last_commit = self.get_last_committed_attempt_submission_id(participant_id)
+            print("DEBUG:", last_commit)
+            if last_commit.shape[0] == 1 and last_commit['idattemptsubmission'][0] != None:
+                result = result.where(
+                    result.idattemptsubmission > last_commit['idattemptsubmission'][0]
+                    ).dropna(how = 'all')
         result.fillna(value = '', inplace = True)
         return result
 
