@@ -76,7 +76,12 @@ class StudyDriver:
         last_committed_attempt = self.get_last_committed_attempt(participant_id)
         attemptnum = 1
         if last_committed_attempt.shape[0] == 1:
-            attemptnum = last_committed_attempt['attemptnum'][0] + 1
+            last_attempt_step = last_committed_attempt['idstep'][0]
+            if float(last_attempt_step) == float(step):
+                attemptnum = last_committed_attempt['attemptnum'][0] + 1
+
+        transcript = transcript.replace("'", "''")
+        transcript = transcript.replace(";", " semicolon ")
 
         query = """
         insert into attemptsubmissions (
@@ -268,6 +273,7 @@ class StudyDriver:
 
         if iscorrect == 1 or attempt_num >= 3:
             step += 1
+            attempt_num = 1
 
         sequence = sequences.where(sequences.step == step).dropna(how = 'all').reset_index(drop = True)
 
