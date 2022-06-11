@@ -154,6 +154,7 @@ def submit_attempt():
         response_dict['msg'] = 'empty submission, did not save to database!'
     else:
         study_driver.submit_attempt(
+            session_id      = request.json['idsession'],
             participant_id  = request.json['idparticipant'],
             query_id        = request.json['idquery'],
             step            = request.json['idstep'],
@@ -198,6 +199,22 @@ def register_participant():
     else:
         #Do create participant id here
         return flask.jsonify({'error': 'No participant id exists or created.'})
+
+
+
+@app.route('/study/get_most_recent_session_id', methods = ['POST'])
+def get_most_recent_session_id():
+    idparticipant = request.json['idparticipant']
+    response_dict = {'msg': 'unable to retrieve session for participant'}
+    if str(idparticipant).isdigit():
+        idsession = study_driver.get_most_recent_session_id(idparticipant)
+        response_dict = {
+            'idsession': int(idsession),
+            'idparticipant' : int(idparticipant)
+            }
+    response = flask.jsonify(response_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 
@@ -270,6 +287,53 @@ def revert_attempt():
         request.json['idattemptsubmissions']
     )
     response = flask.jsonify({'msg': 'attempt reverted'})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
+@app.route('/study/get_all_participant_usernames', methods = ['POST'])
+def get_all_participants():
+    participants = study_driver.get_all_participants()
+    response = flask.jsonify(participants['username'].to_list())
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
+@app.route('/study/get_participant_id_from_username', methods = ['POST'])
+def get_participant_id_from_username():
+    id = study_driver.get_participant_id_from_username(request.json['username'])
+    response = flask.jsonify({
+        'idparticipant': int(id['idparticipant'][0]),
+        'username': request.json['username']
+        })
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
+@app.route('/study/get_sequence_ids', methods = ["POST"])
+def get_sequence_ids():
+    sequence_ids = study_driver.get_all_sequence_ids()
+    response = flask.jsonify(sequence_ids['idsequence'].to_list())
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
+@app.route('/study/register_participant_session', methods = ["POST"])
+def register_participant_session():
+    idparticipant = request.json['idparticipant']
+    idsequence = request.json['idsequence']
+
+    response = {'msg': 'unable to register response, check parameters and try again.'}
+
+    if str(idparticipant).isdigit() and idsequence in ['a', 'b', 'p1', 'p2']:
+        study_driver.register_participant_session(idparticipant, idsequence)
+        session_id = study_driver.get_most_recent_session_id(idparticipant)
+        response = flask.jsonify({'idsession': int(session_id)})
+    
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 

@@ -43,6 +43,16 @@ class StudyDriver:
         return result
 
 
+
+    def get_all_sequence_ids(self):
+        query = """
+        select distinct idsequence from query_sequences
+        """
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
+
+
+
     # Retrieve query sequence from database (ids ar a, b, p1 or p2)
     # Returns dataframe with columns idsequence, idquery, step, speakql_first
     def get_query_sequence(self, sequence_id):
@@ -59,7 +69,7 @@ class StudyDriver:
     # Once the attempt is reviewed and marked correct or incorrect, then call save_attempt
     # to save it in validated attempt table.
     def submit_attempt(
-        self, participant_id, query_id, step, transcript,
+        self, session_id, participant_id, query_id, step, transcript,
         audio_filename, time_taken, used_speakql
         ):
 
@@ -70,19 +80,19 @@ class StudyDriver:
 
         query = """
         insert into attemptsubmissions (
-            idattemptsubmission, idparticipant, idquery,
+            idattemptsubmission, idsession, idparticipant, idquery,
             idstep, transcript, audiofilename,
             time_taken, usedspeakql, attemptnum,
             reviewed
             ) 
         values(
-            default, {}, {},
+            default, {}, {}, {},
             {}, '{}', '{}',
             {}, {}, {},
             default
             )
         """.format(
-            str(participant_id), str(query_id),
+            str(session_id), str(participant_id), str(query_id),
             str(step), str(transcript), str(audio_filename),
             str(time_taken), str(used_speakql), str(attemptnum)
         )
@@ -141,12 +151,16 @@ class StudyDriver:
 
     # Get the most recent attempt committed by the researcher for a participant
     def get_last_committed_attempt(self, participant_id):
+
+        attempt_id = self.get_last_committed_attempt_submission_id(participant_id)
+        attempt_id = attempt_id['idattemptsubmission'][0]
+
         query = """
         select max(s.idattemptsubmission), c.iscorrect, c.idattemptcommitted, s.*
         from speakql_study.attemptscommitted c
         natural join speakql_study.attemptsubmissions s
         where 
-            s.idparticipant = {}
+            s.idparticipant = {} and idattemptsubmission = {}
 		group by 
 			c.idattemptcommitted,
             c.iscorrect,
@@ -160,7 +174,7 @@ class StudyDriver:
             s.usedspeakql,
             s.attemptnum,
             s.reviewed
-        """.format(str(participant_id))
+        """.format(str(participant_id), str(attempt_id))
         result = self.db_connector.do_single_select_query_into_dataframe(query)
         return result
 
@@ -238,9 +252,13 @@ class StudyDriver:
     # if the last attempt is < 3 and not correct.
     def get_next_prompt(self, participant_id):
         last_attempt = self.get_last_committed_attempt(participant_id)
-        step = last_attempt.iloc[0]['idstep']
-        iscorrect = last_attempt.iloc[0]['iscorrect']
-        attempt_num = last_attempt.iloc[0]['attemptnum']
+        step = 1
+        iscorrect = 0
+        attempt_num = 1
+        if last_attempt.shape[0] > 0:
+            step = last_attempt.iloc[0]['idstep']
+            iscorrect = last_attempt.iloc[0]['iscorrect']
+            attempt_num = last_attempt.iloc[0]['attemptnum']
 
         session_id = self.get_most_recent_session_id(participant_id)
         session_params = self.get_session_params(session_id)
@@ -248,7 +266,7 @@ class StudyDriver:
 
         sequences = self.get_query_sequence(sequence_id)
 
-        if iscorrect or attempt_num >= 3:
+        if iscorrect == 1 or attempt_num >= 3:
             step += 1
 
         sequence = sequences.where(sequences.step == step).dropna(how = 'all').reset_index(drop = True)
@@ -264,6 +282,25 @@ class StudyDriver:
         joined_df = prompt_df.join(sequence, rsuffix = "_sequence")        
 
         return joined_df
+
+
+
+    def get_all_participants(self):
+        query = """
+        select * from participants
+        """
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
+
+
+
+    def get_participant_id_from_username(self, username):
+        query = """
+        select idparticipant from participants
+        where username = '{}'
+        """.format(username)
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
         
 
         

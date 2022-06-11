@@ -71,6 +71,7 @@ commands.append(queries_table)
 attempt_sumbission_table = """CREATE TABLE IF NOT EXISTS attemptsubmissions (
                                 idattemptsubmission int NOT NULL AUTO_INCREMENT,
                                 idparticipant int NOT NULL,
+                                idsession int NOT NULL,
                                 idquery int NOT NULL,
                                 idstep int NOT NULL,
                                 transcript varchar(1024) NOT NULL,
