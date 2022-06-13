@@ -21,8 +21,8 @@ def main():
     parse_engine = spc.JavaSpeakQlParseEngine("gen_simple_reorder_modifiers", simple_speakql= True)
     parse_caller = spc.SpeakQlParseCaller(parse_engine)
 
-    py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
-    py_parse_caller = spc.SpeakQlParseCaller(py_parse_engine)
+    # py_parse_engine = spc.PythonSpeakQlParseEngine("pySpeakQl")
+    # py_parse_caller = spc.SpeakQlParseCaller(py_parse_engine)
 
     tree = ""
     user_input = ""
@@ -94,7 +94,7 @@ def main():
             else:
                 translate_from_excel("./generated_queries_01_translated.xlsx", parse_caller)
         elif(user_input.upper() == "ADD SPOKEN TO EXCEL"):
-            speakql_to_spoken_query("generated_queries_01.xlsx", "generated_spoken_script_queries_01.xlsx")
+            speakql_to_spoken_query("speakql_translated_to_sql_01.xlsx", "spoken_sql_01.xlsx")
         else:
             speakql_query = user_input
             tree = parse_caller.run_select_statement(speakql_query)

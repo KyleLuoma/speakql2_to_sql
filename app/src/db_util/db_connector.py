@@ -62,7 +62,7 @@ class DbConnector:
                 print(pe)
                 result_df = pd.DataFrame()
             finally:
-                cursor.close()
+                # cursor.close()
                 return result_df
 
 
