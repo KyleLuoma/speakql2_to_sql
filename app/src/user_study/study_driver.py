@@ -175,6 +175,9 @@ class StudyDriver:
         attempt_id = self.get_last_committed_attempt_submission_id(participant_id, session_id)
         attempt_id = attempt_id['idattemptsubmission'][0]
 
+        if attempt_id == None:
+            attempt_id = -1
+
         query = """
         select max(s.idattemptsubmission), c.iscorrect, c.idattemptcommitted, s.*
         from speakql_study.attemptscommitted c
