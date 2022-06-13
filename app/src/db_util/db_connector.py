@@ -51,8 +51,9 @@ class DbConnector:
         query.replace(";", "")
         
         if self.db_engine == "mysql":
-            cursor = self.connection.cursor()
+            result_df = pd.DataFrame()
             try:
+                cursor = self.connection.cursor()
                 cursor.execute(query)
                 result_df = pd.DataFrame(
                     columns = cursor.column_names,

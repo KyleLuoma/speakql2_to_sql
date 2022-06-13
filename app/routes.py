@@ -221,7 +221,8 @@ def get_most_recent_session_id():
 @app.route('/study/get_all_participant_attempts', methods = ['POST'])
 def get_all_participant_attempts():
     attempts = study_driver.get_all_submitted_attempts(
-        request.json['idparticipant']
+        request.json['idparticipant'],
+        request.json['idsession']
     )
     response_dict = {'msg': 'no submissions exist for this user'}
     if attempts.shape[0] > 0:
@@ -236,7 +237,8 @@ def get_all_participant_attempts():
 @app.route('/study/get_attempt_submissions_since_last_commit', methods = ['POST'])
 def get_attempt_submissions_since_last_commit():
     attempts = study_driver.get_attempt_submissions_since_last_commit(
-        request.json['idparticipant']
+        request.json['idparticipant'],
+        request.json['idsession']
     )
     response_dict = {'msg': 'no submissions exist for this user'}
     if attempts.shape[0] > 0:
@@ -251,7 +253,8 @@ def get_attempt_submissions_since_last_commit():
 @app.route('/study/get_all_committed_attempts', methods = ['POST'])
 def get_all_committed_attempts():
     attempts = study_driver.get_all_comitted_attempts(
-        request.json['idparticipant']
+        request.json['idparticipant'],
+        request.json['idsession']
     )
     print(attempts)
     print(request.json)
@@ -294,6 +297,7 @@ def revert_attempt():
 
 @app.route('/study/get_all_participant_usernames', methods = ['POST'])
 def get_all_participants():
+    print("GETALLPARTICIPANTS!!!")
     participants = study_driver.get_all_participants()
     response = flask.jsonify(participants['username'].to_list())
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -315,6 +319,7 @@ def get_participant_id_from_username():
 
 @app.route('/study/get_sequence_ids', methods = ["POST"])
 def get_sequence_ids():
+    print("GETSEQUENCEIDS!!!")
     sequence_ids = study_driver.get_all_sequence_ids()
     response = flask.jsonify(sequence_ids['idsequence'].to_list())
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -327,13 +332,30 @@ def register_participant_session():
     idparticipant = request.json['idparticipant']
     idsequence = request.json['idsequence']
 
-    response = {'msg': 'unable to register response, check parameters and try again.'}
+    print('DEBUG', idparticipant, idsequence)
+
+    response = {'msg': 'unable to register session, check parameters and try again.'}
 
     if str(idparticipant).isdigit() and idsequence in ['a', 'b', 'p1', 'p2']:
         study_driver.register_participant_session(idparticipant, idsequence)
         session_id = study_driver.get_most_recent_session_id(idparticipant)
-        response = flask.jsonify({'idsession': int(session_id)})
+        response = {'idsession': int(session_id)}
     
+    response = flask.jsonify(response)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
+@app.route('/study/get_participant_sessions', methods = ['POST'])
+def get_participant_sessions():
+    idparticipant = request.json['idparticipant']
+
+    response = {'msg': 'no sessions appear to exist for this participant'}
+    if str(idparticipant).isdigit():
+        sessions = study_driver.get_all_participant_sessions(idparticipant)
+        response = flask.jsonify(sessions.transpose().to_dict())
+        
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 

@@ -34,6 +34,15 @@ class StudyDriver:
 
 
 
+    def get_all_participant_sessions(self, participant_id):
+        query = """
+        select * from session where idparticipant = {}
+        """.format(str(participant_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
+
+
+
     # Retrieve session parameters
     def get_session_params(self, session_id):
         query = """
@@ -140,24 +149,30 @@ class StudyDriver:
     
     
     # Get the most recent attempt submitted by the participant
-    def get_last_submitted_attempt(self, participant_id):
+    def get_last_submitted_attempt(self, participant_id, session_id = None):
+        if session_id == None:
+            session_id = self.get_most_recent_session_id(participant_id)
+
         query = """
         select * 
         from attemptsubmissions
         where idattemptsubmission in (
             select max(idattemptsubmission) as idattemptsubmission
             from attemptsubmissions
-            where idparticipant = {}
+            where idparticipant = {} and idsession = {}
         )
-        """.format(str(participant_id))
+        """.format(str(participant_id), str(session_id))
+
         result = self.db_connector.do_single_select_query_into_dataframe(query)
         return result
 
 
     # Get the most recent attempt committed by the researcher for a participant
-    def get_last_committed_attempt(self, participant_id):
+    def get_last_committed_attempt(self, participant_id, session_id = None):
+        if session_id == None:
+            session_id = self.get_most_recent_session_id(participant_id)
 
-        attempt_id = self.get_last_committed_attempt_submission_id(participant_id)
+        attempt_id = self.get_last_committed_attempt_submission_id(participant_id, session_id)
         attempt_id = attempt_id['idattemptsubmission'][0]
 
         query = """
@@ -185,34 +200,45 @@ class StudyDriver:
 
 
 
-    def get_last_committed_attempt_submission_id(self, participant_id):
+    def get_last_committed_attempt_submission_id(self, participant_id, session_id = None):
+        if session_id == None:
+            session_id = self.get_most_recent_session_id(participant_id)
+
         query = """
         select max(s.idattemptsubmission) as idattemptsubmission
         from speakql_study.attemptscommitted c
         natural join speakql_study.attemptsubmissions s
-        where s.idparticipant = {}
-        """.format(str(participant_id))
+        where s.idparticipant = {} and s.idsession = {}
+        """.format(str(participant_id), str(session_id))
+
         result = self.db_connector.do_single_select_query_into_dataframe(query)
         return result
 
 
 
     # Retrieve all submitted attempts made by the participant
-    def get_all_submitted_attempts(self, participant_id):
+    def get_all_submitted_attempts(self, participant_id, session_id = None):
+        if session_id == None:
+            session_id = self.get_most_recent_session_id(participant_id)
+
         query = """
         select s.*, c.idattemptcommitted, c.iscorrect
         from attemptsubmissions s
         left join attemptscommitted c 
         on s.idattemptsubmission = c.idattemptsubmission
-        where s.idparticipant = {};
-        """.format(str(participant_id))
+        where s.idparticipant = {} and s.idsession = {};
+        """.format(str(participant_id), str(session_id))
+
         result = self.db_connector.do_single_select_query_into_dataframe(query)
         result.fillna(value = '', inplace = True)
         return result
 
 
 
-    def get_attempt_submissions_since_last_commit(self, participant_id):
+    def get_attempt_submissions_since_last_commit(self, participant_id, session_id = None):
+        if session_id == None:
+            session_id = self.get_most_recent_session_id(participant_id)
+
         query = """
         select *
         from attemptsubmissions
@@ -222,14 +248,14 @@ class StudyDriver:
                 select max(idattemptsubmission) 
                 from attemptscommitted c
                 natural join attemptsubmissions s
-                where idparticipant = {}
+                where idparticipant = {} and idsession = {}
             )
-        """.format(str(participant_id), str(participant_id))
+        """.format(str(participant_id), str(participant_id), str(session_id))
         result = self.db_connector.do_single_select_query_into_dataframe(query)
 
         if result.shape[0] == 0:
-            result = self.get_all_submitted_attempts(participant_id)
-            last_commit = self.get_last_committed_attempt_submission_id(participant_id)
+            result = self.get_all_submitted_attempts(participant_id, session_id)
+            last_commit = self.get_last_committed_attempt_submission_id(participant_id, session_id)
             print("DEBUG:", last_commit)
             if last_commit.shape[0] == 1 and last_commit['idattemptsubmission'][0] != None:
                 result = result.where(
@@ -241,13 +267,15 @@ class StudyDriver:
 
 
     # Retrieve all committed attempts made by the participant
-    def get_all_comitted_attempts(self, participant_id):
+    def get_all_comitted_attempts(self, participant_id, session_id = None):
+        if session_id == None:
+            session_id = self.get_most_recent_session_id(participant_id)
         query = """
         select s.*, c.idattemptcommitted, c.iscorrect
         from attemptsubmissions s
         natural join attemptscommitted c
-        where idparticipant = {}
-        """.format(str(participant_id))
+        where idparticipant = {} and idsession = {}
+        """.format(str(participant_id), str(session_id))
         result = self.db_connector.do_single_select_query_into_dataframe(query)
         return result
 
