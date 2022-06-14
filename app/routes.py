@@ -85,7 +85,6 @@ def wav_data():
         recording_dir = '/root/srv/www/speakql2_to_sql/query_audio/user_recordings/'
 
     wav_blob = request.get_json()['wavBlob']
-    count = request.get_json()['count']
     username = request.get_json()['username']
     idparticipant = request.get_json()['idparticipant']
     idquery = request.get_json()['idquery']
@@ -93,7 +92,10 @@ def wav_data():
     transcript = request.get_json()['transcript'].replace(" ", "-").replace(".", "")
 
     attemptnum = study_driver.get_last_committed_attempt(idparticipant)
-    attemptnum = attemptnum['attemptnum'][0]
+    if attemptnum.shape[0] > 0:
+        attemptnum = attemptnum['attemptnum'][0]
+    else:
+        attemptnum = 1
 
     filename = (
         username + '_' + 'queryid-' + str(idquery) 
@@ -146,13 +148,12 @@ def get_next_prompt():
 #   time_taken, used_speakql
 @app.route('/study/submit_attempt', methods = ['POST'])
 def submit_attempt():
-    print(request.json)
 
-    response_dict = {'msg': 'submission complete'}
+    response_dict = {'msg': 'unable to submit'}
 
     if len(request.json['transcript']) == 0 or request.json['time_taken'] == 0:
         response_dict['msg'] = 'empty submission, did not save to database!'
-    else:
+    elif request.json['idsession'] > 0:
         study_driver.submit_attempt(
             session_id      = request.json['idsession'],
             participant_id  = request.json['idparticipant'],
@@ -163,7 +164,9 @@ def submit_attempt():
             time_taken      = request.json['time_taken'],
             used_speakql    = request.json['used_speakql']
         )
+        response_dict = {'msg': 'submission complete'}
 
+    print(response_dict)
     response = flask.jsonify(response_dict)
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Cache-Control', 'no-store')
