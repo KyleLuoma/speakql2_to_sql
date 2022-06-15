@@ -77,7 +77,8 @@ def do_progressive_query():
 
 
 
-@app.route('/wav_data', methods = ['POST'])
+
+@app.route('/study/wav_data', methods = ['POST'])
 def wav_data():
 
     recording_dir = cwd + '/query_audio/user_recordings/'
@@ -91,11 +92,14 @@ def wav_data():
     language = request.get_json()['language']
     transcript = request.get_json()['transcript'].replace(" ", "-").replace(".", "")
 
-    attemptnum = study_driver.get_last_committed_attempt(idparticipant)
-    if attemptnum.shape[0] > 0:
-        attemptnum = attemptnum['attemptnum'][0]
+    if idparticipant > 0:
+        attemptnum = study_driver.get_last_committed_attempt(idparticipant)
+        if attemptnum.shape[0] > 0:
+            attemptnum = attemptnum['attemptnum'][0]
+        else:
+            attemptnum = 1
     else:
-        attemptnum = 1
+        attemptnum = 0
 
     filename = (
         username + '_' + 'queryid-' + str(idquery) 
