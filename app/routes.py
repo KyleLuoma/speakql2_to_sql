@@ -77,6 +77,19 @@ def do_progressive_query():
 
 
 
+@app.route('/process_transcript', methods = ['POST'])
+def process_transcript():
+    transcript = request.get_json()['transcript'].replace(" ", "-").replace(".", "")
+    
+    if not len(request.get_json()['transcript']) <= 1:
+        response = flask.jsonify(
+            asr.process_asr_string(request.get_json()['transcript'])
+            )
+    else:
+        response = flask.jsonify({'msg': 'no transcript received in payload.'})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
 
 @app.route('/study/wav_data', methods = ['POST'])
 def wav_data():
@@ -88,44 +101,44 @@ def wav_data():
     wav_blob = request.get_json()['wavBlob']
     username = request.get_json()['username']
     idparticipant = request.get_json()['idparticipant']
+    idsession = request.get_json()['idsession']
+    step = request.get_json()['step']
     idquery = request.get_json()['idquery']
+    attemptid = request.get_json()['idattemptsubmission']
     language = request.get_json()['language']
-    transcript = request.get_json()['transcript'].replace(" ", "-").replace(".", "")
 
-    if idparticipant > 0:
-        attemptnum = study_driver.get_last_committed_attempt(idparticipant)
-        if attemptnum.shape[0] > 0:
-            attemptnum = attemptnum['attemptnum'][0]
-        else:
-            attemptnum = 1
-    else:
-        attemptnum = 0
-
+    
     filename = (
-        username + '_' + 'queryid-' + str(idquery) 
-        + '_' + language + '-' + 'attempt-' + str(attemptnum) + '-{}.wav')
+        'username-' + username + '_' 
+        + 'queryid-' + str(idquery) + '_' 
+        + 'session-' + str(idsession) + '_'
+        + 'step-' + str(int(float(step))) + '_'
+        + 'query-' + str(idquery) + '_'
+        + 'language-' + language + "_" 
+        + 'attemptid-' + str(attemptid) 
+        + '-{}.wav'
+        )
 
     counter = 1
     while os.path.exists(recording_dir + '/' + filename.format(str(counter))):
         counter += 1
+    filename = filename.format(str(counter))
 
-    print("WAV DATA:", username, idparticipant, idquery, language, transcript)
+    print("WAV DATA:", username, idparticipant, idquery, language)
 
-    file = open(recording_dir + '/' + filename.format(str(counter)), 'wb')
-    file.write(base64.b64decode(wav_blob))
-    file.close()
-
-    print("TRANSCRIPT OBJECT:", request.get_json()['transcript'], "END", str(len(request.get_json()['transcript'])))
+    response = flask.jsonify({'filename': filename})
     
-    if not len(request.get_json()['transcript']) <= 1:
-        response = flask.jsonify(
-            asr.process_asr_string(request.get_json()['transcript'])
-            )
-        response.headers.add('Access-Control-Allow-Origin', '*')
-    else: 
-        response = flask.jsonify({})
+    try:
+        file = open(recording_dir + '/' + filename, 'wb')
+        file.write(base64.b64decode(wav_blob))
+        file.close()
+        study_driver.update_attempt_filename(filename, attemptid)
+    except:
+        response = flask.jsonify({'msg': 'Unable to write file {} to disk.'.format(filename)})
+
+    response.headers.add('Access-Control-Allow-Origin', '*')
     
-    return(response)
+    return response
 
 
 
@@ -158,7 +171,7 @@ def submit_attempt():
     if len(request.json['transcript']) == 0 or request.json['time_taken'] == 0:
         response_dict['msg'] = 'empty submission, did not save to database!'
     elif request.json['idsession'] > 0:
-        study_driver.submit_attempt(
+        idattemptsubmissiondf = study_driver.submit_attempt(
             session_id      = request.json['idsession'],
             participant_id  = request.json['idparticipant'],
             query_id        = request.json['idquery'],
@@ -168,7 +181,10 @@ def submit_attempt():
             time_taken      = request.json['time_taken'],
             used_speakql    = request.json['used_speakql']
         )
-        response_dict = {'msg': 'submission complete'}
+        response_dict = {
+            'msg': 'submission complete',
+            'idattemptsubmission': int(idattemptsubmissiondf['idattemptsubmission'][0])           
+            }
 
     print(response_dict)
     response = flask.jsonify(response_dict)

@@ -111,6 +111,27 @@ class StudyDriver:
             str(time_taken), str(used_speakql), str(attemptnum)
         )
 
+        self.db_connector.do_single_insert_query_into_dataframe(query)
+
+        attempt_id_query = """
+        select max(idattemptsubmission) as idattemptsubmission
+        from attemptsubmissions
+        where idparticipant = {}
+        """.format(str(participant_id))
+
+        result = self.db_connector.do_single_select_query_into_dataframe(attempt_id_query)
+
+        return result
+
+
+
+    # Update the filename for an attempt after 
+    def update_attempt_filename(self, audiofilename, idattemptsubmission):
+        query = """
+        update attemptsubmissions
+        set audiofilename = '{}'
+        where idattemptsubmission = '{}'
+        """.format(audiofilename, idattemptsubmission)
         result = self.db_connector.do_single_insert_query_into_dataframe(query)
         return result
 
