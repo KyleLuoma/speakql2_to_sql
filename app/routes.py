@@ -16,9 +16,9 @@ from .src.user_study.study_driver import StudyDriver
 
 from flask_cors import CORS
 #CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": ".*\.jp8.dev"}})
 
-study_db_connector = DbConnector(db_name = "speakql_study", verbose = True)
+study_db_connector = DbConnector(db_name = "speakql_study", verbose = False)
 study_driver = StudyDriver(study_db_connector)
 
 db_connector = DbConnector(db_name = "speakql_university")
@@ -30,7 +30,6 @@ jwt.init_app(app)
 
 cwd = os.getcwd().replace('\\', '/')
 print('Current working directory:', cwd)
-
 
 
 @app.route('/')
@@ -93,6 +92,7 @@ def process_transcript():
 
 @app.route('/study/wav_data', methods = ['POST'])
 def wav_data():
+    print("DEBUG: WAV DATA API CALLED")
 
     recording_dir = cwd + '/query_audio/user_recordings/'
     if 'linux' in platform:
@@ -107,7 +107,6 @@ def wav_data():
     attemptid = request.get_json()['idattemptsubmission']
     language = request.get_json()['language']
 
-    
     filename = (
         'username-' + username + '_' 
         + 'queryid-' + str(idquery) + '_' 
@@ -128,15 +127,16 @@ def wav_data():
 
     response = flask.jsonify({'filename': filename})
     
-    try:
-        file = open(recording_dir + '/' + filename, 'wb')
-        file.write(base64.b64decode(wav_blob))
-        file.close()
-        study_driver.update_attempt_filename(filename, attemptid)
-    except:
-        response = flask.jsonify({'msg': 'Unable to write file {} to disk.'.format(filename)})
+    
+    file = open(recording_dir + '/' + filename, 'wb')
+    file.write(base64.b64decode(wav_blob))
+    file.close()
+    study_driver.update_attempt_filename(filename, attemptid)
+
 
     response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Cache-Control', 'no-cache')
+    print('wav_data response', response)
     
     return response
 
