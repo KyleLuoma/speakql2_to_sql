@@ -201,6 +201,8 @@ def register_participant():
     if len(participant) == 0:
         return flask.jsonify({"msg": "No data in the participant field."})
 
+    participant = participant.lower()
+
     result_df = study_db_connector.do_select_from_parameters(
         # schema = 'speakql_study',
         columns = ['*'],
