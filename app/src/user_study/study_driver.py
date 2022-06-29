@@ -331,15 +331,21 @@ class StudyDriver:
 
         query_id = sequence.iloc[0]['idquery']
 
-        queries_query = """
-        select *
-        from queries
-        where idquery = {}
-        """.format(str(query_id))
-        prompt_df = self.db_connector.do_single_select_query_into_dataframe(queries_query)
+        prompt_df = self.get_query_data(query_id)
         joined_df = prompt_df.join(sequence, rsuffix = "_sequence")        
 
         return joined_df
+
+
+
+    def get_query_data(self, idquery):
+        query = """
+        select *
+        from queries
+        where idquery = {}
+        """.format(str(idquery))
+        prompt_df = self.db_connector.do_single_select_query_into_dataframe(query)
+        return prompt_df
 
 
 

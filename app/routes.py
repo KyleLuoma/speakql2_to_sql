@@ -5,6 +5,8 @@ from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, u
 import flask
 import base64
 import random
+import pandas as pd
+import numpy as np
 from .src.translator import *
 from .src.speakql_speech_recognition.PollyVoice import *
 from .src.speakql_speech_recognition.AsrStringProcessor import *
@@ -153,6 +155,26 @@ def get_next_prompt():
             response_dict[column] = str(prompt[column][0])
     else:
         response_dict = {'error': 'Unable to retrieve next prompt'}
+    response = flask.jsonify(response_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Cache-Control', 'no-store')
+    return response
+
+
+
+@app.route('/study/get_query_evaluation_data', methods = ['POST'])
+def get_query_evaluation_data():
+    idquery = request.json.get('idquery', None)
+    response_df = study_driver.get_query_data(int(idquery))
+    response_dict = {'msg': 'Unable to retrieve query with the provided query ID'}
+    if response_df.shape[0] == 1:
+        response_dict = {}
+        for column in response_df.columns:
+            value = response_df[column][0]
+            if type(value) == np.int64:
+                value = int(value)
+            response_dict[column] = value
+        print(response_dict)
     response = flask.jsonify(response_dict)
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Cache-Control', 'no-store')
