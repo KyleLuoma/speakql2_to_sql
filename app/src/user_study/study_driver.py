@@ -30,7 +30,10 @@ class StudyDriver:
         where idparticipant = {}
         """.format(str(participant_id))
         result = self.db_connector.do_single_select_query_into_dataframe(query)
-        return result.iloc[0]['idsession']
+        if result.shape[0] > 0:
+            return result.iloc[0]['idsession']
+        else:
+            return -1
 
 
 
@@ -194,10 +197,14 @@ class StudyDriver:
             session_id = self.get_most_recent_session_id(participant_id)
 
         attempt_id = self.get_last_committed_attempt_submission_id(participant_id, session_id)
-        attempt_id = attempt_id['idattemptsubmission'][0]
+        if attempt_id.shape[0] > 0:
+            attempt_id = attempt_id['idattemptsubmission'][0]
 
-        if attempt_id == None:
+        else:
             attempt_id = -1
+
+        # if attempt_id == None:
+        #     attempt_id = -1
 
         query = """
         select max(s.idattemptsubmission), c.iscorrect, c.idattemptcommitted, s.*
