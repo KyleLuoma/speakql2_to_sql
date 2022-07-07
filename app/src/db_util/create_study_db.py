@@ -30,7 +30,8 @@ query_sequences_table = """CREATE TABLE IF NOT EXISTS query_sequences (
                             step int NOT NULL,
                             idquery varchar(8) NOT NULL,
                             speakql_first int NOT NULL,
-                            language varchar(16) NOT NULL
+                            language varchar(16) NOT NULL,
+                            ispractice int NOT NULL
                         )"""
 commands.append(query_sequences_table)
 

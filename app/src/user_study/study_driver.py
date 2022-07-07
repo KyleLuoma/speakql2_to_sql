@@ -314,7 +314,7 @@ class StudyDriver:
 
     # Retreive the next prompt in the sequence, or return the current prompt
     # if the last attempt is < 3 and not correct.
-    def get_next_prompt(self, participant_id):
+    def get_next_prompt(self, participant_id, session_id = None):
         last_attempt = self.get_last_committed_attempt(participant_id)
         step = 1
         iscorrect = 0
@@ -324,7 +324,8 @@ class StudyDriver:
             iscorrect = last_attempt.iloc[0]['iscorrect']
             attempt_num = last_attempt.iloc[0]['attemptnum']
 
-        session_id = self.get_most_recent_session_id(participant_id)
+        if session_id == None:
+            session_id = self.get_most_recent_session_id(participant_id)
         session_params = self.get_session_params(session_id)
         sequence_id = session_params.iloc[0]['idsequence']
 

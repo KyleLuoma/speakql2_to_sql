@@ -146,15 +146,31 @@ def wav_data():
 
 @app.route('/study/get_next_prompt', methods = ['POST'])
 def get_next_prompt():
-    idparticipant = request.json.get('idparticipant', None)
-    prompt = study_driver.get_next_prompt(int(idparticipant))
-    prompt = prompt[['idquery', 'prompt', 'step', 'language']]
+    request_json = request.get_json()
+    idparticipant = request_json['idparticipant']
+    # idparticipant = request.json.get('idparticipant', None)
+
+    idsession = None
+    if 'idsession' in request_json:
+        idsession = request_json['idsession']
+        prompt = study_driver.get_next_prompt(
+            int(idparticipant),
+            int(idsession)
+        )
+    else:
+        prompt = study_driver.get_next_prompt(int(idparticipant))
+
+    prompt = prompt[['idquery', 'prompt', 'step', 'language', 'ispractice']]
     response_dict = {'random': str(random.randint(0, 10000))}
+    
     if prompt.shape[0] == 1:
         for column in prompt.columns:
             response_dict[column] = str(prompt[column][0])
     else:
         response_dict = {'error': 'Unable to retrieve next prompt'}
+
+    print(response_dict)
+
     response = flask.jsonify(response_dict)
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Cache-Control', 'no-store')
@@ -344,7 +360,6 @@ def revert_attempt():
 
 @app.route('/study/get_all_participant_usernames', methods = ['POST'])
 def get_all_participants():
-    print("GETALLPARTICIPANTS!!!")
     participants = study_driver.get_all_participants()
     response = flask.jsonify(participants['username'].to_list())
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -383,7 +398,7 @@ def register_participant_session():
 
     response = {'msg': 'unable to register session, check parameters and try again.'}
 
-    if str(idparticipant).isdigit() and idsequence in ['a', 'b', 'p1', 'p2']:
+    if str(idparticipant).isdigit() and idsequence in ['a', 'b', 'p1', 'p2', 'group1', 'group2']:
         study_driver.register_participant_session(idparticipant, idsequence)
         session_id = study_driver.get_most_recent_session_id(idparticipant)
         response = {'idsession': int(session_id)}
