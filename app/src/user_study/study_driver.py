@@ -77,6 +77,23 @@ class StudyDriver:
         return result
 
 
+
+    # Skip the next step in a particular session
+    def skip_attempt(self, session_id):
+        session_params = self.get_session_params(session_id)
+        idparticipant = session_params['idparticipant'][0]
+        next_prompt = self.get_next_prompt(idparticipant, session_id)
+        self.submit_attempt(
+            session_id, idparticipant, next_prompt['idquery'][0],
+            next_prompt['step'][0], 'SKIP', 'SKIP', '-1', '-1'
+        )
+        submitted_skip = self.get_last_submitted_attempt(idparticipant, session_id)
+        if submitted_skip.shape[0] > 0 and submitted_skip['transcript'][0] == 'SKIP':
+            print("Committing the skipped submission")
+            self.save_attempt(submitted_skip['idattemptsubmission'][0], True)
+
+
+
     # Submit attempt for review. Should go into a separate table with pending attempts.
     # Once the attempt is reviewed and marked correct or incorrect, then call save_attempt
     # to save it in validated attempt table.
@@ -310,6 +327,18 @@ class StudyDriver:
         result = self.db_connector.do_single_select_query_into_dataframe(query)
         return result
 
+
+
+    # Retrieve al uncommitted attempts made by the participant
+    def get_all_uncommitted_attempts(self, session_id):
+        query = """
+        select * from attemptsubmissions 
+        where 
+            idattemptsubmission not in (select idattemptsubmission from attemptscommitted)
+            and idsession = {}
+        """.format(str(session_id))
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
 
 
 

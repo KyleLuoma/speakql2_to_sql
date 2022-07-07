@@ -233,6 +233,17 @@ def submit_attempt():
 
 
 
+@app.route('/study/skip_step', methods = ['POST'])
+def skip_step():
+    request_json = request.get_json()
+    idsession = request_json['idsession']
+    study_driver.skip_attempt(idsession)
+    response = flask.jsonify({'msg': 'skipped step as requested'})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
 @app.route('/register_participant', methods = ['POST'])
 def register_participant():
     participant = request.json.get('participant', None)
@@ -313,6 +324,20 @@ def get_attempt_submissions_since_last_commit():
 
 
 
+@app.route('/study/get_all_uncommitted_attempts', methods = ['POST'])
+def get_all_uncommitted_attempts():
+    session_id = request.get_json()['idsession']
+    attempts = study_driver.get_all_uncommitted_attempts(session_id)
+    response_dict = {'msg': 'no submissions exist for this user'}
+    if attempts.shape[0] > 0:
+        response_dict = attempts.set_index('idattemptsubmission').transpose().to_dict()
+    # print("GET ALL PARTICIPANT ATTEMPTS:\n", response_dict)
+    response = flask.jsonify(response_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
 @app.route('/study/get_all_committed_attempts', methods = ['POST'])
 def get_all_committed_attempts():
     attempts = study_driver.get_all_comitted_attempts(
@@ -338,8 +363,9 @@ def get_session_sequence_and_attempts():
     sequence_and_attempts = study_driver.get_session_sequence_and_attempts(session_id)
     response_dict = {'msg': 'Unable to retrieve sequence with that session ID'}
     if sequence_and_attempts.shape[0] > 0:
-        response_dict = sequence_and_attempts.transpose().to_dict()
+        response_dict = sequence_and_attempts.fillna('').transpose().to_dict()
     response = flask.jsonify(response_dict)
+    print(sequence_and_attempts)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
