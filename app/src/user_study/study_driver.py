@@ -312,6 +312,38 @@ class StudyDriver:
 
 
 
+
+    def get_session_sequence_and_attempts(self, session_id):
+
+        session_params = self.get_session_params(session_id)
+
+        query = """
+        select qs.*, 
+            asub.idattemptsubmission, 
+            asub.idparticipant,
+            asub.idsession,
+            asub.transcript,
+            asub.audiofilename,
+            asub.time_taken,
+            asub.attemptnum,
+            ac.idattemptcommitted,
+            ac.iscorrect
+        from query_sequences as qs
+        left join (select * from attemptsubmissions where idsession = {}) as asub
+            on asub.idstep = qs.step
+            and asub.idquery = qs.idquery
+        left join attemptscommitted ac on asub.idattemptsubmission = ac.idattemptsubmission
+        where qs.idsequence = '{}'
+        order by qs.step, asub.idattemptsubmission
+        """.format(
+            str(session_id),
+            str(session_params['idsequence'][0])
+        )
+        result = self.db_connector.do_single_select_query_into_dataframe(query)
+        return result
+
+
+
     # Retreive the next prompt in the sequence, or return the current prompt
     # if the last attempt is < 3 and not correct.
     def get_next_prompt(self, participant_id, session_id = None):

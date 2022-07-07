@@ -331,6 +331,20 @@ def get_all_committed_attempts():
 
 
 
+@app.route('/study/get_session_sequence_and_attempts', methods = ['POST'])
+def get_session_sequence_and_attempts():
+    request_json = request.get_json()
+    session_id = request_json['idsession']
+    sequence_and_attempts = study_driver.get_session_sequence_and_attempts(session_id)
+    response_dict = {'msg': 'Unable to retrieve sequence with that session ID'}
+    if sequence_and_attempts.shape[0] > 0:
+        response_dict = sequence_and_attempts.transpose().to_dict()
+    response = flask.jsonify(response_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
 @app.route('/study/save_attempt', methods = ['POST'])
 def save_attempt():
 
@@ -381,7 +395,7 @@ def get_participant_id_from_username():
 
 @app.route('/study/get_sequence_ids', methods = ["POST"])
 def get_sequence_ids():
-    print("GETSEQUENCEIDS!!!")
+    print("Getting sequence IDs")
     sequence_ids = study_driver.get_all_sequence_ids()
     response = flask.jsonify(sequence_ids['idsequence'].to_list())
     response.headers.add('Access-Control-Allow-Origin', '*')
