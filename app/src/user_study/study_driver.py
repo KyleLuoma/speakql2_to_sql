@@ -85,7 +85,7 @@ class StudyDriver:
         next_prompt = self.get_next_prompt(idparticipant, session_id)
         self.submit_attempt(
             session_id, idparticipant, next_prompt['idquery'][0],
-            next_prompt['step'][0], 'SKIP', 'SKIP', '-1', '-1'
+            next_prompt['step'][0], 'SKIP', 'SKIP', '-1', '-1', '-1', '-1'
         )
         submitted_skip = self.get_last_submitted_attempt(idparticipant, session_id)
         if submitted_skip.shape[0] > 0 and submitted_skip['transcript'][0] == 'SKIP':
