@@ -87,6 +87,17 @@ commands.append(attempt_sumbission_table)
 
 
 
+submission_time_table = """CREATE TABLE IF NOT EXISTS attemptsubmissiontimes (
+                            idattemptsubmission int NOT NULL,
+                            total_time INT NOT NULL,
+                            recording_time INT NOT NULL,
+                            planning_time INT NOT NULL,
+                            primary key(idattemptsubmission)
+                        )"""
+commands.append(submission_time_table)
+
+
+
 attempt_committed_table = """CREATE TABLE IF NOT EXISTS attemptscommitted (
                                 idattemptcommitted int NOT NULL AUTO_INCREMENT,
                                 idattemptsubmission int NOT NULL UNIQUE,

@@ -99,7 +99,7 @@ class StudyDriver:
     # to save it in validated attempt table.
     def submit_attempt(
         self, session_id, participant_id, query_id, step, transcript,
-        audio_filename, time_taken, used_speakql
+        audio_filename, time_taken, recording_time, planning_time, used_speakql
         ):
 
         last_committed_attempt = self.get_last_committed_attempt(participant_id)
@@ -132,6 +132,8 @@ class StudyDriver:
         )
 
         self.db_connector.do_single_insert_query_into_dataframe(query)
+        
+        idattemptsubmission = self.get_last_submitted_attempt(participant_id, session_id)       
 
         attempt_id_query = """
         select max(idattemptsubmission) as idattemptsubmission
@@ -140,6 +142,20 @@ class StudyDriver:
         """.format(str(participant_id))
 
         result = self.db_connector.do_single_select_query_into_dataframe(attempt_id_query)
+
+        time_query = """
+        insert into attemptsubmissiontimes (
+            idattemptsubmission, total_time, recording_time, planning_time
+        )
+        values (
+            {}, {}, {}, {}
+        )
+        """.format(
+            str(result['idattemptsubmission'][0]), 
+            str(time_taken), str(recording_time), str(planning_time)
+        )
+
+        self.db_connector.do_single_insert_query_into_dataframe(time_query)
 
         return result
 

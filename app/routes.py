@@ -206,7 +206,7 @@ def submit_attempt():
 
     response_dict = {'msg': 'unable to submit'}
 
-    if len(request.json['transcript']) == 0 or request.json['time_taken'] == 0:
+    if len(request.json['transcript']) == 0 or request.json['total_time_taken'] == 0:
         response_dict['msg'] = 'empty submission, did not save to database!'
     elif request.json['idsession'] > 0:
         idattemptsubmissiondf = study_driver.submit_attempt(
@@ -216,7 +216,9 @@ def submit_attempt():
             step            = request.json['idstep'],
             transcript      = request.json['transcript'],
             audio_filename  = request.json['audio_filename'],
-            time_taken      = request.json['time_taken'],
+            time_taken      = request.json['total_time_taken'],
+            recording_time  = request.json['recording_time'],
+            planning_time   = request.json['planning_time'],
             used_speakql    = request.json['used_speakql']
         )
         response_dict = {
@@ -344,8 +346,8 @@ def get_all_committed_attempts():
         request.json['idparticipant'],
         request.json['idsession']
     )
-    print(attempts)
-    print(request.json)
+    # print(attempts)
+    # print(request.json)
     response_dict = {'msg': 'no committed attempts exist for this user'}
     if attempts.shape[0] > 0:
         response_dict = attempts.set_index('idattemptsubmission').transpose().to_dict()
@@ -365,7 +367,7 @@ def get_session_sequence_and_attempts():
     if sequence_and_attempts.shape[0] > 0:
         response_dict = sequence_and_attempts.fillna('').transpose().to_dict()
     response = flask.jsonify(response_dict)
-    print(sequence_and_attempts)
+    # print(sequence_and_attempts)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
