@@ -206,7 +206,7 @@ def submit_attempt():
 
     response_dict = {'msg': 'unable to submit'}
 
-    if len(request.json['transcript']) == 0 or request.json['total_time_taken'] == 0:
+    if request.json['total_time_taken'] == 0:
         response_dict['msg'] = 'empty submission, did not save to database!'
     elif request.json['idsession'] > 0:
         idattemptsubmissiondf = study_driver.submit_attempt(
