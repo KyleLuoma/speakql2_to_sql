@@ -215,7 +215,10 @@ class SpeakQlKeywords:
             "open parenthesis" : "(",
             "close parenthesis" : ")",
             "end quote" : "'",
-            "quote" : "'"
+            "quote" : "'",
+            "star" : "*",
+            "asterisk" : "*",
+            "everything" : "*"
         }
 
         self.symbols_to_word_list_dict = {
@@ -240,7 +243,8 @@ class SpeakQlKeywords:
             "," : ["comma"],
             "avg" : ["average"],
             "desc" : ["descending"],
-            "asc" : ["ascending"]
+            "asc" : ["ascending"],
+            "*" : ["star", "everything", "asterisk"]
         }
 
 
