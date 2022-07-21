@@ -24,7 +24,7 @@ select_query_patterns = [
     "_KW_SELECT_ _SE_ and _SE_ and _SE_ _KW_FROM_ _TE_",
     "_KW_SELECT_ _SE_ _KW_FROM_ _TE_",
     "_KW_FROM_ _TE_ _KW_SELECT_ _SE_ , _SE_ , _SE_",
-    "_KW_SELECT_ _SE_ , _SE_ and _SE_ _KW_FROM_ _TE_"
+    "_KW_SELECT_ _SE_ , _SE_ and _SE_ _KW_FROM_ _TE_",
 ]
 
 join_query_patterns = [
@@ -111,16 +111,17 @@ def build_select_query_pattern(table_element_patterns, where_expression_patterns
 
     num_elements = 0
     rand_num = random.randint(0,100)
-    if rand_num < 40:
+    if rand_num > 30 and rand_num < 50:
         num_elements = 1
-    elif rand_num < 70:
+    elif rand_num >= 50 and rand_num < 70:
         num_elements = 2
-    elif rand_num < 90:
+    elif rand_num >= 70 and rand_num < 90:
         num_elements = 3
-    else:
+    elif rand_num >= 90:
         num_elements = random.randint(4, 6)
 
-    for i in range(0, random.randint(1, num_elements)):
+    # for i in range(0, random.randint(1, num_elements)):
+    for i in range(0, num_elements):
         delim = ["and", ","][random.randrange(0,2)]
         select_string = select_string + " " + delim + " _SE_ "
 
@@ -153,6 +154,8 @@ def build_select_element(
     ):
     timeout_counter = 10
     element_string = select_element_patterns[(random.randint(0, len(select_element_patterns) - 1))]
+
+    #Randomly add '*' in cases where only one CN exists in the statement
 
     while "_TN_" in element_string and timeout_counter > 0:
         table_name = table_names[random.randrange(0, len(table_names))]
@@ -191,8 +194,9 @@ def build_select_element(
 
         elif len(int_columns) == 0 or not do_num_function:
             fun_string = function_patterns[random.randrange(0, len(function_patterns))]
+            column_names_with_star = ['*'] + column_names
             while "_CN_" in fun_string:
-                fun_string = fun_string.replace("_CN_", column_names[random.randrange(0, len(column_names))])
+                fun_string = fun_string.replace("_CN_", column_names_with_star[random.randrange(0, len(column_names_with_star))])
             element_string = element_string.replace(
                 "_FUN_", fun_string
             )
@@ -350,6 +354,9 @@ def build_query(
         #query_string = query_patterns[(random.randrange(0, len(query_patterns)))]
         query_string = build_select_query_pattern(table_element_patterns, where_expression_patterns)
         #print("Randomly generated query template:", query_string)
+
+        if query_string.count("_SE_") == 1 and random.random() > 0.2:
+            query_string = query_string.replace("_SE_", '*')
         
         while "_KW_SELECT_" in query_string:
             query_string = query_string.replace("_KW_SELECT_", select_kws[random.randrange(0, len(select_kws))])
@@ -507,7 +514,7 @@ def get_query():
 queries = []
 
 start_time = time.time()
-queries_to_generate = 100
+queries_to_generate = 400
 
 for i in range (0, queries_to_generate):
 
@@ -533,6 +540,6 @@ for i in range (0, queries_to_generate):
         print("Time remaining", str(int(time_remaining / 60)), "min", str(time_remaining % 60), "sec")
 
 
-pd.Series(queries).to_excel("./artifacts/queries/generated_queries_distinct_val_test.xlsx")
+pd.Series(queries).to_excel("./artifacts/queries/generated_queries_speakql_university.xlsx")
 
 
