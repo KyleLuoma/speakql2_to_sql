@@ -15,6 +15,11 @@ else:
 
 schema_df = pd.read_excel(working_directory + "/speakql2_to_sql/artifacts/query_gen_schemas/query_gen_schemas.xlsx")
 
+#Limit schema to only university
+schema_df = schema_df.where(schema_df.SCHEMA == "speakql_university").dropna(how = "all")
+
+distinct_values = pd.read_csv(working_directory + "/speakql2_to_sql/distinct_values.csv")
+
 select_query_patterns = [
     "_KW_SELECT_ _SE_ and _SE_ and _SE_ _KW_FROM_ _TE_",
     "_KW_SELECT_ _SE_ _KW_FROM_ _TE_",
@@ -209,7 +214,14 @@ def build_table_element(table_element_patterns, table_name, table_alias):
         )
     return element_string
 
-def build_where_expression(where_expression_patterns, columns_in_query, int_columns, tables_in_query, alias_dict):
+def build_where_expression(
+        where_expression_patterns, 
+        columns_in_query, 
+        int_columns, 
+        tables_in_query, 
+        alias_dict,
+        distinct_values = pd.DataFrame()
+        ):
     where_expr_string = where_expression_patterns[random.randrange(0, len(where_expression_patterns))]
     while "_CN_" in where_expr_string and len(columns_in_query) > 0:
         column = columns_in_query[random.randrange(0, len(columns_in_query))]
@@ -225,9 +237,18 @@ def build_where_expression(where_expression_patterns, columns_in_query, int_colu
                 )
             operator = ["=", ">", "<", "<>", "<=", ">="][random.randrange(0, 6)]
         elif random.randrange(0, 100) < 80:
-            word = ew.english_words_alpha_set.pop()
-            value = "'" + word + "'"
-            ew.english_words_alpha_set.add(word)
+
+            column_dvs = distinct_values.where(distinct_values.col_name == column).dropna(how = "all")
+
+            if column_dvs.shape[0] == 0:
+                word = ew.english_words_alpha_set.pop()
+                value = "'" + word + "'"
+                ew.english_words_alpha_set.add(word)
+
+            else:
+                word = column_dvs.iloc[random.randrange(0, column_dvs.shape[0])]['val']
+                value = "'" + word + "'"
+
             operator = ["=", "<>"][random.randrange(0, 2)]
         else:
             value = (
@@ -250,6 +271,7 @@ def build_query(
     num_function_patterns, 
     where_expression_patterns,
     schema_df,
+    distinct_values,
     force_single_relation = False,
     allow_subquery = True
     ):
@@ -355,6 +377,7 @@ def build_query(
                         num_function_patterns, 
                         where_expression_patterns,
                         schema_df,
+                        distinct_values,
                         force_single_relation = True,
                         allow_subquery=False
                     ) + " ) as " + table_name
@@ -392,7 +415,8 @@ def build_query(
                 available_columns,
                 int_columns,
                 tables_in_query,
-                alias_dict
+                alias_dict,
+                distinct_values
             ))
 
         sp_query = query_string.replace("_CN_ _COMP_OP_ _VALUE_", "")
@@ -483,7 +507,7 @@ def get_query():
 queries = []
 
 start_time = time.time()
-queries_to_generate = 400000
+queries_to_generate = 100
 
 for i in range (0, queries_to_generate):
 
@@ -494,7 +518,8 @@ for i in range (0, queries_to_generate):
     function_patterns,
     num_function_patterns,
     where_expression_patterns,
-    schema_df
+    schema_df,
+    distinct_values
     ))
 
     end_time = time.time()
@@ -508,6 +533,6 @@ for i in range (0, queries_to_generate):
         print("Time remaining", str(int(time_remaining / 60)), "min", str(time_remaining % 60), "sec")
 
 
-pd.Series(queries).to_excel("./artifacts/queries/generated_queries_01.xlsx")
+pd.Series(queries).to_excel("./artifacts/queries/generated_queries_distinct_val_test.xlsx")
 
 

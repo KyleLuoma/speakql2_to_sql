@@ -1,6 +1,6 @@
 import pandas as pd
 
-query_xl = pd.read_excel('./artifacts/queries/user_study_master_query_list.xlsx', sheet_name = 'query_sequences')
+query_xl = pd.read_excel('./artifacts/queries/user_study_master_query_list.xlsx', sheet_name = 'queries')
 for column in query_xl.columns:
     print(column)
     query_xl[column] = query_xl.apply(
@@ -8,4 +8,4 @@ for column in query_xl.columns:
         axis = 1
         )
 print(query_xl.columns)
-query_xl.to_csv('./artifacts/queries/user_study_query_sequence_list.csv', sep='|')
+query_xl.to_csv('./artifacts/queries/user_study_query_sequence_list_updated.csv', sep='|')
