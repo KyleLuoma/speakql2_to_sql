@@ -10,6 +10,8 @@ import numpy as np
 from .src.translator import *
 from .src.speakql_speech_recognition.PollyVoice import *
 from .src.speakql_speech_recognition.AsrStringProcessor import *
+from .src.speakql_speech_recognition.AwsTranscribeConnector import *
+from .src.speakql_speech_recognition.GsrConnector import *
 from .src.db_util.db_analyzer import *
 from .src.db_util.db_connector import *
 from sys import platform
@@ -26,6 +28,8 @@ study_driver = StudyDriver(study_db_connector)
 db_connector = DbConnector(db_name = "speakql_university")
 db_analyzer = DbAnalyzer(db_connector)
 asr = AsrStringProcessor(db_analyzer)
+
+gsr_connector = GsrConnector()
 
 jwt = JWTManager()
 jwt.init_app(app)
@@ -126,15 +130,22 @@ def wav_data():
     filename = filename.format(str(counter))
 
     print("WAV DATA:", username, idparticipant, idquery, language)
-
-    response = flask.jsonify({'filename': filename})
-    
     
     file = open(recording_dir + '/' + filename, 'wb')
     file.write(base64.b64decode(wav_blob))
+    transcript = gsr_connector.sendAudioToGsr(wav_blob)
     file.close()
-    study_driver.update_attempt_filename(filename, attemptid)
 
+    # study_driver.update_attempt_filename(filename, attemptid)
+
+    # upload_file_to_bucket(recording_dir, filename, 'userstudyqueries')
+    # transcript = transcribe_file(filename)
+    # print("Wav data transcript:", transcript)
+
+    response = flask.jsonify({
+        'filename': filename,
+        'transcript': transcript
+    })
 
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Cache-Control', 'no-cache')

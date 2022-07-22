@@ -86,13 +86,17 @@ def main():
             )
         elif(user_input.upper() in ["PRINT SPEAKQL", "PRINT SPEAKQL QUERY"]):
             print(speakql_query)  
-        elif(user_input.upper() == "TRANSLATE EXCEL FILE"):
-            if "linux" in platform:
-                translate_from_excel(
-                    "/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01_translated.xlsx", parse_caller
-                    )
-            else:
-                translate_from_excel("./generated_queries_01_translated.xlsx", parse_caller)
+        elif("TRANSLATE FILE" in user_input.upper()):
+            split_input = user_input.split(" ")
+            input_file = ""
+            output_file = ""
+            if len(split_input) == 4:
+                input_file = split_input[2]
+                output_file = split_input[3]
+                translate_from_excel(input_file, output_file, parse_caller)
+            else: 
+                print("Invalid arguments, must be of format TRANSLATE FILE inputfilename.xlsx outputfilename.xlsx")
+
         elif(user_input.upper() == "ADD SPOKEN TO EXCEL"):
             speakql_to_spoken_query("speakql_translated_to_sql_01.xlsx", "spoken_sql_01.xlsx")
         else:
@@ -160,7 +164,7 @@ def speakql_to_spoken_query(input_filename, output_filename, for_model_train = T
         #Add punctuation to make poly voice sound more natural:
         if not for_model_train:
             spoken_query = spoken_query.replace(" and", ", and")
-            spoken_queyr = spoken_query.replace(" comma", ", comma")
+            spoken_query = spoken_query.replace(" comma", ", comma")
             spoken_query = spoken_query.replace(", and then", ". and then")
             for token in tokens:
                 if token.upper() in spqkw.get_start_kws():
@@ -174,11 +178,12 @@ def speakql_to_spoken_query(input_filename, output_filename, for_model_train = T
     queries.to_excel(path + output_filename)
         
 
-def translate_from_excel(filename, parse_caller):
+def translate_from_excel(in_filename, out_filename, parse_caller):
     if "linux" in platform:
-        queries = pd.read_excel("/home/kyle/repos/speakql2_to_sql/artifacts/queries/generated_queries_01.xlsx")
+        path = "/home/kyle/repos/speakql2_to_sql/artifacts/queries/"
     else:
-        queries = pd.read_excel("./generated_queries_01.xlsx")
+        path = "./artifacts/queries/"
+    queries = pd.read_excel(path + in_filename)
     print(queries.head())
     speakql_queries = []
     sql_queries = []
@@ -236,20 +241,20 @@ def translate_from_excel(filename, parse_caller):
             print(str(len(speakql_queries)), str(len(sql_queries)), str(len(time_to_translate)), str(len(status)))
         onrow = onrow + 1
         if onrow % 1000 == 0:
-            print("Writing intermediate results to DF", (filename.replace(".xlsx", (str(onrow) + ".xlsx"))))
+            print("Writing intermediate results to DF", (out_filename.replace(".xlsx", (str(onrow) + ".xlsx"))))
             pd.DataFrame({
                 "SPEAKQL" : speakql_queries, 
                 "SQL" : sql_queries, 
                 "TRANSLATION_SECONDS" : time_to_translate,
                 "STATUS" : status
-                }).to_excel((filename.replace(".xlsx", (str(onrow) + ".xlsx"))))
+                }).to_excel((path + out_filename.replace(".xlsx", (str(onrow) + ".xlsx"))))
 
     pd.DataFrame({
         "SPEAKQL" : speakql_queries, 
         "SQL" : sql_queries, 
         "TRANSLATION_SECONDS" : time_to_translate,
         "STATUS" : status
-        }).to_excel(filename)
+        }).to_excel(path + out_filename)
 
 
 
