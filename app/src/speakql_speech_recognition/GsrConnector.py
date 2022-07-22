@@ -23,8 +23,15 @@ class GsrConnector:
             config = self.config,
             audio = audio
         )
-        print(response.results[0].alternatives[0].transcript)
-        return response.results[0].alternatives[0].transcript
+
+        transcript = ""
+
+        for result in response.results:
+            transcript += (result.alternatives[0].transcript + " ")
+
+        print(response.results)
+
+        return transcript
 
 
 
