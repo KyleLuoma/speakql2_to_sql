@@ -27,12 +27,22 @@ class GsrConnector:
         )
 
         audio = speech.RecognitionAudio(content = audio_file)
-        response = self.client.recognize(
-            config = self.config,
-            audio = audio
-        )
-        print(response.results[0].alternatives[0].transcript)
-        return response.results[0].alternatives[0].transcript
+        transcript = ""
+        try:
+            response = self.client.recognize(
+                config = self.config,
+                audio = audio
+            )
+            
+
+            for result in response.results:
+                transcript += (result.alternatives[0].transcript + " ")
+
+            print(response.results)
+        except:
+            transcript = "GSR transcription timed out due to audio length. This is not a problem, your attempt is valid. Follow instructions from the facilitator to proceed."        
+
+        return transcript
 
 
 
