@@ -3,21 +3,29 @@ from google.cloud import speech
 
 class GsrConnector:
 
-    def __init__(self, sample_rate=48000):
+    def __init__(self, sample_rate=44100, channels=2):
         self.client = speech.SpeechClient()
         self.config = speech.RecognitionConfig(
             encoding = speech.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz = sample_rate,
             language_code="en-US",
-            audio_channel_count = 2
+            audio_channel_count = channels
         )
 
         self.adaptation = speech.AdaptationClient()
 
         pass
 
-    def sendAudioToGsr(self, audio_file):
+    def sendAudioToGsr(self, audio_file, sample_rate=44100, channels=2):
         # content = audio_file.read()
+
+        self.config = speech.RecognitionConfig(
+            encoding = speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            sample_rate_hertz = sample_rate,
+            language_code="en-US",
+            audio_channel_count = channels
+        )
+
         audio = speech.RecognitionAudio(content = audio_file)
         response = self.client.recognize(
             config = self.config,
