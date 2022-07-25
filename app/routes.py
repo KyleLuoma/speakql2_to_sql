@@ -112,8 +112,6 @@ def wav_data():
     idquery = request.get_json()['idquery']
     attemptid = request.get_json()['idattemptsubmission']
     language = request.get_json()['language']
-    channels = request.get_json()['channels']
-    rate = request.get_json()['rate']
 
     filename = (
         'username-' + username + '_' 
@@ -135,7 +133,7 @@ def wav_data():
     
     file = open(recording_dir + '/' + filename, 'wb')
     file.write(base64.b64decode(wav_blob))
-    transcript = gsr_connector.sendAudioToGsr(wav_blob, rate, channels)
+    transcript = gsr_connector.sendAudioToGsr(wav_blob)
     file.close()
 
     # study_driver.update_attempt_filename(filename, attemptid)
