@@ -131,10 +131,14 @@ def wav_data():
 
     print("WAV DATA:", username, idparticipant, idquery, language)
     
+    print("WAV DATA: creating", filename)
     file = open(recording_dir + '/' + filename, 'wb')
+    print("WAV DATA: writing", filename, "to disk")
     file.write(base64.b64decode(wav_blob))
-    transcript = gsr_connector.sendAudioToGsr(wav_blob)
+    # transcript = gsr_connector.sendAudioToGsr(wav_blob)
+    transcript = "Placeholder for GSR response"
     file.close()
+    print("WAV DATA: Finished writing", filename, "to disk")
 
     # study_driver.update_attempt_filename(filename, attemptid)
 
