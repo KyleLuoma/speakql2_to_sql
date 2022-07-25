@@ -98,7 +98,7 @@ def main():
                 print("Invalid arguments, must be of format TRANSLATE FILE inputfilename.xlsx outputfilename.xlsx")
 
         elif(user_input.upper() == "ADD SPOKEN TO EXCEL"):
-            speakql_to_spoken_query("speakql_translated_to_sql_01.xlsx", "spoken_sql_01.xlsx")
+            speakql_to_spoken_query("generated_translated_speakql_university_speakql_sql_union.xlsx", "spoken_sql_02.xlsx")
         else:
             speakql_query = user_input
             tree = parse_caller.run_select_statement(speakql_query)
@@ -114,6 +114,11 @@ def main():
         
 
 def speakql_to_spoken_query(input_filename, output_filename, for_model_train = True):
+
+    months = ["january", "february", "march", "april", "may", 
+                         "june", "july", "august", "september", "october",
+                         "november", "december"]
+
     spqkw = SpeakQlKeywords()
     if "linux" in platform:
         path = "/home/kyle/repos/speakql2_to_sql/artifacts/queries/"
@@ -135,15 +140,14 @@ def speakql_to_spoken_query(input_filename, output_filename, for_model_train = T
                     ]
             except KeyError:
                 pass
-            if len(token.split("-")) == 3:
+            if len(token.split("-")) == 3 :
                 date_time = token.replace("'", "").strip().split("-")
-                year = date_time[0]
-                month = ["january", "february", "march", "april", "may", 
-                         "june", "july", "august", "september", "october",
-                         "november", "december"][int(date_time[1]) - 1]
-                day = date_time[2]
-                print(month, day, year)
-                token = month + " " + day + " " + year
+                if date_time[1].isnumeric() and int(date_time[1]) >= 1 and int(date_time[1]) <= 12:
+                    year = date_time[0]
+                    month = months[int(date_time[1]) - 1]
+                    day = date_time[2]
+                    print(month, day, year)
+                    token = month + " " + day + " " + year
             if "'" in token:
                 token = token.replace("'", " " + spqkw.symbols_to_word_list_dict["'"][
                     random.randrange(0, len(spqkw.symbols_to_word_list_dict["'"]))
