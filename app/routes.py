@@ -29,7 +29,7 @@ db_connector = DbConnector(db_name = "speakql_university")
 db_analyzer = DbAnalyzer(db_connector)
 asr = AsrStringProcessor(db_analyzer)
 
-gsr_connector = GsrConnector()
+# gsr_connector = GsrConnector()
 
 jwt = JWTManager()
 jwt.init_app(app)

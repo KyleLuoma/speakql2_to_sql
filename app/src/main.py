@@ -5,6 +5,8 @@ from speakql_translator.speakql_to_sql import *
 
 from speakql_speech_recognition.SpeakQlPredictorCaller import *
 from speakql_speech_recognition.SpeakqlKeywords import *
+from speakql_speech_recognition.SpeakQlPredictorServerCaller import *
+
 
 from db_util.db_analyzer import *
 from db_util.db_connector import *
@@ -31,9 +33,11 @@ def main():
     verbose = False
     connect = False
     predict = False
+    using_predictor_server = False
 
     speakql_tree = st.SpeakQlTree(tree)
     predictor = SpeakQlPredictorCaller()
+    predictor = SpeakQlPredictorServerCaller()
 
 
     while user_input.upper() != "QUIT":
@@ -48,6 +52,15 @@ def main():
             predict = True
         elif(user_input.upper() == "PREDICT OFF"):
             predict = False
+        elif(user_input.upper() == "USE SERVER"):
+            if using_predictor_server:
+                print("Reverting to command line predictor")
+                predictor = SpeakQlPredictorCaller()
+                using_predictor_server = False
+            else:
+                print("Using predictor server, make sure it's running!")
+                predictor = SpeakQlPredictorServerCaller()
+                using_predictor_server = True
         elif(user_input.upper() == "PRINT PARSE TREE"):
             print(speakql_tree.get_parse_tree())
         elif(user_input.upper() == "VERBOSE ON"):
@@ -98,7 +111,7 @@ def main():
                 print("Invalid arguments, must be of format TRANSLATE FILE inputfilename.xlsx outputfilename.xlsx")
 
         elif(user_input.upper() == "ADD SPOKEN TO EXCEL"):
-            speakql_to_spoken_query("generated_translated_speakql_university_speakql_sql_union.xlsx", "spoken_sql_02.xlsx")
+            speakql_to_spoken_query("generated_translated_speakql_university_2_speakql_sql_union.xlsx", "spoken_sql_03.xlsx")
         else:
             speakql_query = user_input
             tree = parse_caller.run_select_statement(speakql_query)
