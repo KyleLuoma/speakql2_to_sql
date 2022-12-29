@@ -61,6 +61,12 @@ def main():
                 print("Using predictor server, make sure it's running!")
                 predictor = SpeakQlPredictorServerCaller()
                 using_predictor_server = True
+        elif("PREDICT PARTIAL SELECT" in user_input.upper()):
+            if not using_predictor_server:
+                print("Must turn on predictor server with USE SERVER")
+            else:
+                query = user_input.upper().replace("PREDICT PARTIAL SELECT", "").strip()
+                print(predictor.getNextWordsFromPartial(query, "SELECT"))
         elif(user_input.upper() == "PRINT PARSE TREE"):
             print(speakql_tree.get_parse_tree())
         elif(user_input.upper() == "VERBOSE ON"):
