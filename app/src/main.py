@@ -37,13 +37,15 @@ def main():
 
     speakql_tree = st.SpeakQlTree(tree)
     predictor = SpeakQlPredictorCaller()
-    predictor = SpeakQlPredictorServerCaller()
+    # predictor = SpeakQlPredictorServerCaller()
 
 
     while user_input.upper() != "QUIT":
         print("SpeakQl2>", end = ' ')
         user_input = input()
         if(user_input.upper() == "QUIT"):
+            if using_predictor_server:
+                predictor.kill_server()
             break
         elif(user_input.upper() == "CONNECT"):
             connection = DbConnector(db_engine = "mysql", db_name="speakql_university")
