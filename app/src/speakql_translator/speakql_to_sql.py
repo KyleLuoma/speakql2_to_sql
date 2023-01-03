@@ -185,6 +185,9 @@ def translate_speakql_to_sql_with_st(speakql_tree, verbose = False):
     speakql_tree.remove_syntactic_sugar()
     if verbose:
         print("Removed syntactic sugar")
+    speakql_tree.transform_natural_functions(node_id = 0)
+    if verbose:
+        print("Transformed natural functions")
     speakql_tree.reorder_select_and_table_expressions(0)
     if verbose:
         print("Reordered select and table expressions")

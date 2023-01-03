@@ -91,6 +91,8 @@ def main():
                 print(table.to_string())
         elif(user_input.upper() in ["PRINT PROPERTIES", "PRINT PROPS"]):
             print(speakql_tree.get_properties())
+        elif(user_input.upper() == "TEST NATURAL FUNCTIONS"):
+            speakql_tree.transform_natural_functions()
         elif(user_input.upper() == "TEST AGGREGATE COLUMNS"):
             speakql_tree._bundle_select_elements()
         elif(user_input.upper() == "TEST AGGREGATE TABLES"):

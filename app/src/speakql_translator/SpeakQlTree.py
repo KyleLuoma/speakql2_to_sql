@@ -741,17 +741,36 @@ class SpeakQlTree:
 
     def remove_syntactic_sugar(
         self, 
-        sugar_list = ["ofKeyword", "theKeyword", "tableKeyword", "isKeyword"]
+        sugar_list = ["ofKeyword", "theKeyword", "tableKeyword", "isKeyword"],
+        node_id = 0
     ):
         
         for sugar in sugar_list:
-            keyword_ids = self.find_nodes_by_rule_name(sugar)
-            for node_id in keyword_ids:
-                self.remove_node_from_tree(node_id)
+            keyword_ids = self.find_nodes_by_rule_name(sugar, node_id=node_id)
+            for kw_id in keyword_ids:
+                self.remove_node_from_tree(kw_id)
 
         for key in self.sq_dict:
             self.sq_dict[key].remove_syntactic_sugar(sugar_list)
 
+
+
+    def transform_natural_functions(
+        self,
+        node_id = 0
+    ):
+
+        natural_functions = self.find_nodes_by_rule_name("noParenAggregateWindowedFunction", node_id=node_id)
+
+        for rule_id in natural_functions:
+            self.remove_syntactic_sugar(sugar_list = ["ofKeyword", "theKeyword"], node_id = rule_id)
+            arg_id = self.find_first_node_with_rule_name("naturalFunctionArgs")
+            if arg_id < 0:
+                arg_id = self.find_first_node_with_rule_name("naturalCountFunctionArgs")
+            if arg_id < 0:
+                self.print_verbose("Encountered missing arguments when attemptint to transform natural function with node ID {}.".format(str(rule_id)))
+            else:
+                self.surround_node_with_parens(arg_id)
 
 
     def reorder_select_and_table_expressions(self, node_id = 0, first_call = True):

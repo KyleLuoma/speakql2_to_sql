@@ -9,10 +9,10 @@ from sys import platform
 class SpeakQlPredictorCaller:
 
     def __init__(self):
-        self.PREDICTOR_PATH = "java -jar c:/research_projects/speakql2_to_sql/app/bin/speakql_predictor_no_exp.jar"
+        self.PREDICTOR_PATH = "java -jar c:/research_projects/speakql2_to_sql/app/bin/speakql_predictor.jar"
         self.END_TEXT = ["\\r\\n"]
         if 'linux' in platform:
-            self.PREDICTOR_PATH = "java -jar /root/srv/www/speakql2_to_sql/app/bin/speakql_predictor_no_exp.jar"
+            self.PREDICTOR_PATH = "java -jar /root/srv/www/speakql2_to_sql/app/bin/speakql_predictor.jar"
             self.END_TEXT = ["\\n\", stderr=b", "\\n', stderr=b"]
             
     def getNextWordsFromQuery(self, query):
